@@ -57,7 +57,7 @@
             "ionic-plugin-keyboard": {},
             "cordova-plugin-googlemaps": {
                 "API_KEY_FOR_ANDROID": "AIzaSyDkf4O5N67eYGUdT7Cip9uTc8LWohQ_2Lk",
-                "API_KEY_FOR_IOS": "AIzaSyDHRY4e7RVNO0s2skALf6_Rq4LpOP3uvvw"
+                "API_KEY_FOR_IOS": "AIzaSyAhDw5MOfNVEpcLWULEFQO6sNMIF7t9ztQ"
             }
         },
         "platforms": [
