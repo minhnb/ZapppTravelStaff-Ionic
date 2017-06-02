@@ -14,7 +14,7 @@ import { SchedulePage } from '../pages/schedule';
 export class MyApp {
 	@ViewChild(Nav) nav: Nav;
 
-	rootPage: any = LoginPage;
+	rootPage: any = SchedulePage;
 
 	pages: Array<{ title: string, component: any }>;
 

@@ -8,9 +8,12 @@ import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 
 import { SchedulePageModule } from '../pages/schedule';
+import { DirectionStopPageModule } from '../pages/direction-stop';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 @NgModule({
 	declarations: [
@@ -22,7 +25,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 	imports: [
 		BrowserModule,
 		IonicModule.forRoot(MyApp),
-		SchedulePageModule
+		SchedulePageModule,
+		DirectionStopPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -34,6 +38,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 	providers: [
 		StatusBar,
 		SplashScreen,
+		GoogleMaps,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]
 })

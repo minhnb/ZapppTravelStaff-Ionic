@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { DirectionStopPage } from '../direction-stop';
 
 /**
  * Generated class for the SchedulePage page.
@@ -9,16 +10,22 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  */
 @IonicPage()
 @Component({
-  selector: 'page-schedule',
-  templateUrl: 'schedule.html',
+	selector: 'page-schedule',
+	templateUrl: 'schedule.html',
 })
 export class SchedulePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+	constructor(public navCtrl: NavController, public navParams: NavParams) {
+	}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SchedulePage');
-  }
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad SchedulePage');
+	}
 
+	viewDirectionStopPage(event) {
+		this.navCtrl.push(DirectionStopPage, {
+			id: "123",
+			name: "Test"
+		});
+	}
 }

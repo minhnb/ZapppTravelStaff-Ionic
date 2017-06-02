@@ -34,3 +34,33 @@ ion-toolbar {
     left: 0;
   }
 }
+
+button.dismiss-view-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 10px 15px;
+
+    ion-icon {
+        font-size: 40px;
+        color: color($colors, dark, base);;
+    }
+}
+
+button.above-button {
+    position: absolute;
+    min-width: 40%;
+
+    &.bottom-left {
+        left: 20px;
+        bottom: 20px;
+    }
+    &.bottom-right {
+        right: 20px;
+        bottom: 20px;
+    }
+}
