@@ -25,7 +25,9 @@ export class SchedulePage {
 	viewDirectionStopPage(event) {
 		this.navCtrl.push(DirectionStopPage, {
 			id: "123",
-			name: "Test"
+			name: "Lotte Mart Nam Sai Gon",
+			long: 106.702013,
+			lat: 10.740790
 		});
 	}
 }
