@@ -1,22 +1,21 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Login</ion-title>
+    <ion-title>Staff App</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <ion-item>
-    <ion-input type="text" placeholder="Username"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-input type="password" placeholder="Password"></ion-input>
-  </ion-item>
-  <a class="forgot-password" href="https://stage.zappp.com/forgot-password">Forgot password?</a>
-  <div class="button-bottom-full">
-    <button ion-button full>Sign In</button>
-  </div>
+  <form (ngSubmit)="login()">
+      <ion-item>
+        <ion-input type="email" placeholder="Username" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="password" placeholder="Password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <a class="forgot-password" href="https://stage.zappp.com/forgot-password">Forgot password?</a>
+      <div class="button-bottom-full">
+        <button ion-button full type="submit" [disabled]="!username || !password">Sign In</button>
+      </div>
+  </form>
 </ion-content>

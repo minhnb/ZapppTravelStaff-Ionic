@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, Polyline, PolylineOptions } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
-import { AppConfig } from '../../app/app.config';
+import { BaseComponent } from '../../app/base.component';
 
 import { GoogleMapsLoader } from '../../app/helper/googleMaps.loader';
 import * as decodePolyline from 'decode-google-map-polyline';
@@ -12,19 +12,18 @@ import * as decodePolyline from 'decode-google-map-polyline';
 	selector: 'page-direction-stop',
 	templateUrl: 'direction-stop.html',
 })
-export class DirectionStopPage {
+export class DirectionStopPage extends BaseComponent {
 
 
 	directionsService: any;
 	map: GoogleMap;
 	destinationLocation: LatLng = null;
-	poly: any;
-	markers: Array<any> = [];
-	fullPath: Array<any> = [];
-	markerImage: any = {};
-	markerImageStart: any = {};
+	polyLines: Array<any> = [];
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private googleMaps: GoogleMaps, private geolocation: Geolocation) {
+	markers: Array<any> = [];
+
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private googleMaps: GoogleMaps, private geolocation: Geolocation) {
+		super(injector);
 		if (this.navParams.data && this.navParams.data.long && this.navParams.data.lat) {
 			this.destinationLocation = new LatLng(this.navParams.data.lat, this.navParams.data.long);
 		}
@@ -36,6 +35,19 @@ export class DirectionStopPage {
 			this.directionsService = new google.maps.DirectionsService;
 			this.loadMap();
 		});
+	}
+
+	ngOnDestroy() {
+		this.destinationLocation = null;
+		this.polyLines.forEach((polyLine: Polyline) => {
+			polyLine.remove();
+		});
+		this.polyLines = [];
+
+		this.markers.forEach((marker: Marker) => {
+			marker.remove();
+		});
+		this.markers = [];
 	}
 
 	dismissView(event) {
@@ -78,7 +90,7 @@ export class DirectionStopPage {
 
 				let watch = this.geolocation.watchPosition();
 				watch.subscribe((data) => {
-					alert(data.coords.latitude + ' - ' + data.coords.longitude);
+					// alert(data.coords.latitude + ' - ' + data.coords.longitude);
 				});
 			}
 		);
@@ -92,6 +104,7 @@ export class DirectionStopPage {
 
 		this.map.addMarker(markerParams)
 			.then((marker: Marker) => {
+				this.markers.push(marker);
 				if (callback) {
 					callback(marker);
 				}
@@ -99,30 +112,15 @@ export class DirectionStopPage {
 	}
 
 	leaveCurentStop() {
-		let alert = this.alertCtrl.create({
-			title: 'Confirm leaving',
-			message: 'Do you want to leave this stop?',
-			buttons: [
-				{
-					text: 'Cancel',
-					role: 'cancel',
-					handler: () => {
-						console.log('Cancel clicked');
-						this.map.setClickable(true);
-					}
-				},
-				{
-					text: 'OK',
-					handler: () => {
-						console.log('OK clicked');
-						this.map.setClickable(true);
-						this.navCtrl.pop();
-					}
-				}
-			]
-		});
 		this.map.setClickable(false);
-		alert.present();
+		this.showConfirm('Do you want to leave this stop?', 'Confirm leaving',
+			() => {
+				this.map.setClickable(true);
+				this.navCtrl.pop();
+			},
+			() => {
+				this.map.setClickable(true);
+			});
 	}
 
 	addMarker(point) {
@@ -151,7 +149,7 @@ export class DirectionStopPage {
 		};
 		this.map.addPolyline(polylineOptions)
 			.then((polyLine: Polyline) => {
-
+				this.polyLines.push(polyLine);
 			});
 	}
 
