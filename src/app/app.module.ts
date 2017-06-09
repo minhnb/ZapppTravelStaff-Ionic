@@ -8,6 +8,7 @@ import { LoginPage } from '../pages/login/login';
 
 import { SchedulePageModule } from '../pages/schedule';
 import { DirectionStopPageModule } from '../pages/direction-stop';
+import { UserStartPageModule } from '../pages/user-start';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -31,7 +32,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		IonicModule.forRoot(MyApp),
 		HttpModule,
 		SchedulePageModule,
-		DirectionStopPageModule
+		DirectionStopPageModule,
+		UserStartPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

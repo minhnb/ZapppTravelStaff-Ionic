@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title>Staff App</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-label>Status</ion-label>
+    <ion-select [(ngModel)]="status" (ngModelChange)="onStatusChange($event)">
+      <ion-option value="online">Online</ion-option>
+      <ion-option value="offline">Offline</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Choose a truck</ion-label>
+    <ion-select [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
+      <ion-option *ngFor="let item of listTruck" value="{{ item.value }}">{{ item.text }}</ion-option>
+    </ion-select>
+  </ion-item>
+  <div class="button-bottom-full">
+    <button ion-button full>Collection</button>
+    <button ion-button full>Delivery</button>
+  </div>
+
+</ion-content>

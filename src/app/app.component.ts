@@ -10,6 +10,7 @@ import { UserService } from './services/user';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { SchedulePage } from '../pages/schedule';
+import { UserStartPage } from '../pages/user-start';
 
 @Component({
 	templateUrl: 'app.html',
@@ -28,6 +29,7 @@ export class MyApp extends BaseComponent {
 
 		// used for an example of ngFor and navigation
 		this.pages = [
+			{ title: 'Home', component: UserStartPage },
 			{ title: 'List', component: ListPage },
 			{ title: 'Schedule', component: SchedulePage }
 		];

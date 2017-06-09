@@ -1,0 +1,42 @@
+import { Component, Injector } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { BaseComponent } from '../../app/base.component';
+
+@IonicPage()
+@Component({
+	selector: 'page-user-start',
+	templateUrl: 'user-start.html',
+})
+export class UserStartPage extends BaseComponent {
+
+    status: any;
+    truck: any;
+    listTruck: Array<any> = [
+        {
+            value: "mz999",
+            text: "mz999"
+        },
+        {
+            value: "mz001",
+            text: "mz001"
+        }
+    ];
+
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+		super(injector);
+	}
+
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad UserStartPage');
+	}
+
+    onStatusChange(event) {
+        // console.log(event);
+        // console.log(this.status);
+    }
+
+    onTruckChange(event) {
+        // console.log(event);
+        // console.log(this.truck);
+    }
+}
