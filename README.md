@@ -24,3 +24,28 @@ $ ionic cordova run ios
 
 Substitute ios for android if not on a Mac.
 
+*********************************************************************************************
+HOW TO RESOLVE GOOGLE SERVICE CONFLICT WHEN USING GOOGLE MAPS AND GOOGLE FIREBASE CLOUD MESSAGE
+
+Step 1: Remember: Do it before add platform android. If you already added platform android, you should remove it.
+$ ionic cordova platform remove android
+
+Comment out these lines in the FCMPlugin.gradle file.
+classpath 'com.google.gms:google-services:3.0.0'
+apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
+
+Then change the plugin.xml of the FCM plugin to use a different version, in my situation 9.8.0.
+<framework src="com.google.firebase:firebase-core:9.8.0" />
+<framework src="com.google.firebase:firebase-messaging:9.8.0" />
+
+Step 2: Add platform android
+$ ionic cordova platform add android
+
+Step 3: Change the build.gradle file of the android platform folder
+Add this line to the classpath section
+classpath 'com.google.gms:google-services:3.1.0'
+
+And add this line below the dependencies, nearly at the bottom of the file
+apply plugin: 'com.google.gms.google-services'
+
+And these changes should fix the problems with the version conflicts.
