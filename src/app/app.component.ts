@@ -2,6 +2,7 @@ import { Component, ViewChild, Injector } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { FCM } from '@ionic-native/fcm';
 
 import { BaseComponent } from './base.component';
 
@@ -23,7 +24,8 @@ export class MyApp extends BaseComponent {
 
 	pages: Array<{ title: string, component: any }>;
 
-	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private userService: UserService) {
+	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
+		private fcm: FCM, private userService: UserService) {
 		super(injector);
 		this.initializeApp();
 
@@ -34,6 +36,26 @@ export class MyApp extends BaseComponent {
 			{ title: 'Schedule', component: SchedulePage }
 		];
 
+		fcm.subscribeToTopic('marketing');
+
+		fcm.getToken().then(token => {
+			alert('registerToken' + token);
+			console.log('registerToken' + token);
+		})
+
+		fcm.onNotification().subscribe(data => {
+			if (data.wasTapped) {
+				console.log("Received in background");
+			} else {
+				console.log("Received in foreground");
+			};
+		})
+
+		fcm.onTokenRefresh().subscribe(token => {
+			alert('registerToken' + token);
+		})
+
+		fcm.unsubscribeFromTopic('marketing');
 	}
 
 	initializeApp() {

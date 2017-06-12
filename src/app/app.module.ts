@@ -16,6 +16,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { FCM } from '@ionic-native/fcm';
 
 import { HttpModule } from '@angular/http';
 
@@ -47,6 +48,7 @@ import { ZapppHttp } from './services/zapppHttp';
 		SpinnerDialog,
 		GoogleMaps,
 		Geolocation,
+		FCM,
 		ZapppHttp,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]
