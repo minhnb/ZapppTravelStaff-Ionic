@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { CollectionModePage } from '../collection-mode';
 
 @IonicPage()
 @Component({
@@ -38,5 +39,13 @@ export class UserStartPage extends BaseComponent {
     onTruckChange(event) {
         // console.log(event);
         // console.log(this.truck);
+    }
+
+    goToCollectionModePage() {
+        this.navCtrl.push(CollectionModePage);
+    }
+
+    goToDeliveryModePage() {
+
     }
 }

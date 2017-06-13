@@ -39,7 +39,7 @@ export class MyApp extends BaseComponent {
 		fcm.subscribeToTopic('marketing');
 
 		fcm.getToken().then(token => {
-			alert('registerToken' + token);
+			// alert('registerToken' + token);
 			console.log('registerToken' + token);
 		})
 

@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/login/login';
 import { SchedulePageModule } from '../pages/schedule';
 import { DirectionStopPageModule } from '../pages/direction-stop';
 import { UserStartPageModule } from '../pages/user-start';
+import { CollectionModePageModule } from '../pages/collection-mode';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -17,6 +18,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { FCM } from '@ionic-native/fcm';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { HttpModule } from '@angular/http';
 
@@ -34,7 +36,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		HttpModule,
 		SchedulePageModule,
 		DirectionStopPageModule,
-		UserStartPageModule
+		UserStartPageModule,
+		CollectionModePageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -49,6 +52,7 @@ import { ZapppHttp } from './services/zapppHttp';
 		GoogleMaps,
 		Geolocation,
 		FCM,
+		BarcodeScanner,
 		ZapppHttp,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]

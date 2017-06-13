@@ -2,7 +2,7 @@
   <ion-navbar>
     <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
-      </button>
+    </button>
     <ion-title>Staff App</ion-title>
   </ion-navbar>
 
@@ -24,8 +24,8 @@
     </ion-select>
   </ion-item>
   <div class="button-bottom-full">
-    <button ion-button full>Collection</button>
-    <button ion-button full>Delivery</button>
+    <button ion-button full (click)="goToCollectionModePage()">Collection</button>
+    <button ion-button full (click)="goToDeliveryModePage()">Delivery</button>
   </div>
 
 </ion-content>
