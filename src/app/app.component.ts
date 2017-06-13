@@ -36,26 +36,28 @@ export class MyApp extends BaseComponent {
 			{ title: 'Schedule', component: SchedulePage }
 		];
 
-		fcm.subscribeToTopic('marketing');
+		if (this.isMobileDevice(platform)) {
+			fcm.subscribeToTopic('marketing');
 
-		fcm.getToken().then(token => {
-			// alert('registerToken' + token);
-			console.log('registerToken' + token);
-		})
+			fcm.getToken().then(token => {
+				// alert('registerToken' + token);
+				console.log('registerToken' + token);
+			})
 
-		fcm.onNotification().subscribe(data => {
-			if (data.wasTapped) {
-				console.log("Received in background");
-			} else {
-				console.log("Received in foreground");
-			};
-		})
+			fcm.onNotification().subscribe(data => {
+				if (data.wasTapped) {
+					console.log("Received in background");
+				} else {
+					console.log("Received in foreground");
+				};
+			})
 
-		fcm.onTokenRefresh().subscribe(token => {
-			alert('registerToken' + token);
-		})
+			fcm.onTokenRefresh().subscribe(token => {
+				alert('registerToken' + token);
+			})
 
-		fcm.unsubscribeFromTopic('marketing');
+			fcm.unsubscribeFromTopic('marketing');
+		}
 	}
 
 	initializeApp() {

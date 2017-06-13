@@ -67,3 +67,13 @@ button.above-button {
         bottom: 20px;
     }
 }
+
+.info-row {
+    margin-bottom: 15px;
+
+    .label {
+        font-weight: bold;
+        font-size: x-small;
+        margin-bottom: 5px;
+    }
+}

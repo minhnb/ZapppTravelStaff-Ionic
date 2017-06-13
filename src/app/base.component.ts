@@ -1,5 +1,5 @@
 import { Component, Injector, ElementRef } from '@angular/core';
-import { AlertController } from 'ionic-angular';
+import { Platform, AlertController } from 'ionic-angular';
 import { AppConstant } from './app.constant';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 
@@ -14,6 +14,10 @@ export class BaseComponent {
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
 		this.barcodeScanner = injector.get(BarcodeScanner);
+	}
+
+	isMobileDevice(platform: Platform): boolean {
+		return platform.is('cordova') && (platform.is('ios') || platform.is('android'));
 	}
 
 	setFocusInput(elementRef: ElementRef) {
@@ -70,6 +74,18 @@ export class BaseComponent {
 
         this.presentAlert(title || 'Confirm', message, buttons);
     }
+
+	confirmBeforeLeaveView(message?: string, title?: string): Promise<{}> {
+		return new Promise((resolve, reject) => {
+			this.showConfirm(message || 'Are you sure you want to discard?', title || 'Discard',
+				() => {
+					resolve();
+				},
+				() => {
+					reject();
+				});
+		});
+	}
 
 	scanQRCode(callback: (result: string) => void) {
         let barcodeScannerOptions: BarcodeScannerOptions = {

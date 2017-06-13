@@ -10,6 +10,7 @@ import { SchedulePageModule } from '../pages/schedule';
 import { DirectionStopPageModule } from '../pages/direction-stop';
 import { UserStartPageModule } from '../pages/user-start';
 import { CollectionModePageModule } from '../pages/collection-mode';
+import { CustomerInfoPageModule } from '../pages/customer-info';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -37,7 +38,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		SchedulePageModule,
 		DirectionStopPageModule,
 		UserStartPageModule,
-		CollectionModePageModule
+		CollectionModePageModule,
+		CustomerInfoPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
