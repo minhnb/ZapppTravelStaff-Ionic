@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>887424921355-keuod33sihrs7iv7bd2vr5t3eas42qs4.apps.googleusercontent.com</string>
+	<string>887424921355-0g1h2de2l314mfnklm3iv390s7oi961c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.887424921355-keuod33sihrs7iv7bd2vr5t3eas42qs4</string>
+	<string>com.googleusercontent.apps.887424921355-0g1h2de2l314mfnklm3iv390s7oi961c</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDUlKexgqfFaHP94TCK-M3EQcnQQZmimbM</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.zapppworld.driver</string>
+	<string>com.zapppworld.staff</string>
 	<key>PROJECT_ID</key>
 	<string>zappphk</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:887424921355:ios:27293c0c45ecbf6e</string>
+	<string>1:887424921355:ios:6cb9e4cb87a57ce1</string>
 	<key>DATABASE_URL</key>
 	<string>https://zappphk.firebaseio.com</string>
 </dict>

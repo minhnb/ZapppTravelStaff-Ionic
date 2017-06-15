@@ -40,6 +40,41 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887424921355:android:6cb9e4cb87a57ce1",
+        "android_client_info": {
+          "package_name": "com.zapppworld.staff"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887424921355-lhhmltnrjs6esk7jjvfvgog3hvsmd17t.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "887424921355-hb74akt3p29labk66u6l11pkh1g8cgs7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdA6SKoGraZXyfYIHrZYoGIOUZ0PmexTU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
