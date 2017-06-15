@@ -35,29 +35,6 @@ export class MyApp extends BaseComponent {
 			{ title: 'List', component: ListPage },
 			{ title: 'Schedule', component: SchedulePage }
 		];
-
-		if (this.isMobileDevice(platform)) {
-			fcm.subscribeToTopic('marketing');
-
-			fcm.getToken().then(token => {
-				// alert('registerToken' + token);
-				console.log('registerToken' + token);
-			})
-
-			fcm.onNotification().subscribe(data => {
-				if (data.wasTapped) {
-					console.log("Received in background");
-				} else {
-					console.log("Received in foreground");
-				};
-			})
-
-			fcm.onTokenRefresh().subscribe(token => {
-				alert('registerToken' + token);
-			})
-
-			fcm.unsubscribeFromTopic('marketing');
-		}
 	}
 
 	initializeApp() {
@@ -66,7 +43,36 @@ export class MyApp extends BaseComponent {
 			// Here you can do any higher level native things you might need.
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
+			this.registerFCM();
 		});
+	}
+
+	registerFCM() {
+		if (this.isMobileDevice(this.platform)) {
+			let fcm = this.fcm;
+			// fcm.subscribeToTopic('marketing');
+
+			fcm.getToken().then(token => {
+				// alert('registerToken' + token);
+				console.log('registerToken' + token);
+			});
+
+			fcm.onNotification().subscribe(data => {
+				if (data.wasTapped) {
+					console.log("Received in background");
+				} else {
+					console.log("Received in foreground");
+					console.log(data);
+					this.showInfo(data.aps.alert, data["google.c.a.c_l"]);
+				};
+			});
+
+			fcm.onTokenRefresh().subscribe(token => {
+				alert('registerToken' + token);
+			});
+
+			// fcm.unsubscribeFromTopic('marketing');
+		}
 	}
 
 	openPage(page) {

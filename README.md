@@ -25,7 +25,7 @@ $ ionic cordova run ios
 Substitute ios for android if not on a Mac.
 
 *********************************************************************************************
-HOW TO RESOLVE GOOGLE SERVICE CONFLICT WHEN USING GOOGLE MAPS AND GOOGLE FIREBASE CLOUD MESSAGE
+[ANDROID] HOW TO RESOLVE GOOGLE SERVICE CONFLICT WHEN USING GOOGLE MAPS AND GOOGLE FIREBASE CLOUD MESSAGE
 
 Step 1: Remember: Do it before add platform android. If you already added platform android, you should remove it.
 ```bash
@@ -61,3 +61,20 @@ apply plugin: 'com.google.gms.google-services'
 ```
 
 And these changes should fix the problems with the version conflicts.
+
+*********************************************************************************************
+[iOS] RESOLVE FCM - INVALID GOOGLE_APP_ID PROBLEM
+
+ The GoogleService-Info.plist was corrupted by Cordova when copying, so you will solve it by copying it directly to the resource folder after adding the platform.
+
+ Step 1: Build ios. It may be failed but it will generate a Xcode Project.
+ ```bash
+ $ ionic cordova build ios
+ ```
+
+ Step 2: Check your GoogleService-Info.plist in Xcode Project, in resource folder
+ ```bash
+ platforms/ios/<your app>/Resources
+ platforms/ios/<your app>/Resources/Resources
+ ```
+ If they are different with the root GoogleService-Info.plist file, replace them.
