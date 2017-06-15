@@ -57,13 +57,13 @@ export class MyApp extends BaseComponent {
 				console.log('registerToken' + token);
 			});
 
-			fcm.onNotification().subscribe(data => {
+			fcm.onNotification().subscribe((data: any) => {
 				if (data.wasTapped) {
 					console.log("Received in background");
 				} else {
 					console.log("Received in foreground");
-					console.log(data);
-					this.showInfo(data.aps.alert, data["google.c.a.c_l"]);
+					console.log(JSON.stringify(data));
+					this.showInfo(data.body, data.title);
 				};
 			});
 
