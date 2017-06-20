@@ -25,6 +25,22 @@ $ ionic cordova run ios
 Substitute ios for android if not on a Mac.
 
 *********************************************************************************************
+[ANDROID] RESOLVE MULTIPLE VERSION PROBLEM
+Add this snippet to build.gradle file of the android platform folder, nearly at the bottom of the file
+```bash
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.1'            
+            }
+        }
+    }
+}
+```
+
+*********************************************************************************************
 [ANDROID] HOW TO RESOLVE GOOGLE SERVICE CONFLICT WHEN USING GOOGLE MAPS AND GOOGLE FIREBASE CLOUD MESSAGE
 
 Step 1: Remember: Do it before add platform android. If you already added platform android, you should remove it.

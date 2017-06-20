@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, Polyline, PolylineOptions } from '@ionic-native/google-maps';
-import { Geolocation } from '@ionic-native/geolocation';
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { BaseComponent } from '../../app/base.component';
 
 import { GoogleMapsLoader } from '../../app/helper/googleMaps.loader';
@@ -13,8 +13,6 @@ import * as decodePolyline from 'decode-google-map-polyline';
 	templateUrl: 'direction-stop.html',
 })
 export class DirectionStopPage extends BaseComponent {
-
-
 	directionsService: any;
 	map: GoogleMap;
 	destinationLocation: LatLng = null;
@@ -24,6 +22,7 @@ export class DirectionStopPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private googleMaps: GoogleMaps, private geolocation: Geolocation) {
 		super(injector);
+		this.hasGoogleMapNative = true;
 		if (this.navParams.data && this.navParams.data.long && this.navParams.data.lat) {
 			this.destinationLocation = new LatLng(this.navParams.data.lat, this.navParams.data.long);
 		}
@@ -54,16 +53,28 @@ export class DirectionStopPage extends BaseComponent {
 		this.navCtrl.pop();
 	}
 
+	disableMapClickable() {
+		this.map.setClickable(false);
+	}
+
+	enableMapClickable() {
+		this.map.setClickable(true);
+	}
+
 	loadMap() {
 		console.log('Loading map!');
 		let element: HTMLElement = document.getElementById('map');
 
 		this.map = this.googleMaps.create(element);
 
+		let geolocationOptions: GeolocationOptions = {
+			enableHighAccuracy: true,
+			timeout: 5000
+		};
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
-				this.geolocation.getCurrentPosition().then((resp) => {
+				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
 					let position: CameraPosition = {
 						target: currentLocation,
@@ -86,6 +97,10 @@ export class DirectionStopPage extends BaseComponent {
 
 				}).catch((error) => {
 					console.log('Error getting location', error);
+					this.showConfirm('Unable to determine your location. Please make sure location services are enabled', 'Error',
+						() => {
+							this.diagnostic.switchToLocationSettings();
+						});
 				});
 
 				let watch = this.geolocation.watchPosition();
@@ -112,14 +127,9 @@ export class DirectionStopPage extends BaseComponent {
 	}
 
 	leaveCurentStop() {
-		this.map.setClickable(false);
 		this.showConfirm('Do you want to leave this stop?', 'Confirm leaving',
 			() => {
-				this.map.setClickable(true);
 				this.navCtrl.pop();
-			},
-			() => {
-				this.map.setClickable(true);
 			});
 	}
 

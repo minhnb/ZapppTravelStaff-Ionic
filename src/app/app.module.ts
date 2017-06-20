@@ -20,6 +20,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { FCM } from '@ionic-native/fcm';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { HttpModule } from '@angular/http';
 
@@ -55,6 +56,7 @@ import { ZapppHttp } from './services/zapppHttp';
 		Geolocation,
 		FCM,
 		BarcodeScanner,
+		Diagnostic,
 		ZapppHttp,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]
