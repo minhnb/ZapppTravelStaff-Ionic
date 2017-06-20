@@ -97,7 +97,7 @@ export class DirectionStopPage extends BaseComponent {
 
 				}).catch((error) => {
 					console.log('Error getting location', error);
-					this.showConfirm('Unable to determine your location. Please make sure location services are enabled', 'Error',
+					this.showConfirm('Unable to determine your location. Please make sure location services are enabled. If they are enabled, try to restart them.', 'Error',
 						() => {
 							this.diagnostic.switchToLocationSettings();
 						});
