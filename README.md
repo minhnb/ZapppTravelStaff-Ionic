@@ -26,7 +26,9 @@ Substitute ios for android if not on a Mac.
 
 *********************************************************************************************
 [ANDROID] RESOLVE MULTIPLE VERSION PROBLEM
+
 Add this snippet to build.gradle file of the android platform folder, nearly at the bottom of the file
+
 ```bash
 configurations.all {
     resolutionStrategy.eachDependency { details ->
