@@ -11,6 +11,7 @@ import { DirectionStopPageModule } from '../pages/direction-stop';
 import { UserStartPageModule } from '../pages/user-start';
 import { CollectionModePageModule } from '../pages/collection-mode';
 import { CustomerInfoPageModule } from '../pages/customer-info';
+import { CustomerLuggagePageModule } from '../pages/customer-luggage';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -40,7 +41,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		DirectionStopPageModule,
 		UserStartPageModule,
 		CollectionModePageModule,
-		CustomerInfoPageModule
+		CustomerInfoPageModule,
+		CustomerLuggagePageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

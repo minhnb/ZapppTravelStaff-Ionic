@@ -41,11 +41,11 @@ export class UserService {
 
 	pureLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {
 		let user = {
-			login_name: loginName,
+			email: loginName,
 			password: password,
 			country: countryCode
 		};
-		return this.zapppHttp.post(this.userUrl + '/login', user);
+		return this.zapppHttp.post(AppConfig.API_URL + 'login', user);
 	}
 
 	userLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {

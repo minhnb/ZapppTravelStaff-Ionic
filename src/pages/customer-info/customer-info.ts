@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { CustomerLuggagePage } from '../customer-luggage';
 
 @IonicPage()
 @Component({
@@ -11,6 +12,7 @@ export class CustomerInfoPage extends BaseComponent {
 
 	customer: any;
 	listRow: Array<any>;
+	needConfirmBeforeLeave: boolean = true;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
@@ -40,13 +42,25 @@ export class CustomerInfoPage extends BaseComponent {
 	}
 
 	ionViewCanLeave() {
+		if (!this.needConfirmBeforeLeave) {
+			return true;
+		}
 		return this.confirmBeforeLeaveView();
 	}
 
 	scanLuggageQRCode() {
 		this.scanQRCode(text => {
-            this.showInfo(text, 'Scan result');
+            this.goToCustomerLugguagePage(text);
         });
+	}
+
+	goToCustomerLugguagePage(firstLuggageCode: string) {
+		let params = {
+			customer: this.customer,
+			luggageCode: firstLuggageCode
+		}
+		this.needConfirmBeforeLeave = false;
+		this.navCtrl.push(CustomerLuggagePage, params);
 	}
 
 }
