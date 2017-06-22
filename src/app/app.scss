@@ -23,6 +23,11 @@ ion-toolbar {
   .toolbar-title {
     color: #ffffff;
   }
+
+  ion-title.title {
+      padding-left: 10px;
+      padding-right: 10px;
+  }
 }
 
 ion-navbar {

@@ -12,6 +12,7 @@ import { UserStartPageModule } from '../pages/user-start';
 import { CollectionModePageModule } from '../pages/collection-mode';
 import { CustomerInfoPageModule } from '../pages/customer-info';
 import { CustomerLuggagePageModule } from '../pages/customer-luggage';
+import { ListTruckPageModule } from '../pages/list-truck';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -42,7 +43,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		UserStartPageModule,
 		CollectionModePageModule,
 		CustomerInfoPageModule,
-		CustomerLuggagePageModule
+		CustomerLuggagePageModule,
+		ListTruckPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

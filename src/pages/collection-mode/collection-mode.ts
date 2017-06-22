@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { CustomerInfoPage } from '../customer-info';
+import { ListTruckPage } from '../list-truck';
 
 @IonicPage()
 @Component({
@@ -30,5 +31,21 @@ export class CollectionModePage extends BaseComponent {
 			}
 			this.navCtrl.push(CustomerInfoPage, customerInfo);
         });
+	}
+
+	acceptLugguageFromZappper() {
+		let listTruck = [
+			{
+				name: 'LY123'
+			},
+			{
+				name: 'LY834'
+			}
+		];
+		let params = {
+			pageName: 'ACCEPT luggage from ZAPPPER',
+			listTruck: listTruck
+		}
+		this.navCtrl.push(ListTruckPage, params);
 	}
 }

@@ -1,0 +1,19 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ pageName }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row full class="list-header info-row">
+    <ion-col col-12 class="label">Truck</ion-col>
+  </ion-row>
+  <ion-list>
+    <button menuClose ion-item no-lines *ngFor="let item of listTruck">
+        {{ item.name }}
+      </button>
+  </ion-list>
+</ion-content>
