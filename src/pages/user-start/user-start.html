@@ -10,20 +10,18 @@
 
 
 <ion-content padding>
-  <ion-item>
-    <ion-label>Status</ion-label>
-    <ion-select [(ngModel)]="status" (ngModelChange)="onStatusChange($event)">
-      <ion-option value="online">Online</ion-option>
-      <ion-option value="offline">Offline</ion-option>
-    </ion-select>
+  <ion-item no-lines>
+    <ion-label>Active</ion-label>
+    <ion-toggle color="secondary" [(ngModel)]="isActive" (ngModelChange)="onStatusChange($event)"></ion-toggle>
   </ion-item>
-  <ion-item>
+  <div full padding [hidden]="isActive" class="middle-notice">Turn it on and choose a truck to receive assignments from Office System</div>
+  <ion-item no-lines [hidden]="!isActive">
     <ion-label>Choose a truck</ion-label>
     <ion-select [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
       <ion-option *ngFor="let item of listTruck" value="{{ item.value }}">{{ item.text }}</ion-option>
     </ion-select>
   </ion-item>
-  <div class="button-bottom-full">
+  <div class="button-bottom-full" [hidden]="!isActive">
     <button ion-button full (click)="goToCollectionModePage()">Collection</button>
     <button ion-button full (click)="goToDeliveryModePage()">Delivery</button>
   </div>

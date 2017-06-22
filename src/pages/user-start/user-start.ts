@@ -10,7 +10,7 @@ import { CollectionModePage } from '../collection-mode';
 })
 export class UserStartPage extends BaseComponent {
 
-    status: any;
+	isActive: boolean;
     truck: any;
     listTruck: Array<any> = [
         {
@@ -29,12 +29,12 @@ export class UserStartPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		this.checkDevicePermission();
+		// this.checkDevicePermission();
 	}
 
     onStatusChange(event) {
         // console.log(event);
-        // console.log(this.status);
+        // console.log(this.isActive);
     }
 
     onTruckChange(event) {

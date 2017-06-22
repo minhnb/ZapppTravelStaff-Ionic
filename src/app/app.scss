@@ -110,8 +110,16 @@ button.button-scanner {
             text-align: left;
 
             &.mark {
-                color: green;                
+                color: green;
             }
         }
     }
+}
+.middle-notice {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 1.7rem;
+    line-height: 25px;
+    margin-top: -44px;
 }
