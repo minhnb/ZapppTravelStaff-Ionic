@@ -104,8 +104,14 @@ button.button-scanner {
 }
 
 .list-item {
-    button.transparent-button.text-button {
-        padding: 0;
-        text-align: left;
+    ion-col {
+        button.transparent-button.text-button {
+            padding: 0;
+            text-align: left;
+
+            &.mark {
+                color: green;                
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
-import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, Injector, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { CustomerLuggagePage } from '../customer-luggage';
 
@@ -12,11 +12,42 @@ export class CustomerInfoPage extends BaseComponent {
 
 	customer: any;
 	listRow: Array<any>;
-	needConfirmBeforeLeave: boolean = true;
+	hasLuggage: boolean = false;
+
+	@ViewChild(Navbar) navBar: Navbar;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
 		this.customer = this.navParams.data;
+		this.initCustomerInfo();
+	}
+
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad CustomerInfoPage');
+		this.customBackButtonClick();
+	}
+
+	ionViewWillEnter() {
+		console.log('ionViewWillEnter');
+		console.log(JSON.stringify(this.customer));
+		if (this.customer && this.customer.listLuggage && this.customer.listLuggage.length) {
+			this.hasLuggage = true;
+		} else {
+			this.hasLuggage = false;
+		}
+	}
+
+	customBackButtonClick() {
+		this.navBar.backButtonClick = (e: UIEvent) => {
+			this.confirmBeforeLeaveView().then(() => {
+				this.navCtrl.pop();
+			}).catch(() => {
+
+			});
+		};
+	}
+
+	initCustomerInfo() {
 		this.listRow = [
 			{
 				label: 'Hotel',
@@ -37,29 +68,19 @@ export class CustomerInfoPage extends BaseComponent {
 		]
 	}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad CustomerInfoPage');
-	}
-
-	ionViewCanLeave() {
-		if (!this.needConfirmBeforeLeave) {
-			return true;
-		}
-		return this.confirmBeforeLeaveView();
-	}
-
 	scanLuggageQRCode() {
 		this.scanQRCode(text => {
             this.goToCustomerLugguagePage(text);
         });
 	}
 
-	goToCustomerLugguagePage(firstLuggageCode: string) {
-		let params = {
-			customer: this.customer,
-			luggageCode: firstLuggageCode
+	goToCustomerLugguagePage(firstLuggageCode?: string) {
+		let params: any = {
+			customer: this.customer
+		};
+		if (firstLuggageCode) {
+			params.luggageCode = firstLuggageCode;
 		}
-		this.needConfirmBeforeLeave = false;
 		this.navCtrl.push(CustomerLuggagePage, params);
 	}
 

@@ -13,6 +13,7 @@
         <div class="content">{{ item.content }}</div>
     </div>
     <div class="button-bottom-full">
-      <button ion-button full (click)="scanLuggageQRCode()">Scan luggage</button>
+      <button ion-button full (click)="scanLuggageQRCode()" [hidden]="hasLuggage">Scan luggage</button>
+      <button ion-button full (click)="goToCustomerLugguagePage()" [hidden]="!hasLuggage">Next</button>
     </div>
 </ion-content>
