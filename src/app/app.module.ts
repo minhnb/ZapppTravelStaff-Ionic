@@ -35,7 +35,7 @@ import { ZapppHttp } from './services/zapppHttp';
 	],
 	imports: [
 		BrowserModule,
-		IonicModule.forRoot(MyApp),
+		IonicModule.forRoot(MyApp, { mode: 'ios' }),
 		HttpModule,
 		SchedulePageModule,
 		DirectionStopPageModule,

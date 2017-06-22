@@ -25,6 +25,14 @@ ion-toolbar {
   }
 }
 
+ion-navbar {
+    button.back-button {
+        span.back-button-text {
+            visibility: hidden;;
+        }
+    }
+}
+
 .scroll-content {
   .button-bottom-full {
     position: absolute;
