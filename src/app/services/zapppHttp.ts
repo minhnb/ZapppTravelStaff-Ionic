@@ -17,11 +17,13 @@ export class ZapppHttp {
     constructor(private http: Http, private _spinner: SpinnerDialog) { }
 
     private getRequestOptionsByToken(method: string | RequestMethod, accessToken: string): RequestOptions {
-        let jwt = 'JWT ' + accessToken;
-        let headerParams = {
-            "jsonerror": "true",
-            "Authorization": jwt
-        };
+        let headerParams = {};
+        if (accessToken) {
+            let jwt = 'JWT ' + accessToken;
+            headerParams = {
+                "Authorization": jwt
+            };
+        }
         if (method != RequestMethod.Get) {
             headerParams['Content-Type'] = 'application/json';
         }

@@ -7,7 +7,7 @@ import { AppConstant } from '../app.constant';
 
 @Injectable()
 export class UserService {
-	private userUrl = AppConfig.API_URL + 'auth';
+	private userUrl = AppConfig.API_URL + 'user';
 	errorWrongUserNameOrPassword: any;
 
 	constructor(private zapppHttp: ZapppHttp) { }
@@ -29,9 +29,9 @@ export class UserService {
 	}
 
 	handleLoginSuccess(data: any): any {
-		let role = AppConstant.USER_ROLE.SENDER.toLowerCase();
-		this.saveUserAccessTokenToLocalStorage(data, data.user.roles);
-		return data;
+		// let role = AppConstant.USER_ROLE.SENDER.toLowerCase();
+		// this.saveUserAccessTokenToLocalStorage(data, data.user.roles);
+		// return data;
 	}
 
 	handleLogout(data: any): any {
@@ -45,7 +45,7 @@ export class UserService {
 			password: password,
 			country: countryCode
 		};
-		return this.zapppHttp.post(AppConfig.API_URL + 'login', user);
+		return this.zapppHttp.post(AppConfig.API_URL + '/login', user);
 	}
 
 	userLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {
