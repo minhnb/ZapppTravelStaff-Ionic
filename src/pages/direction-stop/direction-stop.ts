@@ -180,7 +180,7 @@ export class DirectionStopPage extends BaseComponent {
 					}
 				}
 			} else {
-				alert('Directions request failed due to ' + status);
+				this.showError('Directions request failed due to ' + status);
 			}
 		});
 	}
