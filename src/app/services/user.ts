@@ -45,7 +45,7 @@ export class UserService {
 			password: password,
 			country: countryCode
 		};
-		return this.zapppHttp.post(AppConfig.API_URL + '/login', user);
+		return this.zapppHttp.post(this.userUrl + '/login', user);
 	}
 
 	userLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {

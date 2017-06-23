@@ -81,7 +81,7 @@ export class ZapppHttp {
         if (ENV != 'production') {
             console.log(response);
         }
-		return response;
+		return response.data;
     }
 
     handleError(error: Response | any, url: string, options: RequestOptions): any {
@@ -100,13 +100,15 @@ export class ZapppHttp {
         }
 		if (error instanceof Response) {
             if (error.status == 0) {
-                let message = 'ERROR.CONNECTION';
+                let message = 'Connection Error';
                 errMsg = {
                     status: error.status,
                     message: message
                 }
             } else {
-                errMsg = error.json();
+                let errorJson = error.json();
+                errMsg = errorJson.status;
+                errMsg.message = errMsg.msg;
             }
 		} else {
 			errMsg = {

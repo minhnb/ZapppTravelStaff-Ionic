@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { UserService } from '../../app/services/user';
 import { SchedulePage } from '../schedule';
+import { UserStartPage } from '../user-start';
 
 @Component({
 	selector: 'page-login',
@@ -16,6 +17,8 @@ export class LoginPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private userService: UserService) {
 		super(injector);
+		this.username = 'test002@gmail.com';
+		this.password = '1234567';
 	}
 
 	ionViewDidLoad() {
@@ -25,7 +28,7 @@ export class LoginPage extends BaseComponent {
 	login() {
 		this.userService.userLogIn(this.username, this.password).subscribe(
 			res => {
-				this.navCtrl.setRoot(SchedulePage);
+				this.navCtrl.setRoot(UserStartPage);
 			},
 			err => {
 				this.showError(err.message);
