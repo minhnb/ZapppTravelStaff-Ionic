@@ -1,0 +1,21 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ pageName }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row full class="list-header info-row">
+    <ion-col col-12 class="label">Receiver</ion-col>
+    <ion-col col-12>
+      <ion-list>
+        <button class="no-padding-left" menuClose ion-item no-lines *ngFor="let item of listOrder" (click)="goToCustomerLugguagePage(item)">
+              {{ item.name }}
+          </button>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-content>

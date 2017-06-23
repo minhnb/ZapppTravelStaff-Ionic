@@ -13,6 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { SchedulePage } from '../pages/schedule';
 import { UserStartPage } from '../pages/user-start';
 import { CustomerLuggagePage } from '../pages/customer-luggage';
+import { CollectionModePage } from '../pages/collection-mode';
 
 @Component({
 	templateUrl: 'app.html',
@@ -30,7 +31,6 @@ export class MyApp extends BaseComponent {
 		super(injector);
 		this.initializeApp();
 
-		// used for an example of ngFor and navigation
 		this.pages = [
 			{ title: 'Home', component: UserStartPage },
 			{ title: 'Schedule', component: SchedulePage }
@@ -39,8 +39,6 @@ export class MyApp extends BaseComponent {
 
 	initializeApp() {
 		this.platform.ready().then(() => {
-			// Okay, so the platform is ready and our plugins are available.
-			// Here you can do any higher level native things you might need.
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
 			this.registerFCM();
@@ -76,8 +74,6 @@ export class MyApp extends BaseComponent {
 	}
 
 	openPage(page) {
-		// Reset the content nav to have just this page
-		// we wouldn't want the back button to show in this scenario
 		this.nav.setRoot(page.component);
 	}
 
