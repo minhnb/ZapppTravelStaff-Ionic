@@ -83,7 +83,8 @@ export class CustomerInfoPage extends BaseComponent {
 
 	goToCustomerLugguagePage(firstLuggageCode?: string) {
 		let params: any = {
-			customer: this.customer
+			customer: this.customer,
+			isFromCustomerInfoPage: true
 		};
 		if (firstLuggageCode) {
 			params.luggageCode = firstLuggageCode;

@@ -13,6 +13,8 @@ export class CustomerLuggagePage extends BaseComponent {
     customer: any;
     attendantSaveMode: boolean = false;
     selectedIndex: number = -1;
+	isTransferMode: boolean = false;
+	isFromCustomerInfoPage: boolean = false;
 
     @ViewChild(Navbar) navBar: Navbar;
 
@@ -66,6 +68,12 @@ export class CustomerLuggagePage extends BaseComponent {
         }
 		if (this.customer.isAttendantSaveMode) {
 			this.attendantSaveMode = true;
+		}
+		if (this.navParams.data.isTransferMode) {
+			this.isTransferMode = true;
+		}
+		if (this.navParams.data.isFromCustomerInfoPage) {
+			this.isFromCustomerInfoPage = true;
 		}
     }
 
@@ -186,7 +194,12 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     finishScanning() {
-        this.goBackToCollectionModePage();
+		if (this.isFromCustomerInfoPage) {
+			this.goBackToCollectionModePage();
+		} else {
+			this.goBackToCustomerInfoPage();
+		}
+
     }
 
     goBackToCollectionModePage() {

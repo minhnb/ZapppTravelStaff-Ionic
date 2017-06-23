@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { CustomerInfoPage } from '../customer-info';
 import { ListTruckPage } from '../list-truck';
+import { ListOrderPage } from '../list-order';
 
 @IonicPage()
 @Component({
@@ -70,5 +71,67 @@ export class CollectionModePage extends BaseComponent {
 			listTruck: listTruck
 		}
 		this.navCtrl.push(ListTruckPage, params);
+	}
+
+	transferToOtherTruck() {
+		let listTruck = [
+			{
+				name: 'LY123'
+			},
+			{
+				name: 'LY834'
+			}
+		];
+		let params = {
+			pageName: 'Transfer to other trucks',
+			listTruck: listTruck,
+			isTransferMode: true
+		}
+		this.navCtrl.push(ListTruckPage, params);
+	}
+
+	viewOrder() {
+		let params = {
+            pageName: 'Orders',
+            listOrder: [
+                {
+                    name: 'Dolly Doe',
+                    listLuggage: [
+                        {
+                            luggageCode: 'ZTL12789',
+                            storageBinCode: 'A12'
+                        }
+                    ]
+                },
+                {
+                    name: 'Jolly Doe',
+                    listLuggage: [
+                        {
+                            luggageCode: 'ZTL12790',
+                            storageBinCode: 'A13'
+                        }
+                    ]
+                },
+                {
+                    name: 'Nanny San',
+                    listLuggage: [
+                        {
+                            luggageCode: 'ZTL12791',
+                            storageBinCode: 'A14'
+                        }
+                    ]
+                },
+                {
+                    name: 'Fancy Lu',
+                    listLuggage: [
+                        {
+                            luggageCode: 'ZTL12792',
+                            storageBinCode: 'A15'
+                        }
+                    ]
+                }
+            ]
+        }
+        this.navCtrl.push(ListOrderPage, params);
 	}
 }

@@ -12,7 +12,7 @@
     <ion-col col-12 class="label">Truck</ion-col>
     <ion-col col-12>
       <ion-list>
-        <button class="no-padding-left" menuClose ion-item no-lines *ngFor="let item of listTruck">
+        <button class="no-padding-left" menuClose ion-item no-lines *ngFor="let item of listTruck" (click)="goToTruckOrderPage(item)">
               {{ item.name }}
           </button>
       </ion-list>

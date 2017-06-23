@@ -18,7 +18,7 @@
           </ion-col>
       </ion-col>
       <ion-col col-4>
-          <button class="transparent-button text-button" (click)="scanBinStorageCode(i)">{{ item.storageBinCode }}</button>
+          <button class="transparent-button text-button" (click)="isTransferMode || scanBinStorageCode(i)">{{ item.storageBinCode }}</button>
       </ion-col>
       <ion-col col-2>
         <button class="transparent-button" (click)="removeItem(i)">
@@ -27,7 +27,7 @@
       </ion-col>
     </ion-row>
   </ion-list>
-  <div class="button-bottom-full">
+  <div class="button-bottom-full" [hidden]="isTransferMode">
     <button class="transparent-button button-scanner" (click)="smartScanQRCode()">
           <ion-icon name="ios-qr-scanner-outline"></ion-icon>
       </button>
