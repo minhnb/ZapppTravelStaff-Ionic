@@ -64,6 +64,9 @@ export class CustomerLuggagePage extends BaseComponent {
                 this.listLuggage = this.customer.listLuggage;
             }
         }
+		if (this.customer.isAttendantSaveMode) {
+			this.attendantSaveMode = true;
+		}
     }
 
     isLuggageCode(code: string): boolean {

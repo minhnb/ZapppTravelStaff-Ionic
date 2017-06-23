@@ -21,19 +21,42 @@ export class CollectionModePage extends BaseComponent {
 
 	scanUserQRCode() {
         this.scanQRCode(text => {
-            // this.showInfo(text, 'Scan result');
 			let customerInfo = {
 				name: 'Dolly Doe',
 				hotel: 'Sheraton',
 				address: '20 Nathan Rd, Hong Kong',
 				receiver: 'Dolly Doe',
-				room: '223'
+				room: '223',
+				isAttendantSaveMode: false
 			}
 			this.navCtrl.push(CustomerInfoPage, customerInfo);
         });
 	}
 
 	acceptLugguageFromZappper() {
+		this.scanQRCode(text => {
+			let customerInfo = {
+				name: 'Dolly Doe',
+				hotel: 'Sheraton',
+				address: '20 Nathan Rd, Hong Kong',
+				receiver: 'Dolly Doe',
+				room: '223',
+				isAttendantSaveMode: true,
+				listLuggage: [
+					{
+						luggageCode: 'ZTL12789',
+						storageBinCode: ''
+					},
+					{
+						luggageCode: 'ZTL127890',
+						storageBinCode: ''
+					}
+				]
+			}
+			this.navCtrl.push(CustomerInfoPage, customerInfo);
+        });
+	}
+	acceptLugguageFromOtherTruck() {
 		let listTruck = [
 			{
 				name: 'LY123'
@@ -43,7 +66,7 @@ export class CollectionModePage extends BaseComponent {
 			}
 		];
 		let params = {
-			pageName: 'ACCEPT luggage from ZAPPPER',
+			pageName: 'Accept luggage from other trucks',
 			listTruck: listTruck
 		}
 		this.navCtrl.push(ListTruckPage, params);

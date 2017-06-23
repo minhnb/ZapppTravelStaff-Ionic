@@ -105,7 +105,7 @@ button.button-scanner {
 .info-row {
     margin-bottom: 15px;
 
-    .label {
+    & > .label {
         font-weight: bold;
         font-size: x-small;
         margin-bottom: 5px;
@@ -135,4 +135,7 @@ button.button-scanner {
     font-size: 1.7rem;
     line-height: 25px;
     margin-top: -44px;
+}
+.no-padding-left {
+    padding-left: 0;
 }

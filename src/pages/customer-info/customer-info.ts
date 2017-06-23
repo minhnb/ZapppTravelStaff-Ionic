@@ -13,13 +13,13 @@ export class CustomerInfoPage extends BaseComponent {
 	customer: any;
 	listRow: Array<any>;
 	hasLuggage: boolean = false;
+	attendantSaveMode: boolean = false;
 
 	@ViewChild(Navbar) navBar: Navbar;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
 		this.customer = this.navParams.data;
-		this.initCustomerInfo();
 	}
 
 	ionViewDidLoad() {
@@ -30,11 +30,7 @@ export class CustomerInfoPage extends BaseComponent {
 	ionViewWillEnter() {
 		console.log('ionViewWillEnter');
 		console.log(JSON.stringify(this.customer));
-		if (this.customer && this.customer.listLuggage && this.customer.listLuggage.length) {
-			this.hasLuggage = true;
-		} else {
-			this.hasLuggage = false;
-		}
+		this.initCustomerInfo();
 	}
 
 	customBackButtonClick() {
@@ -66,6 +62,17 @@ export class CustomerInfoPage extends BaseComponent {
 				content: this.customer.room
 			}
 		]
+
+		if (this.customer.listLuggage && this.customer.listLuggage.length) {
+			this.hasLuggage = true;
+		} else {
+			this.hasLuggage = false;
+		}
+
+		if (this.customer.isAttendantSaveMode) {
+			this.attendantSaveMode = true;
+		}
+
 	}
 
 	scanLuggageQRCode() {
