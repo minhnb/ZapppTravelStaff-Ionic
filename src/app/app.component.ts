@@ -66,7 +66,8 @@ export class MyApp extends BaseComponent {
 			});
 
 			fcm.onTokenRefresh().subscribe(token => {
-				alert('registerToken' + token);
+				// alert('registerToken' + token);
+				console.log('registerToken' + token);
 			});
 
 			// fcm.unsubscribeFromTopic('marketing');
