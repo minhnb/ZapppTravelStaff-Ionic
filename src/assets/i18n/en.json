@@ -42,6 +42,7 @@
   "PROMPT_BARCODE_SCANNER": "Place a barcode inside the scan area",
   "RECEIVER": "Receiver",
   "ROOM": "Room",
+  "SENDER": "Sender",
   "STORAGE_BIN": "Storage Bin",
   "TRUCK": "Truck",
   "USERNAME": "Username"
