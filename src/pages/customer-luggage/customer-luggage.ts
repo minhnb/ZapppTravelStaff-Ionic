@@ -21,6 +21,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
         super(injector);
         this.initCustomerLuggage();
+		// for quick layout
         // this.attendantSaveMode = true;
         // this.customer = {
         //     name: 'Dolly Doe',
@@ -75,7 +76,24 @@ export class CustomerLuggagePage extends BaseComponent {
 		if (this.navParams.data.isFromCustomerInfoPage) {
 			this.isFromCustomerInfoPage = true;
 		}
+		if (this.isAcceptLuggageFromOtherTrucksMode()) {
+			this.removeAllOldStorageBinCode();
+		}
     }
+
+	removeAllOldStorageBinCode() {
+		this.listLuggage.forEach(item => {
+			item.storageBinCode = '';
+		});
+	}
+
+	isAcceptLuggageFromOtherTrucksMode(): boolean {
+		return this.attendantSaveMode && !this.isFromCustomerInfoPage && !this.isTransferMode;
+	}
+
+	isAllowedToRemoveLuggageCode() {
+		return !(this.isTransferMode || this.attendantSaveMode || !this.isFromCustomerInfoPage);
+	}
 
     isLuggageCode(code: string): boolean {
         if (code.startsWith('ZTL')) {
