@@ -42,6 +42,7 @@ export class MyApp extends BaseComponent {
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
 			this.registerFCM();
+			this.defineLangs();
 		});
 	}
 
@@ -72,6 +73,13 @@ export class MyApp extends BaseComponent {
 
 			// fcm.unsubscribeFromTopic('marketing');
 		}
+	}
+
+	defineLangs() {
+		this.translate.addLangs(['en']);
+		this.translate.setDefaultLang('en');
+		this.translate.use('en');
+		console.log(this.translate);
 	}
 
 	openPage(page) {

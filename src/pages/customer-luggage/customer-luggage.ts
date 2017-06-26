@@ -103,11 +103,11 @@ export class CustomerLuggagePage extends BaseComponent {
 
     addLuggageCode(luggageCode: string) {
         if (!this.isLuggageCode(luggageCode)) {
-            this.showError('Invalid luggage code');
+            this.showError(this.translate.instant('ERROR_INVALID_LUGGAGE_CODE'));
             return;
         }
         if (this.isDuplicatedLuggageCode(luggageCode)) {
-            this.showError('This luggage code was already added');
+            this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_ALREADY_ADDED'));
             return;
         }
         let newItem = {
@@ -118,7 +118,7 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     removeItem(index: number) {
-        this.showConfirm('Are you sure you want to remove this row?', 'Delete Confirmation',
+        this.showConfirm(this.translate.instant('CONFIRM_REMOVE_LUGGAGE'), this.translate.instant('CONFIRMAION_DELETE'),
             () => {
                 this.listLuggage.splice(index, 1);
             });
@@ -155,7 +155,7 @@ export class CustomerLuggagePage extends BaseComponent {
             this.updateStorageBinCodeToLastItem(code);
             return;
         }
-        this.showError('Invalid luggage code');
+        this.showError(this.translate.instant('ERROR_INVALID_LUGGAGE_CODE'));
     }
 
     findLuggageCodeInList(luggageCode: string) {
@@ -163,7 +163,7 @@ export class CustomerLuggagePage extends BaseComponent {
         if (luggageCodeIndex > -1) {
             this.selectedIndex = luggageCodeIndex;
         } else {
-            this.showError('This code is not in list');
+            this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST'));
         }
     }
 

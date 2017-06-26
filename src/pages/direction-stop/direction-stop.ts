@@ -97,7 +97,7 @@ export class DirectionStopPage extends BaseComponent {
 
 				}).catch((error) => {
 					console.log('Error getting location', error);
-					this.showConfirm('Unable to determine your location. Please make sure location services are enabled. If they are enabled, try to restart them.', 'Error',
+					this.showConfirm(this.translate.instant('CONFIRM_LOCATION_SERVICE_PROBLEM'), this.translate.instant('ERROR'),
 						() => {
 							this.diagnostic.switchToLocationSettings();
 						});
@@ -127,7 +127,7 @@ export class DirectionStopPage extends BaseComponent {
 	}
 
 	leaveCurentStop() {
-		this.showConfirm('Do you want to leave this stop?', 'Confirm leaving',
+		this.showConfirm(this.translate.instant('CONFIRM_LEAVE_STOP'), this.translate.instant('CONFIRMAION_LEAVE'),
 			() => {
 				this.navCtrl.pop();
 			});

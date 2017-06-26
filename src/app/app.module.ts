@@ -25,7 +25,10 @@ import { FCM } from '@ionic-native/fcm';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 
-import { HttpModule } from '@angular/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+import { Http, HttpModule } from '@angular/http';
 
 import { ZapppHttp } from './services/zapppHttp';
 
@@ -39,6 +42,13 @@ import { ZapppHttp } from './services/zapppHttp';
 		BrowserModule,
 		IonicModule.forRoot(MyApp, { mode: 'ios' }),
 		HttpModule,
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: (http: Http) => new TranslateHttpLoader(http, 'assets/i18n/', '.json'),
+				deps: [Http]
+			}
+		}),
 		SchedulePageModule,
 		DirectionStopPageModule,
 		UserStartPageModule,

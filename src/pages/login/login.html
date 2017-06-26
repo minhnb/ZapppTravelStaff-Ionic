@@ -3,7 +3,7 @@
     <!-- <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button> -->
-    <ion-title>Staff App</ion-title>
+    <ion-title>{{ 'APP_NAME' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -11,14 +11,14 @@
 <ion-content padding>
   <form (ngSubmit)="login()">
     <ion-item>
-      <ion-input type="email" placeholder="Username" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-input type="email" placeholder="{{ 'USERNAME' | translate }}" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input type="password" placeholder="Password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-input type="password" placeholder="{{ 'PASSWORD' | translate }}" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
-    <a class="forgot-password" href="https://stage.zappp.com/forgot-password">Forgot password?</a>
+    <a class="forgot-password" href="https://stage.zappp.com/forgot-password">{{ 'LOGIN_FORGOT_PASSWORD' | translate }}</a>
     <div class="button-bottom-full">
-      <button ion-button full type="submit" [disabled]="!username || !password">Sign In</button>
+      <button ion-button full type="submit" [disabled]="!username || !password">{{ 'BUTTON_LOGIN' | translate }}</button>
     </div>
   </form>
 </ion-content>

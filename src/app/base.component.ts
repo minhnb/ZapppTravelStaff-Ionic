@@ -3,6 +3,7 @@ import { Platform, AlertController } from 'ionic-angular';
 import { AppConstant } from './app.constant';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { TranslateService } from '@ngx-translate/core';
 
 import * as moment from 'moment';
 
@@ -13,11 +14,13 @@ export class BaseComponent {
 	public alertController: AlertController;
 	public barcodeScanner: BarcodeScanner;
 	public diagnostic: Diagnostic;
+	public translate: TranslateService;
 	hasGoogleMapNative: boolean = false;
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
 		this.barcodeScanner = injector.get(BarcodeScanner);
 		this.diagnostic = injector.get(Diagnostic);
+		this.translate = injector.get(TranslateService);
 	}
 
 	isMobileDevice(platform: Platform): boolean {
@@ -27,7 +30,7 @@ export class BaseComponent {
 	checkDevicePermission() {
 		this.diagnostic.isLocationEnabled().then(isEnabled => {
 			if (isEnabled) return;
-			this.showConfirm('Please enable location service on your device', 'Error',
+			this.showConfirm(this.translate.instant('CONFIRM_ENABLE_LOCATION_SERVICE'), this.translate.instant('ERROR'),
 				() => {
 					this.diagnostic.switchToLocationSettings();
 				});
@@ -86,17 +89,17 @@ export class BaseComponent {
     }
 
     showError(message: string, title?: string, buttonTitle?: string) {
-        this.presentAlert(title || 'Error', message, [{ text: buttonTitle || 'Close' }]);
+        this.presentAlert(title || this.translate.instant('ERROR'), message, [{ text: buttonTitle || this.translate.instant('BUTTON_CLOSE') }]);
 	}
 
 	showInfo(message: string, title?: string, buttonTitle?: string) {
-        this.presentAlert(title || 'Info', message, [{ text: buttonTitle || 'Close' }]);
+        this.presentAlert(title || this.translate.instant('INFO'), message, [{ text: buttonTitle || this.translate.instant('BUTTON_CLOSE') }]);
 	}
 
     showConfirm(message: string, title?: string, okCallback?: () => void, cancelCallback?: () => void, okButtonTitle?: string, cancelButtonTitle?: string) {
         let buttons = [
             {
-                text: cancelButtonTitle || 'Cancel',
+                text: cancelButtonTitle || this.translate.instant('BUTTON_CANCEL'),
                 role: 'cancel',
                 handler: () => {
                     if (cancelCallback) {
@@ -105,7 +108,7 @@ export class BaseComponent {
                 }
             },
             {
-                text: okButtonTitle || 'OK',
+                text: okButtonTitle || this.translate.instant('BUTTON_OK'),
                 handler: () => {
                     if (okCallback) {
                         okCallback();
@@ -114,12 +117,12 @@ export class BaseComponent {
             }
         ];
 
-        this.presentAlert(title || 'Confirm', message, buttons);
+        this.presentAlert(title || this.translate.instant('CONFIRM'), message, buttons);
     }
 
 	confirmBeforeLeaveView(message?: string, title?: string): Promise<{}> {
 		return new Promise((resolve, reject) => {
-			this.showConfirm(message || 'Are you sure you want to discard?', title || 'Discard',
+			this.showConfirm(message || this.translate.instant('CONFIRM_LEAVE_VIEW'), title || this.translate.instant('CONFIRMAION_DISCARD'),
 				() => {
 					resolve();
 				},
@@ -133,7 +136,7 @@ export class BaseComponent {
         let barcodeScannerOptions: BarcodeScannerOptions = {
             showFlipCameraButton: false,
             resultDisplayDuration: 0,
-            prompt: 'Place a barcode inside the scan area'
+            prompt: this.translate.instant('PROMPT_BARCODE_SCANNER')
         };
 		this.barcodeScanner.scan(barcodeScannerOptions).then((barcodeData) => {
             if (!barcodeData.cancelled) {

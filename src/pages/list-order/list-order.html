@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <ion-row full class="list-header info-row">
-    <ion-col col-12 class="label">Receiver</ion-col>
+    <ion-col col-12 class="label">{{ 'RECEIVER' | translate }}</ion-col>
     <ion-col col-12>
       <ion-list>
         <button class="no-padding-left" menuClose ion-item no-lines *ngFor="let item of listOrder" (click)="goToCustomerLugguagePage(item)">

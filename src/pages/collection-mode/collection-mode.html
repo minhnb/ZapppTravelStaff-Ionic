@@ -4,7 +4,7 @@
     <button ion-button menuToggle>
           <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Collection Mode</ion-title>
+    <ion-title>{{ 'COLLECTION_MODE' | translate }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -12,10 +12,10 @@
 
 <ion-content padding>
     <div class="button-bottom-full">
-      <button ion-button full (click)="scanUserQRCode()">Scan User's QR</button>
-      <button ion-button full (click)="acceptLugguageFromZappper()">ACCEPT luggage from ZAPPPER</button>
-      <button ion-button full (click)="acceptLugguageFromOtherTruck()">ACCEPT luggage from other TRUCKS</button>
-      <button ion-button full (click)="transferToOtherTruck()">TRANSFER luggage to other TRUCKS</button>
-      <button ion-button full (click)="viewOrder()">View Order</button>
+      <button ion-button full (click)="scanUserQRCode()">{{ 'BUTTON_SCAN_USER_QR' | translate }}</button>
+      <button ion-button full (click)="acceptLugguageFromZappper()">{{ 'BUTTON_ACCEPT_LUGGAGE_FROM_ZAPPPER' | translate }}</button>
+      <button ion-button full (click)="acceptLugguageFromOtherTruck()">{{ 'BUTTON_ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS' | translate }}</button>
+      <button ion-button full (click)="transferToOtherTruck()">{{ 'BUTTON_TRANSFER_LUGGAGE_TO_OTHER_TRUCKS' | translate }}</button>
+      <button ion-button full (click)="viewOrder()">{{ 'BUTTON_VIEW_ORDER' | translate }}</button>
     </div>
 </ion-content>

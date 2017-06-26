@@ -46,19 +46,19 @@ export class CustomerInfoPage extends BaseComponent {
 	initCustomerInfo() {
 		this.listRow = [
 			{
-				label: 'Hotel',
+				label: this.translate.instant('HOTEL'),
 				content: this.customer.hotel
 			},
 			{
-				label: 'Address',
+				label: this.translate.instant('ADDRESS'),
 				content: this.customer.address
 			},
 			{
-				label: 'Receiver',
+				label: this.translate.instant('RECEIVER'),
 				content: this.customer.receiver
 			},
 			{
-				label: 'Room',
+				label: this.translate.instant('ROOM'),
 				content: this.customer.room
 			}
 		]

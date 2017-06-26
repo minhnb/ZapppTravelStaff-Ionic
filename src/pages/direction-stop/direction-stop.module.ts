@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { DirectionStopPage } from './direction-stop';
 
 @NgModule({
@@ -8,6 +9,7 @@ import { DirectionStopPage } from './direction-stop';
 	],
 	imports: [
 		IonicPageModule.forChild(DirectionStopPage),
+		TranslateModule
 	],
 	exports: [
 		DirectionStopPage
