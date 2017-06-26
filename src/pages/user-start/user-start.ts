@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { CollectionModePage } from '../collection-mode';
+import { ListHotelPage } from '../list-hotel';
 
 @IonicPage()
 @Component({
@@ -45,11 +46,11 @@ export class UserStartPage extends BaseComponent {
         // console.log(this.truck);
     }
 
-    goToCollectionModePage() {
+    goToCollectionMode() {
         this.navCtrl.push(CollectionModePage);
     }
 
-    goToDeliveryModePage() {
-
+    goToDeliveryMode() {
+		this.navCtrl.push(ListHotelPage);
     }
 }

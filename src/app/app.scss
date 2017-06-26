@@ -128,6 +128,24 @@ button.button-scanner {
         }
     }
 }
+.list-hotel {
+    margin-bottom: 15px;
+    position: relative;
+    padding-right: 30px;
+    .name {
+
+    }
+    .address {
+        font-size: x-small;
+        margin-top: 5px;
+    }
+    ion-icon.right-checkmark {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 35px;
+    }
+}
 .middle-notice {
     position: absolute;
     top: 50%;

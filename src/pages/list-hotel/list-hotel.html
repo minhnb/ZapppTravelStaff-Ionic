@@ -1,0 +1,21 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'CHOOSE_HOTEL' | translate }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <div class="list-hotel" *ngFor="let item of listHotel; let i = index" (click)="selectedIndex = i">
+      <div class="name">{{ item.name }}</div>
+      <div class="address">{{ item.address }}</div>
+      <ion-icon class="right-checkmark" name="ios-checkmark-outline" [hidden]="i != selectedIndex"></ion-icon>
+    </div>
+  </ion-list>
+  <div class="button-bottom-full">
+    <button ion-button full [disabled]="selectedIndex == -1" (click)="goToHotelOrderPage()">{{ 'BUTTON_NEXT' | translate }}</button>
+  </div>
+</ion-content>

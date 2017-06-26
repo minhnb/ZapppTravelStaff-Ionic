@@ -18,6 +18,6 @@
     </div>
     <div class="button-bottom-full">
       <button ion-button full (click)="scanLuggageQRCode()" [hidden]="hasLuggage">{{ 'BUTTON_SCAN_LUGGAGE' | translate }}</button>
-      <button ion-button full (click)="goToCustomerLugguagePage()" [hidden]="!hasLuggage || attendantSaveMode">Next</button>
+      <button ion-button full (click)="goToCustomerLugguagePage()" [hidden]="!hasLuggage || attendantSaveMode">{{ 'BUTTON_NEXT' | translate }}</button>
     </div>
 </ion-content>
