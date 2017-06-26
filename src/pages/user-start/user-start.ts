@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { CollectionModePage } from '../collection-mode';
 
@@ -23,13 +23,16 @@ export class UserStartPage extends BaseComponent {
         }
     ];
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform) {
 		super(injector);
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		// this.checkDevicePermission();
+		if (!this.isMobileDevice(this.platform)) {
+			return;
+		}
+		this.checkDevicePermission();
 	}
 
     onStatusChange(event) {
