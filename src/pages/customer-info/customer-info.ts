@@ -61,7 +61,7 @@ export class CustomerInfoPage extends BaseComponent {
 				label: this.translate.instant('ROOM'),
 				content: this.customer.room
 			}
-		]
+		];
 
 		if (this.customer.listLuggage && this.customer.listLuggage.length) {
 			this.hasLuggage = true;

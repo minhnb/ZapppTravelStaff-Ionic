@@ -15,6 +15,7 @@ import { CustomerLuggagePageModule } from '../pages/customer-luggage';
 import { ListTruckPageModule } from '../pages/list-truck';
 import { ListOrderPageModule } from '../pages/list-order';
 import { ListHotelPageModule } from '../pages/list-hotel';
+import { DeliveryInfoPageModule } from '../pages/delivery-info';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -58,7 +59,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		CustomerLuggagePageModule,
 		ListTruckPageModule,
 		ListOrderPageModule,
-		ListHotelPageModule
+		ListHotelPageModule,
+		DeliveryInfoPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

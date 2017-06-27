@@ -104,6 +104,12 @@ button.button-scanner {
   }
 }
 
+.left-scanner-button {
+  float: left;
+  width: calc(100vw - 120px);
+  margin-top: 15px;
+}
+
 .info-row {
   margin-bottom: 15px;
 

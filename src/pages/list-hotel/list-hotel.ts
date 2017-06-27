@@ -34,46 +34,6 @@ export class ListHotelPage extends BaseComponent {
             {
                 name: "The Gritti Palace",
                 address: "768 Eve"
-            },
-			{
-                name: "Sheraton Hotel",
-                address: "20 Nathan Rd, Hong Kong"
-            },
-            {
-                name: "The Plaza Hotel",
-                address: "193 Prince Edward Road West, Kowloon"
-            },
-            {
-                name: "The Rex Hotel",
-                address: "141 Nguyen Hue"
-            },
-            {
-                name: "The Sayvoy",
-                address: "Strand LD"
-            },
-            {
-                name: "The Gritti Palace",
-                address: "768 Eve"
-            },
-			{
-                name: "Sheraton Hotel",
-                address: "20 Nathan Rd, Hong Kong"
-            },
-            {
-                name: "The Plaza Hotel",
-                address: "193 Prince Edward Road West, Kowloon"
-            },
-            {
-                name: "The Rex Hotel",
-                address: "141 Nguyen Hue"
-            },
-            {
-                name: "The Sayvoy",
-                address: "Strand LD"
-            },
-            {
-                name: "The Gritti Palace",
-                address: "768 Eve"
             }
         ];
 	}
@@ -88,6 +48,8 @@ export class ListHotelPage extends BaseComponent {
             listOrder: [
                 {
                     name: 'Dolly Doe',
+                    receiver: 'Dolly Doe',
+					room: 245,
                     listLuggage: [
                         {
                             luggageCode: 'ZTL12789',
@@ -97,6 +59,8 @@ export class ListHotelPage extends BaseComponent {
                 },
                 {
                     name: 'Jolly Doe',
+					receiver: 'Dolly Doe',
+					room: 245,
                     listLuggage: [
                         {
                             luggageCode: 'ZTL12790',
@@ -106,6 +70,8 @@ export class ListHotelPage extends BaseComponent {
                 },
                 {
                     name: 'Nanny San',
+					receiver: 'Dolly Doe',
+					room: 245,
                     listLuggage: [
                         {
                             luggageCode: 'ZTL12791',
@@ -115,6 +81,8 @@ export class ListHotelPage extends BaseComponent {
                 },
                 {
                     name: 'Fancy Lu',
+					receiver: 'Dolly Doe',
+					room: 245,
                     listLuggage: [
                         {
                             luggageCode: 'ZTL12792',

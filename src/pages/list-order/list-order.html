@@ -12,7 +12,8 @@
     <ion-col col-12 class="label">{{ 'SENDER' | translate }}</ion-col>
     <ion-col col-12>
       <ion-list>
-        <button class="no-padding-left" ion-item no-lines *ngFor="let item of listOrder" (click)="goToCustomerLugguagePage(item)">
+        <button class="no-padding-left" ion-item no-lines *ngFor="let item of listOrder"
+        (click)="isDeliveryMode ? goToDeliveryInfo(item) : goToCustomerLugguagePage(item)">
               {{ item.name }}
           </button>
       </ion-list>
