@@ -1,3 +1,6 @@
 page-customer-luggage {
-
+  .scrollable-list-luggage {
+    height: calc(100vh - 230px);
+    overflow-y: scroll;
+  }
 }

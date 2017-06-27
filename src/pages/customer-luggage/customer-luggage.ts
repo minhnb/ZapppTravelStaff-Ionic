@@ -15,6 +15,7 @@ export class CustomerLuggagePage extends BaseComponent {
     selectedIndex: number = -1;
 	isTransferMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
+	isDeliveryMode: boolean = false;
 
     @ViewChild(Navbar) navBar: Navbar;
 
@@ -76,6 +77,9 @@ export class CustomerLuggagePage extends BaseComponent {
 		if (this.navParams.data.isFromCustomerInfoPage) {
 			this.isFromCustomerInfoPage = true;
 		}
+		if (this.navParams.data.isDeliveryMode) {
+			this.isDeliveryMode = true;
+		}
 		if (this.isAcceptLuggageFromOtherTrucksMode()) {
 			this.removeAllOldStorageBinCode();
 		}
@@ -88,11 +92,11 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
 	isAcceptLuggageFromOtherTrucksMode(): boolean {
-		return this.attendantSaveMode && !this.isFromCustomerInfoPage && !this.isTransferMode;
+		return this.attendantSaveMode && !this.isFromCustomerInfoPage && !this.isTransferMode && !this.isDeliveryMode;
 	}
 
 	isAllowedToRemoveLuggageCode() {
-		return !(this.isTransferMode || this.attendantSaveMode || !this.isFromCustomerInfoPage);
+		return !(this.isTransferMode || this.attendantSaveMode || !this.isFromCustomerInfoPage || this.isDeliveryMode);
 	}
 
     isLuggageCode(code: string): boolean {
@@ -186,7 +190,7 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     helpAttendantSortLuggage(code: string) {
-        if (this.isLuggageCode(code) || this.selectedIndex == -1) {
+        if (this.isLuggageCode(code) || this.selectedIndex == -1 || this.isDeliveryMode) {
             this.findLuggageCodeInList(code);
         } else {
             this.updateStorageBinCodeToItemByIndex(code, this.selectedIndex);
@@ -195,7 +199,7 @@ export class CustomerLuggagePage extends BaseComponent {
 
     smartScanQRCode() {
 		this.scanQRCode(text => {
-            if (this.attendantSaveMode) {
+            if (this.attendantSaveMode || this.isDeliveryMode) {
                 this.helpAttendantSortLuggage(text);
                 return;
             }
@@ -212,6 +216,10 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     finishScanning() {
+		if (this.isDeliveryMode) {
+			this.goToTakeProofPicturePage();
+			return;
+		}
 		if (this.isFromCustomerInfoPage) {
 			this.goBackToCollectionModePage();
 		} else {
@@ -230,4 +238,8 @@ export class CustomerLuggagePage extends BaseComponent {
         this.customer.listLuggage = this.listLuggage;
         this.navCtrl.pop(this.customer);
     }
+
+	goToTakeProofPicturePage() {
+
+	}
 }

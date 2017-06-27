@@ -37,18 +37,13 @@ export class DeliveryInfoPage extends BaseComponent {
 		];
         if (this.customer.listLuggage) {
             this.listLuggage = this.customer.listLuggage;
-            for (let i = 0; i < 20; i++) {
-                this.listLuggage.push({
-                    luggageCode: 'ZTL12792',
-                    storageBinCode: 'A15'
-                })
-            }
         }
 	}
 
     goToCustomerLugguagePage() {
 		let params: any = {
-			customer: this.customer
+			customer: this.customer,
+            isDeliveryMode: true
 		};
 		this.navCtrl.push(CustomerLuggagePage, params);
 	}
