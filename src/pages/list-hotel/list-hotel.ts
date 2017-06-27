@@ -11,7 +11,6 @@ import { ListOrderPage } from '../list-order';
 export class ListHotelPage extends BaseComponent {
 
     listHotel: Array<any> = [];
-	selectedIndex: number = -1;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
@@ -83,13 +82,9 @@ export class ListHotelPage extends BaseComponent {
 		console.log('ionViewDidLoad ListHotelPage');
 	}
 
-	goToHotelOrderPage() {
-		if (this.selectedIndex == -1) {
-			return;
-		}
-		let selectedHotel = this.listHotel[this.selectedIndex];
+	goToHotelOrderPage(hotel: any) {
         let params = {
-            pageName: selectedHotel.name,
+            pageName: hotel.name,
             listOrder: [
                 {
                     name: 'Dolly Doe',

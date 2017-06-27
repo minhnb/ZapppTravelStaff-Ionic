@@ -25,17 +25,17 @@ ion-toolbar {
   }
 
   ion-title.title {
-      padding-left: 10px;
-      padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 
 ion-navbar {
-    button.back-button {
-        span.back-button-text {
-            visibility: hidden;;
-        }
+  button.back-button {
+    span.back-button-text {
+      visibility: hidden;
     }
+  }
 }
 
 .scroll-content {
@@ -47,113 +47,113 @@ ion-navbar {
     left: 0;
 
     & > button {
-        margin-bottom: 10px;
+      margin-bottom: 10px;
     }
   }
 }
 
 button.transparent-button {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 5px 10px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 5px 10px;
 
-    ion-icon {
-        font-size: 20px;
-        color: color($colors, dark, base);
-    }
+  ion-icon {
+    font-size: 20px;
+    color: color($colors, dark, base);
+  }
 
-    &.text-button {
-        width: 100%;
-        height: 100%;
-    }
+  &.text-button {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 button.dismiss-view-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-    padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 10px 15px;
 
-    ion-icon {
-        font-size: 40px;
-    }
+  ion-icon {
+    font-size: 40px;
+  }
 }
 
 button.above-button {
-    position: absolute;
-    min-width: 40%;
+  position: absolute;
+  min-width: 40%;
 
-    &.bottom-left {
-        left: 20px;
-        bottom: 20px;
-    }
-    &.bottom-right {
-        right: 20px;
-        bottom: 20px;
-    }
+  &.bottom-left {
+    left: 20px;
+    bottom: 20px;
+  }
+
+  &.bottom-right {
+    right: 20px;
+    bottom: 20px;
+  }
 }
 
 button.button-scanner {
-    float: right;
-    ion-icon {
-        font-size: 50px;
-    }
+  float: right;
+
+  ion-icon {
+    font-size: 50px;
+  }
 }
 
 .info-row {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 
-    & > .label {
-        font-weight: bold;
-        font-size: x-small;
-        margin-bottom: 5px;
-    }
+  & > .label {
+    font-weight: bold;
+    font-size: x-small;
+    margin-bottom: 5px;
+  }
 }
 
 .list-header {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .list-item {
-    ion-col {
-        button.transparent-button.text-button {
-            padding: 0;
-            text-align: left;
+  ion-col {
+    button.transparent-button.text-button {
+      padding: 0;
+      text-align: left;
 
-            &.mark {
-                color: green;
-            }
-        }
+      &.mark {
+        color: green;
+      }
     }
+  }
 }
-.list-hotel {
-    margin-bottom: 15px;
-    position: relative;
-    padding-right: 30px;
-    .name {
 
-    }
-    .address {
-        font-size: x-small;
-        margin-top: 5px;
-    }
-    ion-icon.right-checkmark {
-        position: absolute;
-        top: 0;
-        right: 0;
-        font-size: 35px;
-    }
+.hotel-item {
+  .address,
+  .name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .address {
+    font-size: x-small;
+    margin-top: 5px;
+  }
 }
+
 .middle-notice {
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
-    font-size: 1.7rem;
-    line-height: 25px;
-    margin-top: -44px;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-size: 1.7rem;
+  line-height: 25px;
+  margin-top: -44px;
 }
+
 .no-padding-left {
-    padding-left: 0;
+  padding-left: 0;
 }
