@@ -3,9 +3,10 @@
     <name>Zappp Staff</name>
     <description>Staff for Zappp Travel - with Ionic Framework</description>
     <author email="minh.nguyen@cofoundervp.com" href="http://cofoundervp.com/">CoFounder Venture Partners</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://10.198.6.94:8101" />
     <access origin="*" />
     <allow-navigation href="http://zappp.com/*" />
+    <allow-navigation href="http://10.198.6.94:8101" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -81,6 +82,7 @@
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
     <engine name="ios" spec="^4.4.0" />
+    <plugin name="cordova-plugin-camera" spec="^2.4.1" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />

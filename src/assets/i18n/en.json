@@ -12,6 +12,8 @@
   "BUTTON_LOGIN": "Sign In",
   "BUTTON_NEXT": "Next",
   "BUTTON_OK": "OK",
+  "BUTTON_RETAKE": "Retake",
+  "BUTTON_SAVE": "Save",
   "BUTTON_SCAN_LUGGAGE": "Scan luggage",
   "BUTTON_SCAN_USER_QR": "Scan User's QR",
   "BUTTON_TRANSFER_LUGGAGE_TO_OTHER_TRUCKS": "TRANSFER luggage to other TRUCKS",
@@ -46,6 +48,7 @@
   "ROOM": "Room",
   "SENDER": "Sender",
   "STORAGE_BIN": "Storage Bin",
+  "TAKE_PICTURE_AS_PROOF": "Take a picture as proof",
   "TOTAL_LUGGAGE": "Total luggage",
   "TRUCK": "Truck",
   "USERNAME": "Username"

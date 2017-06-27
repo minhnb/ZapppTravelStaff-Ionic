@@ -1,6 +1,7 @@
 import { Component, Injector, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { TakePicturePage } from '../take-picture';
 
 @IonicPage()
 @Component({
@@ -240,6 +241,10 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
 	goToTakeProofPicturePage() {
-
+		this.customer.listLuggage = this.listLuggage;
+		let params: any = {
+			customer: this.customer
+		};
+		this.navCtrl.push(TakePicturePage, params);
 	}
 }

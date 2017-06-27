@@ -16,6 +16,7 @@ import { ListTruckPageModule } from '../pages/list-truck';
 import { ListOrderPageModule } from '../pages/list-order';
 import { ListHotelPageModule } from '../pages/list-hotel';
 import { DeliveryInfoPageModule } from '../pages/delivery-info';
+import { TakePicturePageModule } from '../pages/take-picture';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -26,6 +27,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { FCM } from '@ionic-native/fcm';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { Camera } from '@ionic-native/camera';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -60,7 +62,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		ListTruckPageModule,
 		ListOrderPageModule,
 		ListHotelPageModule,
-		DeliveryInfoPageModule
+		DeliveryInfoPageModule,
+		TakePicturePageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -77,6 +80,7 @@ import { ZapppHttp } from './services/zapppHttp';
 		FCM,
 		BarcodeScanner,
 		Diagnostic,
+		Camera,
 		ZapppHttp,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]
