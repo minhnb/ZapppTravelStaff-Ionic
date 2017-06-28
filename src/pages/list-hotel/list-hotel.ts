@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { ListOrderPage } from '../list-order';
+import { DirectionStopPage } from '../direction-stop';
 
 @IonicPage()
 @Component({
@@ -94,6 +95,15 @@ export class ListHotelPage extends BaseComponent {
             isDeliveryMode: true
         }
         this.navCtrl.push(ListOrderPage, params);
+    }
+
+	viewDirection(hotel: any) {
+        this.navCtrl.push(DirectionStopPage, {
+            name: hotel.name,
+            long: 106.702013,
+            lat: 10.740790,
+			isDeliveryMode: true
+        });
     }
 
 }

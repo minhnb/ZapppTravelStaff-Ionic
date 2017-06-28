@@ -9,7 +9,8 @@
 
 <ion-content padding>
   <ion-list>
-    <button class="hotel-item" ion-item no-lines *ngFor="let item of listHotel" (click)="goToHotelOrderPage(item)">
+    <button class="hotel-item" ion-item no-lines *ngFor="let item of listHotel"
+    (click)="isAttedant() ? goToHotelOrderPage(item) : viewDirection(item)">
       <div class="name">{{ item.name }}</div>
       <div class="address">{{ item.address }}</div>
     </button>

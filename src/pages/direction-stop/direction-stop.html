@@ -4,7 +4,8 @@
         <ion-icon name="close"></ion-icon>
       </button>
       <div class="button-bottom-full">
-        <button ion-button full>{{ 'BUTTON_ARRIVE' | translate }}</button>
+        <button ion-button full *ngIf="!isDeliveryMode">{{ 'BUTTON_ARRIVE' | translate }}</button>
+        <button ion-button full *ngIf="isDeliveryMode">{{ 'BUTTON_START' | translate }}</button>
       </div>
   </div>
 </ion-content>

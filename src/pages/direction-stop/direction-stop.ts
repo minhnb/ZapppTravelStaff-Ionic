@@ -13,17 +13,22 @@ import * as decodePolyline from 'decode-google-map-polyline';
 	templateUrl: 'direction-stop.html',
 })
 export class DirectionStopPage extends BaseComponent {
+
 	directionsService: any;
 	map: GoogleMap;
 	destinationLocation: LatLng = null;
 	polyLines: Array<any> = [];
 
 	markers: Array<any> = [];
+	isDeliveryMode: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private googleMaps: GoogleMaps, private geolocation: Geolocation) {
 		super(injector);
 		this.hasGoogleMapNative = true;
-		if (this.navParams.data && this.navParams.data.long && this.navParams.data.lat) {
+		if (this.navParams.data.isDeliveryMode) {
+			this.isDeliveryMode = true;
+		}
+		if (this.navParams.data.long && this.navParams.data.lat) {
 			this.destinationLocation = new LatLng(this.navParams.data.lat, this.navParams.data.long);
 		}
 	}
