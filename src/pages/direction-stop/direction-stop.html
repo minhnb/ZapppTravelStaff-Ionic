@@ -3,7 +3,8 @@
       <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
         <ion-icon name="close"></ion-icon>
       </button>
-      <button ion-button class="above-button bottom-left" (click)="leaveCurentStop()">Leave</button>
-      <button ion-button class="above-button bottom-right">Stop</button>
+      <div class="button-bottom-full">
+        <button ion-button full>{{ 'BUTTON_ARRIVE' | translate }}</button>
+      </div>
   </div>
 </ion-content>

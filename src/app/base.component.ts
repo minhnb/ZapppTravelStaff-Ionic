@@ -23,6 +23,29 @@ export class BaseComponent {
 		this.translate = injector.get(TranslateService);
 	}
 
+	isLoggedIn(): boolean {
+		if (localStorage.getItem(AppConstant.ACCESS_TOKEN)) {
+			return true;
+		}
+		return false;
+	}
+
+	isDriver(): boolean {
+		return localStorage.getItem(AppConstant.ROLE) == AppConstant.USER_ROLE.DRIVER;
+	}
+
+	isAttedant(): boolean {
+		return localStorage.getItem(AppConstant.ROLE) == AppConstant.USER_ROLE.ATTENDANT;
+	}
+
+	isZappper(): boolean {
+		return localStorage.getItem(AppConstant.ROLE) == AppConstant.USER_ROLE.ZAPPPER;
+	}
+
+	getUserRole(): string {
+		return localStorage.getItem(AppConstant.ROLE);
+	}
+
 	isMobileDevice(platform: Platform): boolean {
 		return platform.is('cordova') && (platform.is('ios') || platform.is('android'));
 	}

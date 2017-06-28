@@ -4,9 +4,9 @@ export const AppConstant = {
     EXPIRED_AT: 'expired_at',
     ROLE: 'role',
     USER_ROLE: {
-        ADMIN: 'Admin',
-        SENDER: 'Sender',
-        DELIVERER: 'Deliverer'
+        DRIVER: 'DRIVER',
+        ATTENDANT: 'ATTENDANT',
+        ZAPPPER: 'ZAPPPER'
     },
     PATTERN: {
         ONLY_DIGIT: '^[0-9]*$',

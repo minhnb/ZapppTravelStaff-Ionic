@@ -17,7 +17,6 @@ export class UserService {
 	}
 
 	saveUserAccessTokenToLocalStorage(data: any, role: string) {
-		// let expiredAt = data.expired_at;
 		localStorage.setItem(AppConstant.ACCESS_TOKEN, data.access_token);
 		localStorage.setItem(AppConstant.REFRESH_TOKEN, data.refresh_token);
 		localStorage.setItem(AppConstant.EXPIRED_AT, data.expired_at);
@@ -29,9 +28,8 @@ export class UserService {
 	}
 
 	handleLoginSuccess(data: any): any {
-		// let role = AppConstant.USER_ROLE.SENDER.toLowerCase();
-		// this.saveUserAccessTokenToLocalStorage(data, data.user.roles);
-		// return data;
+		this.saveUserAccessTokenToLocalStorage(data, data.user.roles);
+		return data;
 	}
 
 	handleLogout(data: any): any {

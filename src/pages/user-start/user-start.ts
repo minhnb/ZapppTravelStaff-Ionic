@@ -1,8 +1,10 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
+import { ListStationPage } from '../list-station';
 
 @IonicPage()
 @Component({
@@ -47,7 +49,15 @@ export class UserStartPage extends BaseComponent {
     }
 
     goToCollectionMode() {
-        this.navCtrl.push(CollectionModePage);
+		switch (this.getUserRole()) {
+			case AppConstant.USER_ROLE.DRIVER:
+				this.navCtrl.push(ListStationPage);
+				break;
+			case AppConstant.USER_ROLE.ATTENDANT:
+				this.navCtrl.push(CollectionModePage);
+				break;
+			default:
+		}
     }
 
     goToDeliveryMode() {

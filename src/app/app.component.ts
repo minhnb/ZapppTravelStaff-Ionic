@@ -32,12 +32,15 @@ export class MyApp extends BaseComponent {
 		this.initializeApp();
 
 		this.pages = [
-			{ title: 'Home', component: UserStartPage },
-			{ title: 'Schedule', component: SchedulePage }
+			// { title: 'Home', component: UserStartPage },
+			// { title: 'Schedule', component: SchedulePage }
 		];
 	}
 
 	initializeApp() {
+		if (this.isLoggedIn()) {
+			this.rootPage = UserStartPage;
+		}
 		this.platform.ready().then(() => {
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
@@ -79,7 +82,6 @@ export class MyApp extends BaseComponent {
 		this.translate.addLangs(['en']);
 		this.translate.setDefaultLang('en');
 		this.translate.use('en');
-		console.log(this.translate);
 	}
 
 	openPage(page) {
