@@ -50,12 +50,24 @@ export class UserStartPage extends BaseComponent {
     onTruckChange(event) {
         // console.log(event);
         // console.log(this.truck);
+		this.chooseTruck(this.truck);
     }
 
 	getListTruck() {
 		this.staffService.getListTruck().subscribe(
 			res => {
 				this.listTruck = res;
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	chooseTruck(truckId: string) {
+		this.staffService.chooseTruck(truckId).subscribe(
+			res => {
+
 			},
 			err => {
 				this.showError(err.message);

@@ -23,4 +23,11 @@ export class StaffService {
 		};
 		return this.zapppHttp.post(this.userUrl + '/update_status', params);
 	}
+
+	chooseTruck(truckId: string) {
+		let params = {
+			truck_id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/assign_driver', params);
+	}
 }
