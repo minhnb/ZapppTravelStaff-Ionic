@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <ion-list>
-    <button class="no-padding-left" ion-item no-lines *ngFor="let item of listStation" (click)="viewDirection(item)">
+    <button class="no-padding-left" ion-item no-lines *ngFor="let item of listStation" (click)="isSelectNextStationMode ? chooseNextStation(item) : viewDirection(item)">
             {{ item.name }}
         </button>
   </ion-list>
