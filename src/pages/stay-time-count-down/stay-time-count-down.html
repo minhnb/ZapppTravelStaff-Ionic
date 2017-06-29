@@ -1,0 +1,28 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div class="info-row top-content">
+        <div>{{ 'STATION' | translate }}</div>
+        <div class="content">{{ station.name }}</div>
+    </div>
+    <div class="middle-content">
+        <div>{{ 'STAY_TIME' | translate }}</div>
+        <div class="count-down">{{ displayDuration(duration) }}</div>
+    </div>
+    <div class="bottom-content">
+        <button ion-item no-lines (click)="chooseNextStation()">{{ 'CHOOSE_NEXT_STATION' | translate }}</button>
+        <div class="content" *ngIf="nextStation">{{ nextStation.name }}</div>
+    </div>
+    <div class="button-bottom-full">
+      <button ion-button full *ngIf="!isStarted" (click)="startCountDown()">{{ 'BUTTON_START' | translate }}</button>
+      <button ion-button full *ngIf="isStarted">{{ 'BUTTON_STOP_OR_LEAVE' | translate }}</button>
+    </div>
+
+</ion-content>
