@@ -60,4 +60,11 @@ export class UserService {
 	getUserInfo(): Observable<any> {
 		return this.zapppHttp.get(AppConfig.API_URL + 'me');
 	}
+
+	updateStatus(status: boolean) {
+		let params = {
+			status: status
+		};
+		return this.zapppHttp.post(this.userUrl + '/update_status', params);
+	}
 }

@@ -5,11 +5,13 @@ import { AppConstant } from '../../app/app.constant';
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
+import { UserService } from '../../app/services/user';
 
 @IonicPage()
 @Component({
 	selector: 'page-user-start',
 	templateUrl: 'user-start.html',
+	providers: [UserService]
 })
 export class UserStartPage extends BaseComponent {
 
@@ -26,7 +28,8 @@ export class UserStartPage extends BaseComponent {
         }
     ];
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
+		private userService: UserService) {
 		super(injector);
 	}
 
@@ -41,6 +44,15 @@ export class UserStartPage extends BaseComponent {
     onStatusChange(event) {
         // console.log(event);
         // console.log(this.isActive);
+		this.userService.updateStatus(this.isActive).subscribe(
+			res => {
+
+			},
+			err => {
+				this.isActive = !this.isActive;
+				this.showError(err.message);
+			}
+		);
     }
 
     onTruckChange(event) {
