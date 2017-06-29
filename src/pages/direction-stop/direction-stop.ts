@@ -7,6 +7,8 @@ import { BaseComponent } from '../../app/base.component';
 import { GoogleMapsLoader } from '../../app/helper/googleMaps.loader';
 import * as decodePolyline from 'decode-google-map-polyline';
 
+import { StayTimeCountDownPage } from '../stay-time-count-down';
+
 @IonicPage()
 @Component({
 	selector: 'page-direction-stop',
@@ -21,6 +23,7 @@ export class DirectionStopPage extends BaseComponent {
 
 	markers: Array<any> = [];
 	isDeliveryMode: boolean = false;
+	station: any;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private googleMaps: GoogleMaps, private geolocation: Geolocation) {
 		super(injector);
@@ -28,8 +31,9 @@ export class DirectionStopPage extends BaseComponent {
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
 		}
+		this.station = this.navParams.data.station;
 		if (this.navParams.data.long && this.navParams.data.lat) {
-			this.destinationLocation = new LatLng(this.navParams.data.lat, this.navParams.data.long);
+			this.destinationLocation = new LatLng(Number(this.navParams.data.lat), Number(this.navParams.data.long));
 		}
 	}
 
@@ -43,15 +47,7 @@ export class DirectionStopPage extends BaseComponent {
 
 	ngOnDestroy() {
 		this.destinationLocation = null;
-		this.polyLines.forEach((polyLine: Polyline) => {
-			polyLine.remove();
-		});
-		this.polyLines = [];
-
-		this.markers.forEach((marker: Marker) => {
-			marker.remove();
-		});
-		this.markers = [];
+		this.removeAllMarkersAndPolyline();
 	}
 
 	dismissView(event) {
@@ -73,32 +69,18 @@ export class DirectionStopPage extends BaseComponent {
 		this.map = this.googleMaps.create(element);
 
 		let geolocationOptions: GeolocationOptions = {
-			enableHighAccuracy: true,
+			// enableHighAccuracy: true,
 			timeout: 5000
 		};
+		let watchOption = geolocationOptions;
+		let watchTimeout = 15000;
+		watchOption.timeout = watchTimeout;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
 				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-					let position: CameraPosition = {
-						target: currentLocation,
-						zoom: 15,
-						tilt: 30
-					};
-
-					this.map.moveCamera(position);
-
-					this.addSimpleMarker(currentLocation, 'You are here', (marker: Marker) => {
-						marker.showInfoWindow();
-					});
-
-					if (this.destinationLocation) {
-						this.addSimpleMarker(this.destinationLocation, 'Destination', (marker: Marker) => {
-							marker.showInfoWindow();
-							this.showDirection(currentLocation, this.destinationLocation);
-						});
-					}
+					this.drawDirectionFromCurrentLocationToDestination(currentLocation);
 
 				}).catch((error) => {
 					console.log('Error getting location', error);
@@ -108,12 +90,52 @@ export class DirectionStopPage extends BaseComponent {
 						});
 				});
 
-				let watch = this.geolocation.watchPosition();
-				watch.subscribe((data) => {
-					// alert(data.coords.latitude + ' - ' + data.coords.longitude);
-				});
+				let watch = this.geolocation.watchPosition(watchOption);
+				setTimeout(() => {
+					watch.subscribe((resp) => {
+						if (!resp.coords) {
+							return;
+						}
+						let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+						this.drawDirectionFromCurrentLocationToDestination(currentLocation);
+					});
+				}, watchTimeout)
 			}
 		);
+	}
+
+	drawDirectionFromCurrentLocationToDestination(currentLocation: LatLng) {
+		this.removeAllMarkersAndPolyline();
+		let position: CameraPosition = {
+			target: currentLocation,
+			zoom: 15,
+			tilt: 30
+		};
+
+		this.map.moveCamera(position);
+
+		this.addSimpleMarker(currentLocation, 'You are here', (marker: Marker) => {
+			// marker.showInfoWindow();
+		});
+
+		if (this.destinationLocation) {
+			this.addSimpleMarker(this.destinationLocation, this.station.name, (marker: Marker) => {
+				marker.showInfoWindow();
+				this.showDirection(currentLocation, this.destinationLocation);
+			});
+		}
+	}
+
+	removeAllMarkersAndPolyline() {
+		this.polyLines.forEach((polyLine: Polyline) => {
+			polyLine.remove();
+		});
+		this.polyLines = [];
+
+		this.markers.forEach((marker: Marker) => {
+			marker.remove();
+		});
+		this.markers = [];
 	}
 
 	addSimpleMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
@@ -195,6 +217,13 @@ export class DirectionStopPage extends BaseComponent {
 			points.push(destination);
 			this.addPolyline(points);
 		}));
+	}
+
+	goToStayTimeCountDownPage() {
+		let params = {
+			station: this.station
+		};
+		this.navCtrl.push(StayTimeCountDownPage, params);
 	}
 
 }

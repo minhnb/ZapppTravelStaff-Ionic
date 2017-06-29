@@ -99,7 +99,9 @@ export class ListHotelPage extends BaseComponent {
 
 	viewDirection(hotel: any) {
         this.navCtrl.push(DirectionStopPage, {
-            name: hotel.name,
+            station: {
+				name: hotel.name,
+			},
             long: 106.702013,
             lat: 10.740790,
 			isDeliveryMode: true

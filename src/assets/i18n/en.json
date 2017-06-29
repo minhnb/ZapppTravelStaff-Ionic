@@ -24,6 +24,7 @@
   "BUTTON_VIEW_ORDER": "View Order",
   "CHOOSE_HOTEL": "Choose a hotel",
   "CHOOSE_STATION": "Choose a station",
+  "CHOOSE_NEXT_STATION": "Choose your next Station",
   "CHOOSE_TRUCK": "Choose a truck",
   "COLLECTION_MODE": "Collection Mode",
   "CONFIRM": "Confirm",
@@ -52,9 +53,12 @@
   "RECEIVER": "Receiver",
   "ROOM": "Room",
   "SENDER": "Sender",
+  "STATION": "Station",
+  "STAY_TIME": "Stay time (min)",
   "STORAGE_BIN": "Storage Bin",
   "TAKE_PICTURE_AS_PROOF": "Take a picture as proof",
   "TOTAL_LUGGAGE": "Total luggage",
   "TRUCK": "Truck",
+  "USER_NOT_STAFF": "You are not staff, so you can not access to this app",
   "USERNAME": "Username"
 }
