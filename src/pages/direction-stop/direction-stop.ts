@@ -73,13 +73,19 @@ export class DirectionStopPage extends BaseComponent {
 			timeout: 5000
 		};
 		let watchOption = geolocationOptions;
-		let watchTimeout = 15000;
+		let watchTimeout = 30000;
 		watchOption.timeout = watchTimeout;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
 				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+					let position: CameraPosition = {
+						target: currentLocation,
+						zoom: 15,
+						tilt: 30
+					};
+					this.map.moveCamera(position);
 					this.drawDirectionFromCurrentLocationToDestination(currentLocation);
 
 				}).catch((error) => {
@@ -106,14 +112,6 @@ export class DirectionStopPage extends BaseComponent {
 
 	drawDirectionFromCurrentLocationToDestination(currentLocation: LatLng) {
 		this.removeAllMarkersAndPolyline();
-		let position: CameraPosition = {
-			target: currentLocation,
-			zoom: 15,
-			tilt: 30
-		};
-
-		this.map.moveCamera(position);
-
 		this.addSimpleMarker(currentLocation, 'You are here', (marker: Marker) => {
 			// marker.showInfoWindow();
 		});
