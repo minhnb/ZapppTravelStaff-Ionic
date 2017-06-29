@@ -17,7 +17,7 @@ export class LoginPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private userService: UserService) {
 		super(injector);
-		this.username = 'test002@gmail.com';
+		this.username = 'test010@gmail.com';
 		this.password = '1234567';
 	}
 
@@ -28,7 +28,12 @@ export class LoginPage extends BaseComponent {
 	login() {
 		this.userService.userLogIn(this.username, this.password).subscribe(
 			res => {
-				this.navCtrl.setRoot(UserStartPage);
+				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
+					this.navCtrl.setRoot(UserStartPage);
+				} else {
+					this.showError(this.translate.instant('USER_NOT_STAFF'));
+					localStorage.clear();
+				}
 			},
 			err => {
 				this.showError(err.message);
