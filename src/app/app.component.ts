@@ -89,13 +89,15 @@ export class MyApp extends BaseComponent {
 	}
 
 	logOut() {
-		this.userService.logOut().subscribe(
-			res => {
-				this.nav.setRoot(LoginPage);
-			},
-			err => {
-				this.showError(err.message);
-			}
-		)
+		localStorage.clear();
+		this.nav.setRoot(LoginPage);
+		// this.userService.logOut().subscribe(
+		// 	res => {
+		// 		this.nav.setRoot(LoginPage);
+		// 	},
+		// 	err => {
+		// 		this.showError(err.message);
+		// 	}
+		// )
 	}
 }
