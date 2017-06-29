@@ -18,7 +18,7 @@
   <ion-item no-lines [hidden]="!isActive">
     <ion-label>{{ 'CHOOSE_TRUCK' | translate }}</ion-label>
     <ion-select [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
-      <ion-option *ngFor="let item of listTruck" value="{{ item.value }}">{{ item.text }}</ion-option>
+      <ion-option *ngFor="let item of listTruck" value="{{ item.id }}">{{ item.truck_number }}</ion-option>
     </ion-select>
   </ion-item>
   <div class="button-bottom-full" [hidden]="!isActive">

@@ -5,36 +5,28 @@ import { AppConstant } from '../../app/app.constant';
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
-import { UserService } from '../../app/services/user';
+import { StaffService } from '../../app/services/staff';
 
 @IonicPage()
 @Component({
 	selector: 'page-user-start',
 	templateUrl: 'user-start.html',
-	providers: [UserService]
+	providers: [StaffService]
 })
 export class UserStartPage extends BaseComponent {
 
 	isActive: boolean;
     truck: any;
-    listTruck: Array<any> = [
-        {
-            value: "mz999",
-            text: "mz999"
-        },
-        {
-            value: "mz001",
-            text: "mz001"
-        }
-    ];
+    listTruck: Array<any> = [];
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private userService: UserService) {
+		private staffService: StaffService) {
 		super(injector);
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
+		this.getListTruck();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -44,7 +36,7 @@ export class UserStartPage extends BaseComponent {
     onStatusChange(event) {
         // console.log(event);
         // console.log(this.isActive);
-		this.userService.updateStatus(this.isActive).subscribe(
+		this.staffService.updateStatus(this.isActive).subscribe(
 			res => {
 
 			},
@@ -59,6 +51,17 @@ export class UserStartPage extends BaseComponent {
         // console.log(event);
         // console.log(this.truck);
     }
+
+	getListTruck() {
+		this.staffService.getListTruck().subscribe(
+			res => {
+				this.listTruck = res;
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
 
     goToCollectionMode() {
 		switch (this.getUserRole()) {
