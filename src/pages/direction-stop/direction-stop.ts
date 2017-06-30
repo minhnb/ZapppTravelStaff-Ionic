@@ -22,6 +22,7 @@ export class DirectionStopPage extends BaseComponent {
 	polyLines: Array<any> = [];
 
 	markers: Array<any> = [];
+	currentLocationMarker: Marker;
 	isDeliveryMode: boolean = false;
 	station: any;
 
@@ -103,7 +104,10 @@ export class DirectionStopPage extends BaseComponent {
 							return;
 						}
 						let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-						this.drawDirectionFromCurrentLocationToDestination(currentLocation);
+						this.currentLocationMarker.remove();
+						this.addSimpleMarker(currentLocation, '', (marker: Marker) => {
+							this.currentLocationMarker = marker;
+						});
 					});
 				}, watchTimeout)
 			}
@@ -114,6 +118,7 @@ export class DirectionStopPage extends BaseComponent {
 		this.removeAllMarkersAndPolyline();
 		this.addSimpleMarker(currentLocation, 'You are here', (marker: Marker) => {
 			// marker.showInfoWindow();
+			this.currentLocationMarker = marker;
 		});
 
 		if (this.destinationLocation) {
