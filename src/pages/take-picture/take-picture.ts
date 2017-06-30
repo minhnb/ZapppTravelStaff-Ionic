@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -13,7 +13,7 @@ export class TakePicturePage extends BaseComponent {
 	base64Image: string = '';
 	customer: any;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera, public events: Events) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
 	}
@@ -53,6 +53,7 @@ export class TakePicturePage extends BaseComponent {
 		let params: any = {
 			deliveryItem: this.customer
 		};
-        this.navCtrl.popTo(this.navCtrl.getByIndex(listOrderPageIndex), params);
+		this.events.publish('delivery:completed', params);
+        this.navCtrl.popTo(this.navCtrl.getByIndex(listOrderPageIndex));
 	}
 }

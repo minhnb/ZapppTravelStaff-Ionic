@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { ListStationPage } from '../list-station';
 import * as moment from 'moment';
@@ -17,7 +17,7 @@ export class StayTimeCountDownPage extends BaseComponent {
     countDownTimer: any;
     isStarted: boolean = false;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public events: Events) {
         super(injector);
         this.station = this.navParams.data.station;
         this.duration = Number(this.navParams.data.station.stop_time);
@@ -25,6 +25,9 @@ export class StayTimeCountDownPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad StayTimeCountDownPage');
+		this.events.subscribe('collection:nextStation', (data) => {
+			this.nextStation = data.nextStation;
+		});
 	}
 
     chooseNextStation() {

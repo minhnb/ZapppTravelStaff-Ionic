@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { DirectionStopPage } from '../direction-stop';
 import { CollectionModeService } from '../../app/services/collection-mode';
@@ -15,15 +15,11 @@ export class ListStationPage extends BaseComponent {
     listStation: Array<any> = [];
 	isSelectNextStationMode: boolean = false;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private collectionModeService: CollectionModeService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
+		private collectionModeService: CollectionModeService, public events: Events) {
 		super(injector);
 		if (navParams.data.isSelectNextStationMode) {
 			this.isSelectNextStationMode = true;
-		}
-
-		if (this.isSelectNextStationMode) {
-			let currentStation = navParams.data.currentStation;
-			this.removeCurrentStationInList(currentStation);
 		}
 	}
 
@@ -39,7 +35,7 @@ export class ListStationPage extends BaseComponent {
 
 	indexOfStationInList(station: any) {
 		for (let i = 0; i < this.listStation.length; i++) {
-			if (station.name == this.listStation[i].name) {
+			if (station.id == this.listStation[i].id) {
 				return i;
 			}
 		}
@@ -50,6 +46,10 @@ export class ListStationPage extends BaseComponent {
 		this.collectionModeService.getListStation().subscribe(
 			res => {
 				this.listStation = res;
+				if (this.isSelectNextStationMode) {
+					let currentStation = this.navParams.data.currentStation;
+					this.removeCurrentStationInList(currentStation);
+				}
 			},
 			err => {
 				this.showError(err.message);
@@ -69,7 +69,8 @@ export class ListStationPage extends BaseComponent {
 		let params = {
 			nextStation: station
 		}
-		this.navCtrl.pop(params);
+		this.events.publish('collection:nextStation', params);
+		this.navCtrl.pop();
 	}
 
 }

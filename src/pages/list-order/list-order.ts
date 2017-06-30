@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { CustomerLuggagePage } from '../customer-luggage';
 import { DeliveryInfoPage } from '../delivery-info';
@@ -16,7 +16,7 @@ export class ListOrderPage extends BaseComponent {
 	isDeliveryMode: boolean = false;
 	deliveryItem: any;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public events: Events) {
 		super(injector);
 		this.pageName = navParams.data.pageName;
 		this.listOrder = navParams.data.listOrder;
@@ -26,15 +26,13 @@ export class ListOrderPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ListOrderPage');
-	}
-
-	ionViewWillEnter() {
-		console.log('ionViewWillEnter');
-		console.log(JSON.stringify(this.navParams.data));
-		if (this.deliveryItem) {
-			this.removeDeliveryItem();
-			this.deliveryItem = null;
-		}
+		this.events.subscribe('delivery:completed', (data) => {
+			this.deliveryItem = data.deliveryItem;
+			if (this.deliveryItem) {
+				this.removeDeliveryItem();
+				this.deliveryItem = null;
+			}
+		})
 	}
 
     goToCustomerLugguagePage(customer: any) {
