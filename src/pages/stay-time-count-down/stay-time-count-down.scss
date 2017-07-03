@@ -29,6 +29,19 @@ page-stay-time-count-down {
       font-size: 2em;
       width: 60%;
       display: inline-block;
+
+      input {
+        margin: 0;
+        text-align: center;
+      }
+    }
+
+    .transparent-button {
+      padding: 5px 15px;
+
+      ion-icon {
+        font-weight: bold;
+      }
     }
   }
 

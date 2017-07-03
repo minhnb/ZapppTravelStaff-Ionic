@@ -22,8 +22,8 @@ import { CollectionModePage } from '../pages/collection-mode';
 export class MyApp extends BaseComponent {
 	@ViewChild(Nav) nav: Nav;
 
+	deviceHeight: number = 0;
 	rootPage: any = LoginPage;
-
 	pages: Array<{ title: string, component: any }>;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
@@ -46,6 +46,7 @@ export class MyApp extends BaseComponent {
 			this.splashScreen.hide();
 			this.registerFCM();
 			this.defineLangs();
+			this.deviceHeight = this.platform.height();
 		});
 	}
 

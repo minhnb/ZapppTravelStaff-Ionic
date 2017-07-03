@@ -38,13 +38,14 @@ ion-navbar {
   }
 }
 
-.scroll-content {
+.ion-page, .scroll-content {
   .button-bottom-full {
     position: absolute;
     width: 100%;
     padding: 16px;
     bottom: 0;
     left: 0;
+    z-index: 2;
 
     & > button {
       margin-bottom: 10px;
