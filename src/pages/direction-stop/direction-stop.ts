@@ -91,7 +91,7 @@ export class DirectionStopPage extends BaseComponent {
 
 				}).catch((error) => {
 					console.log('Error getting location', error);
-					this.showConfirm(this.translate.instant('CONFIRM_LOCATION_SERVICE_PROBLEM'), this.translate.instant('ERROR'),
+					this.showConfirm(this.translate.instant('CONFIRM_LOCATION_SERVICE_PROBLEM'), this.translate.instant('CONFIRMAION_LOCATION'),
 						() => {
 							this.diagnostic.switchToLocationSettings();
 						});

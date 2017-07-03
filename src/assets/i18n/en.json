@@ -31,6 +31,7 @@
   "CONFIRMAION_DELETE": "Delete Confirmation",
   "CONFIRMAION_DISCARD": "Discard",
   "CONFIRMAION_LEAVE": "Confirm leaving",
+  "CONFIRMAION_LOCATION": "Location",
   "CONFIRM_ENABLE_LOCATION_SERVICE": "Please enable location service on your device",
   "CONFIRM_LEAVE_STOP": "Do you want to leave this stop?",
   "CONFIRM_LEAVE_VIEW": "Are you sure you want to discard?",

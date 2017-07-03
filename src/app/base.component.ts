@@ -53,7 +53,7 @@ export class BaseComponent {
 	checkDevicePermission() {
 		this.diagnostic.isLocationEnabled().then(isEnabled => {
 			if (isEnabled) return;
-			this.showConfirm(this.translate.instant('CONFIRM_ENABLE_LOCATION_SERVICE'), this.translate.instant('ERROR'),
+			this.showConfirm(this.translate.instant('CONFIRM_ENABLE_LOCATION_SERVICE'), this.translate.instant('CONFIRMAION_LOCATION'),
 				() => {
 					this.diagnostic.switchToLocationSettings();
 				});
