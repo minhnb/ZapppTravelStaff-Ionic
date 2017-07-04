@@ -2,7 +2,6 @@ import { Component, Injector } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { UserService } from '../../app/services/user';
-import { SchedulePage } from '../schedule';
 import { UserStartPage } from '../user-start';
 
 @Component({
@@ -17,7 +16,7 @@ export class LoginPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private userService: UserService) {
 		super(injector);
-		this.username = 'test010@gmail.com';
+		this.username = 'test@attendant.zappp.com';
 		this.password = '1234567';
 	}
 

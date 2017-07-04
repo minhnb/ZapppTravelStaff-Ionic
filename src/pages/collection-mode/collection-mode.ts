@@ -4,15 +4,18 @@ import { BaseComponent } from '../../app/base.component';
 import { CustomerInfoPage } from '../customer-info';
 import { ListTruckPage } from '../list-truck';
 import { ListOrderPage } from '../list-order';
+import { CollectionModeService } from '../../app/services/collection-mode';
 
 @IonicPage()
 @Component({
 	selector: 'page-collection-mode',
 	templateUrl: 'collection-mode.html',
+	providers: [CollectionModeService]
 })
 export class CollectionModePage extends BaseComponent {
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
+		private collectionModeService: CollectionModeService) {
 		super(injector);
 	}
 
@@ -20,17 +23,42 @@ export class CollectionModePage extends BaseComponent {
 		console.log('ionViewDidLoad CollectionModePage');
 	}
 
-	scanUserQRCode() {
-        this.scanQRCode(text => {
-			let customerInfo = {
-				name: 'Dolly Doe',
-				hotel: 'Sheraton',
-				address: '20 Nathan Rd, Hong Kong',
-				receiver: 'Dolly Doe',
-				room: '223',
-				isAttendantSaveMode: false
+	goToCustomerInfoPage(customerInfo: any) {
+		this.navCtrl.push(CustomerInfoPage, customerInfo);
+	}
+
+	getOrderDetail(orderId: string) {
+		this.collectionModeService.getOrderDetail(orderId).subscribe(
+			res => {
+				let customerInfo = this.customerInfoTransform(res);
+				this.goToCustomerInfoPage(customerInfo);
+			},
+			err => {
+				this.showError(err.message);
 			}
-			this.navCtrl.push(CustomerInfoPage, customerInfo);
+		);
+	}
+
+	getLuggageCodeDetail(luggageCode: string) {
+		this.collectionModeService.getLuggageCodeDetail(luggageCode).subscribe(
+			res => {
+				let customerInfo = this.customerInfoTransform(res);
+				customerInfo.isAttendantSaveMode = true;
+				this.goToCustomerInfoPage(customerInfo);
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	scanOrderQRCode() {
+        this.scanQRCode(text => {
+			if (this.isLuggageCode(text)) {
+				this.getLuggageCodeDetail(text);
+			} else {
+				this.getOrderDetail(text);
+			}
         });
 	}
 

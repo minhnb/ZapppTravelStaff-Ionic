@@ -169,4 +169,47 @@ export class BaseComponent {
 			this.showError(JSON.stringify(err));
 		});
 	}
+
+	isLuggageCode(code: string): boolean {
+        if (code.startsWith('ZTL')) {
+            return true;
+        }
+        return false;
+    }
+
+    isStorageBinCode(code: string): boolean {
+        return true;
+    }
+
+	getFullName(firstName: string, lastName: string): string {
+		let names = [firstName, lastName];
+		return names.filter(Boolean).join(' ');
+	}
+
+	listLuggageTransform(listServerLuggage: Array<any>): Array<any> {
+		if (listServerLuggage) {
+			return listServerLuggage.map(item => {
+				return {
+					id: item.id,
+					luggageCode: item.luggage_id,
+					storageBinCode: item.bin
+				}
+			});
+		}
+		return null;
+	}
+
+	customerInfoTransform(requestInfo: any): any {
+		let customerInfo = {
+			name: this.getFullName(requestInfo.user_request_info_first, requestInfo.user_request_info_last),
+			hotel: requestInfo.hotel_info ? requestInfo.hotel_info.name : '',
+			address: requestInfo.hotel_info ? requestInfo.hotel_info.address : '',
+			receiver: requestInfo.guest_name,
+			room: requestInfo.room_no,
+			listLuggage: this.listLuggageTransform(requestInfo.order_luggage_bin),
+			isAttendantSaveMode: false,
+			orderId: requestInfo.id
+		};
+		return customerInfo;
+	}
 }

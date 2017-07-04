@@ -7,8 +7,10 @@ import { AppConstant } from '../app.constant';
 
 @Injectable()
 export class CollectionModeService {
+
 	private stopUrl = AppConfig.API_URL + 'stop';
 	private truckUrl = AppConfig.API_URL + 'truck';
+	private orderUrl = AppConfig.API_URL + 'orders';
 
 	constructor(private zapppHttp: ZapppHttp) { }
 
@@ -34,5 +36,13 @@ export class CollectionModeService {
 			stay_time: stayTime
 		};
 		return this.zapppHttp.post(this.truckUrl + '/update_stay_time', params);
+	}
+
+	getOrderDetail(orderId: string) {
+		return this.zapppHttp.get(this.orderUrl + '/detail/order_id/' + orderId);
+	}
+
+	getLuggageCodeDetail(luggageCode: string) {
+		return this.zapppHttp.get(this.orderUrl + '/detail/luggage_id/' + luggageCode);
 	}
 }

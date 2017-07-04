@@ -100,17 +100,6 @@ export class CustomerLuggagePage extends BaseComponent {
 		return !(this.isTransferMode || this.attendantSaveMode || !this.isFromCustomerInfoPage || this.isDeliveryMode);
 	}
 
-    isLuggageCode(code: string): boolean {
-        if (code.startsWith('ZTL')) {
-            return true;
-        }
-        return false;
-    }
-
-    isStorageBinCode(code: string): boolean {
-        return true;
-    }
-
     indexOfLuggageCode(luggageCode: string): number {
         for (let i = 0; i < this.listLuggage.length; i++) {
             if (this.listLuggage[i].luggageCode == luggageCode) {
