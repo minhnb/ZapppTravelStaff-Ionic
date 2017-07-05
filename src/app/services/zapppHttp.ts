@@ -68,20 +68,38 @@ export class ZapppHttp {
         }
         this._spinner.show();
         let self = this;
-        return this.http.request(url, options)
-			.map(this.extractData.bind(this))
-			.catch((err: any) => {
-                return self.handleError(err, url, options);
-            });
+        let observer: Observable<any> = Observable.create(observer => {
+            let requestSub = this.http.request(url, options)
+				.map(this.extractData.bind(this))
+				.catch((err: any) => {
+                    return self.handleError(err, url, options);
+                });
+            requestSub.subscribe(
+                (res: any) => {
+                    if (res.status.code > 0) {
+                        observer.next(res.data);
+                        observer.complete();
+                    } else {
+                        let err = res.status;
+                        err.message = err.msg;
+                        observer.error(err);
+                    }
+                },
+                err => {
+                    observer.error(err);
+                }
+            );
+        });
+        return observer;
     }
 
-    extractData(res: Response) {
+    extractData(res: Response): any {
         this._spinner.hide();
         let response = res.json() || {};
         if (ENV != 'production') {
             console.log(response);
         }
-		return response.data;
+		return response;
     }
 
     handleError(error: Response | any, url: string, options: RequestOptions): any {
