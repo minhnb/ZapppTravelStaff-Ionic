@@ -199,6 +199,18 @@ export class BaseComponent {
 		return null;
 	}
 
+	listLuggageReverseTransform(listLuggage: Array<any>): Array<any> {
+		if (listLuggage) {
+			return listLuggage.map(item => {
+				return {
+					luggage_id: item.luggageCode,
+					bin: item.storageBinCode
+				}
+			});
+		}
+		return null;
+	}
+
 	customerInfoTransform(requestInfo: any): any {
 		let customerInfo = {
 			name: this.getFullName(requestInfo.user_request_info_first, requestInfo.user_request_info_last),

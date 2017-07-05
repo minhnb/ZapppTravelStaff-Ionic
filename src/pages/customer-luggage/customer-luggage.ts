@@ -2,11 +2,13 @@ import { Component, Injector, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { TakePicturePage } from '../take-picture';
+import { CollectionModeService } from '../../app/services/collection-mode';
 
 @IonicPage()
 @Component({
 	selector: 'page-customer-luggage',
 	templateUrl: 'customer-luggage.html',
+	providers: [CollectionModeService]
 })
 export class CustomerLuggagePage extends BaseComponent {
 
@@ -17,35 +19,14 @@ export class CustomerLuggagePage extends BaseComponent {
 	isTransferMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
 	isDeliveryMode: boolean = false;
+	isUpdated: boolean = false;
 
     @ViewChild(Navbar) navBar: Navbar;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
+		private collectionModeService: CollectionModeService) {
         super(injector);
         this.initCustomerLuggage();
-		// for quick layout
-        // this.attendantSaveMode = true;
-        // this.customer = {
-        //     name: 'Dolly Doe',
-        //     hotel: 'Sheraton',
-        //     address: '20 Nathan Rd, Hong Kong',
-        //     receiver: 'Dolly Doe',
-        //     room: '223'
-        // }
-        // this.listLuggage = [
-        //     {
-        //         luggageCode: 'ZTL12789',
-        //         storageBinCode: ''
-        //     },
-        //     {
-        //         luggageCode: 'ZTL127890',
-        //         storageBinCode: ''
-        //     },
-        //     {
-        //         luggageCode: 'ZTL127891',
-        //         storageBinCode: ''
-        //     }
-        // ]
 	}
 
 	ionViewDidLoad() {
@@ -67,6 +48,9 @@ export class CustomerLuggagePage extends BaseComponent {
         } else {
             if (this.customer.listLuggage) {
                 this.listLuggage = this.customer.listLuggage;
+				if (this.listLuggage.length > 0) {
+					this.isUpdated = true;
+				}
             }
         }
 		if (this.customer.isAttendantSaveMode) {
@@ -211,7 +195,7 @@ export class CustomerLuggagePage extends BaseComponent {
 			return;
 		}
 		if (this.isFromCustomerInfoPage) {
-			this.goBackToCollectionModePage();
+			this.updateLuggage();
 		} else {
 			this.goBackToCustomerInfoPage();
 		}
@@ -235,5 +219,18 @@ export class CustomerLuggagePage extends BaseComponent {
 			customer: this.customer
 		};
 		this.navCtrl.push(TakePicturePage, params);
+	}
+
+	updateLuggage() {
+		let orderId = this.customer.orderId;
+		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
+		this.collectionModeService.updateLuggage(orderId, listLuggage, this.isUpdated).subscribe(
+			res => {
+				this.goBackToCollectionModePage();
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 }

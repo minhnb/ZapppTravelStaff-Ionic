@@ -45,4 +45,13 @@ export class CollectionModeService {
 	getLuggageCodeDetail(luggageCode: string) {
 		return this.zapppHttp.get(this.orderUrl + '/detail/luggage_id/' + luggageCode);
 	}
+
+	updateLuggage(orderId: string, listLuggage: Array<any>, isUpdated: boolean = false) {
+		let params = {
+			order_id: orderId,
+			luggage_info: listLuggage,
+			is_update: isUpdated
+		};
+		return this.zapppHttp.post(this.orderUrl + '/add_luggage_to_order', params);
+	}
 }
