@@ -5,6 +5,7 @@ import { AppConstant } from '../../app/app.constant';
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
+import { ListRequestPage } from '../list-request';
 import { StaffService } from '../../app/services/staff';
 
 @IonicPage()
@@ -26,7 +27,9 @@ export class UserStartPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		this.getListTruck();
+		if (this.isDriver() || this.isAttedant()) {
+			this.getListTruck();
+		}
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -90,4 +93,8 @@ export class UserStartPage extends BaseComponent {
     goToDeliveryMode() {
 		this.navCtrl.push(ListHotelPage);
     }
+
+	goToListRequest() {
+		this.navCtrl.push(ListRequestPage);
+	}
 }

@@ -152,6 +152,20 @@ button.button-scanner {
   }
 }
 
+button.right-number {
+    ion-label {
+        padding-right: 30px;
+        position: relative;
+
+        span {
+            position: absolute;
+            right: 0;
+            top: 0;
+            text-align: right;
+        }
+    }
+}
+
 .middle-notice {
   position: absolute;
   top: 50%;

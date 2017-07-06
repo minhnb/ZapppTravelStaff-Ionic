@@ -19,6 +19,7 @@ import { DeliveryInfoPageModule } from '../pages/delivery-info';
 import { TakePicturePageModule } from '../pages/take-picture';
 import { ListStationPageModule } from '../pages/list-station';
 import { StayTimeCountDownPageModule } from '../pages/stay-time-count-down';
+import { ListRequestPageModule } from '../pages/list-request';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -67,7 +68,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		DeliveryInfoPageModule,
 		TakePicturePageModule,
 		ListStationPageModule,
-		StayTimeCountDownPageModule
+		StayTimeCountDownPageModule,
+		ListRequestPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

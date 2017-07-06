@@ -1,0 +1,46 @@
+page-list-request {
+  ion-slide {
+    .slide-zoom {
+      height: 100%;
+    }
+
+    .user-request {
+      color: #666666;
+      font-size: 14px;
+      height: calc(100% - 75px);
+      position: relative;
+      text-align: center;
+
+      .distance,
+      .estimated-time {
+        font-size: large;
+      }
+
+      .distance {
+        margin-top: 50px;
+        margin-bottom: 10px;
+      }
+
+      .estimated-time {
+        margin-bottom: 20px;
+      }
+
+      img.avatar {
+        height: 150px;
+      }
+
+      .name {
+        margin-top: 10px;
+      }
+
+      .luggage-info {
+        margin-top: 50px;
+        text-align: left;
+      }
+
+      .button-bottom-full {
+        padding: 0;
+      }
+    }
+  }
+}

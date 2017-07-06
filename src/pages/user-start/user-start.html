@@ -14,14 +14,28 @@
     <ion-label>{{ 'ACTIVE' | translate }}</ion-label>
     <ion-toggle color="secondary" [(ngModel)]="isActive" (ngModelChange)="onStatusChange($event)"></ion-toggle>
   </ion-item>
-  <div full padding [hidden]="isActive" class="middle-notice">{{ 'HINT_TURN_ON_STATUS' | translate }}</div>
-  <ion-item no-lines [hidden]="!isActive">
+  <div [hidden]="!isActive || !isZappper()">
+    <button class="right-number" ion-item no-lines (click)="goToListRequest()">
+        <div>{{ 'NEW_REQUEST' | translate }}</div>
+        <span>5</span>
+      </button>
+    <button class="right-number" ion-item no-lines>
+        <div>{{ 'UNCOMPLETED_ORDER' | translate }}</div>
+        <span>12</span>
+      </button>
+    <button ion-item no-lines>
+        <div>{{ 'FIND_TRUCK' | translate }}</div>
+      </button>
+  </div>
+  <div full padding [hidden]="isActive  || isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS' | translate }}</div>
+  <div full padding [hidden]="isActive  || !isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS_ZAPPPER' | translate }}</div>
+  <ion-item no-lines [hidden]="!isActive || isZappper()">
     <ion-label>{{ 'CHOOSE_TRUCK' | translate }}</ion-label>
     <ion-select [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
       <ion-option *ngFor="let item of listTruck" value="{{ item.id }}">{{ item.truck_number }}</ion-option>
     </ion-select>
   </ion-item>
-  <div class="button-bottom-full" [hidden]="!isActive">
+  <div class="button-bottom-full" [hidden]="!isActive || isZappper()">
     <button ion-button full (click)="goToCollectionMode()">{{ 'BUTTON_COLLECTION_MODE' | translate }}</button>
     <button ion-button full (click)="goToDeliveryMode()">{{ 'BUTTON_DELIVERY_MODE' | translate }}</button>
   </div>
