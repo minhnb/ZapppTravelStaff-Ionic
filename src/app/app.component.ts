@@ -8,12 +8,8 @@ import { BaseComponent } from './base.component';
 
 import { UserService } from './services/user';
 
-import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
-import { SchedulePage } from '../pages/schedule';
 import { UserStartPage } from '../pages/user-start';
-import { CustomerLuggagePage } from '../pages/customer-luggage';
-import { CollectionModePage } from '../pages/collection-mode';
 
 @Component({
 	templateUrl: 'app.html',

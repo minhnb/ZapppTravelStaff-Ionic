@@ -1,4 +1,5 @@
 {
+  "ACCEPTED": "Accepted",
   "ACTIVE": "Active",
   "ADDRESS": "Address",
   "APP_NAME": "Staff App",
@@ -13,6 +14,7 @@
   "BUTTON_COLLECTION_MODE": "Collection",
   "BUTTON_DELIVERY_MODE": "Delivery",
   "BUTTON_DONE": "Done",
+  "BUTTON_FIND_TRUCK": "Find trucks",
   "BUTTON_FINISH": "Finish",
   "BUTTON_LOGIN": "Sign In",
   "BUTTON_NEXT": "Next",

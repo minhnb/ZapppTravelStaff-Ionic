@@ -6,6 +6,7 @@ import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
 import { ListRequestPage } from '../list-request';
+import { UncompletedOrderPage } from '../uncompleted-order';
 import { StaffService } from '../../app/services/staff';
 
 @IonicPage()
@@ -96,5 +97,9 @@ export class UserStartPage extends BaseComponent {
 
 	goToListRequest() {
 		this.navCtrl.push(ListRequestPage);
+	}
+
+	goToListUncompletedOrder() {
+		this.navCtrl.push(UncompletedOrderPage);
 	}
 }
