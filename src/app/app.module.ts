@@ -20,6 +20,7 @@ import { TakePicturePageModule } from '../pages/take-picture';
 import { ListStationPageModule } from '../pages/list-station';
 import { StayTimeCountDownPageModule } from '../pages/stay-time-count-down';
 import { ListRequestPageModule } from '../pages/list-request';
+import { DirectionUserPageModule } from '../pages/direction-user';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -31,6 +32,7 @@ import { FCM } from '@ionic-native/fcm';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Camera } from '@ionic-native/camera';
+import { CallNumber } from '@ionic-native/call-number';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -69,7 +71,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		TakePicturePageModule,
 		ListStationPageModule,
 		StayTimeCountDownPageModule,
-		ListRequestPageModule
+		ListRequestPageModule,
+		DirectionUserPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -87,6 +90,7 @@ import { ZapppHttp } from './services/zapppHttp';
 		BarcodeScanner,
 		Diagnostic,
 		Camera,
+		CallNumber,
 		ZapppHttp,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]

@@ -21,6 +21,7 @@
         "@angular/platform-browser": "4.1.2",
         "@angular/platform-browser-dynamic": "4.1.2",
         "@ionic-native/barcode-scanner": "^3.12.1",
+        "@ionic-native/call-number": "^3.14.0",
         "@ionic-native/camera": "^3.12.1",
         "@ionic-native/core": "3.7.0",
         "@ionic-native/diagnostic": "^3.12.1",
@@ -34,6 +35,7 @@
         "@ionic/storage": "2.0.1",
         "@ngx-translate/core": "^7.0.0",
         "@ngx-translate/http-loader": "^0.1.0",
+        "call-number": "^1.0.1",
         "cordova-android": "^6.2.3",
         "cordova-browser": "^4.1.0",
         "cordova-ios": "^4.4.0",
@@ -61,7 +63,8 @@
         "phonegap-plugin-barcodescanner": "^6.0.6",
         "rxjs": "5.1.1",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.10"
+        "zone.js": "0.8.10",
+        "mx.ferreyra.callnumber": "~0.0.2"
     },
     "devDependencies": {
         "@ionic/app-scripts": "1.3.7",
@@ -90,7 +93,8 @@
             "cordova-plugin-fcm": {},
             "phonegap-plugin-barcodescanner": {},
             "cordova.plugins.diagnostic": {},
-            "cordova-plugin-camera": {}
+            "cordova-plugin-camera": {},
+            "mx.ferreyra.callnumber": {}
         },
         "platforms": [
             "android",

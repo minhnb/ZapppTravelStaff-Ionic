@@ -14,7 +14,7 @@ export class CustomerLuggagePage extends BaseComponent {
 
     listLuggage: Array<any> = [];
     customer: any;
-    attendantSaveMode: boolean = false;
+    isAttendantSaveMode: boolean = false;
     selectedIndex: number = -1;
 	isTransferMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
@@ -36,7 +36,7 @@ export class CustomerLuggagePage extends BaseComponent {
 
     customBackButtonClick() {
 		this.navBar.backButtonClick = (e: UIEvent) => {
-			this.goBackToCustomerInfoPage();
+			this.goBackToPreviousPage();
 		};
 	}
 
@@ -54,7 +54,7 @@ export class CustomerLuggagePage extends BaseComponent {
             }
         }
 		if (this.customer.isAttendantSaveMode) {
-			this.attendantSaveMode = true;
+			this.isAttendantSaveMode = true;
 		}
 		if (this.navParams.data.isTransferMode) {
 			this.isTransferMode = true;
@@ -77,11 +77,11 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
 	isAcceptLuggageFromOtherTrucksMode(): boolean {
-		return this.attendantSaveMode && !this.isFromCustomerInfoPage && !this.isTransferMode && !this.isDeliveryMode;
+		return this.isAttendantSaveMode && !this.isFromCustomerInfoPage && !this.isTransferMode && !this.isDeliveryMode;
 	}
 
 	isAllowedToRemoveLuggageCode() {
-		return !(this.isTransferMode || this.attendantSaveMode || !this.isFromCustomerInfoPage || this.isDeliveryMode);
+		return !(this.isTransferMode || this.isAttendantSaveMode || !this.isFromCustomerInfoPage || this.isDeliveryMode);
 	}
 
     indexOfLuggageCode(luggageCode: string): number {
@@ -173,7 +173,7 @@ export class CustomerLuggagePage extends BaseComponent {
 
     smartScanQRCode() {
 		this.scanQRCode(text => {
-            if (this.attendantSaveMode || this.isDeliveryMode) {
+            if (this.isAttendantSaveMode || this.isDeliveryMode) {
                 this.helpAttendantSortLuggage(text);
                 return;
             }
@@ -197,7 +197,11 @@ export class CustomerLuggagePage extends BaseComponent {
 		if (this.isFromCustomerInfoPage) {
 			this.updateLuggage();
 		} else {
-			this.goBackToCustomerInfoPage();
+			if (this.isAttendantSaveMode || this.isTransferMode) {
+				this.goBackToPreviousPage();
+			} else {
+				this.goBackToUserStartPage();
+			}
 		}
 
     }
@@ -208,7 +212,13 @@ export class CustomerLuggagePage extends BaseComponent {
         this.navCtrl.popTo(this.navCtrl.getByIndex(collectionModePageIndex));
     }
 
-    goBackToCustomerInfoPage() {
+    goBackToUserStartPage() {
+        let currentPageIndex = this.navCtrl.getViews().length - 1;
+        let userStartPageIndex = currentPageIndex - 3;
+        this.navCtrl.popTo(this.navCtrl.getByIndex(userStartPageIndex));
+    }
+
+    goBackToPreviousPage() {
         this.customer.listLuggage = this.listLuggage;
         this.navCtrl.pop(this.customer);
     }
