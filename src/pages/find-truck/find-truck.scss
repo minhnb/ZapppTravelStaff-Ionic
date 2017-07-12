@@ -1,0 +1,56 @@
+page-find-truck {
+  &,
+  .district-header {
+    font-size: small;
+  }
+
+  .district-header {
+    ion-label {
+      font-weight: bold;
+    }
+  }
+
+  .truck-list {
+    display: block;
+    margin-top: 20px;
+    position: relative;
+
+    & > label {
+      font-weight: bold;
+    }
+
+    & > button {
+      position: absolute;
+      top: -5px;
+      right: 0;
+      font-size: small;
+      height: auto;
+      padding: 5px 15px;
+      border-radius: 0;
+    }
+
+    & > div {
+      margin-top: 15px;
+      overflow: auto;
+
+      .time-left {
+        width: 30%;
+        float: left;
+      }
+
+      .address {
+        width: 70%;
+        float: left;
+        padding-left: 15px;
+      }
+
+      .red {
+        color: red;
+      }
+
+      .green {
+        color: green;
+      }
+    }
+  }
+}

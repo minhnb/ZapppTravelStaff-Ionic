@@ -1,0 +1,21 @@
+page-uncompleted-order {
+  ion-slides {
+    height: calc(100% - 60px);
+  }
+
+  ion-slide.swiper-slide {
+    align-items: baseline;
+    font-size: 1em;
+    text-align: left;
+
+    .slide-zoom {
+      text-align: left;
+
+      .info-row {
+        .content {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}
