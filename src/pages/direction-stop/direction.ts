@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, Polyline, PolylineOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 
 import { GoogleMapsLoader } from '../../app/helper/googleMaps.loader';
 import * as decodePolyline from 'decode-google-map-polyline';
@@ -48,8 +49,10 @@ export class DirectionPage extends BaseComponent {
 	}
 
 	updateCurrentLocationMarker(currentLocation: LatLng) {
-		this.currentLocationMarker.remove();
-		this.addSimpleMarker(currentLocation, '', (marker: Marker) => {
+		if (this.currentLocationMarker) {
+			this.currentLocationMarker.remove();
+		}
+		this.addCurrentLocationMarker(currentLocation, '', (marker: Marker) => {
 			this.currentLocationMarker = marker;
 		});
 	}
@@ -116,13 +119,12 @@ export class DirectionPage extends BaseComponent {
 
 	drawDirectionFromCurrentLocationToDestination(currentLocation: LatLng, destinationName: string) {
 		this.removeAllMarkersAndPolyline();
-		this.addSimpleMarker(currentLocation, 'You are here', (marker: Marker) => {
-			// marker.showInfoWindow();
-			this.currentLocationMarker = marker;
+		this.addStartPointMarker(currentLocation, 'You are here', (marker: Marker) => {
+
 		});
 
 		if (this.destinationLocation) {
-			this.addSimpleMarker(this.destinationLocation, destinationName, (marker: Marker) => {
+			this.addEndPointMarker(this.destinationLocation, destinationName, (marker: Marker) => {
 				marker.showInfoWindow();
 				this.showDirection(currentLocation, this.destinationLocation);
 			});
@@ -141,12 +143,7 @@ export class DirectionPage extends BaseComponent {
 		this.markers = [];
 	}
 
-	addSimpleMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
-		var markerParams: MarkerOptions = {
-			position: point,
-			title: title
-		};
-
+	addMarker(markerParams: MarkerOptions, callback?: (marker: Marker) => void) {
 		this.map.addMarker(markerParams)
 			.then((marker: Marker) => {
 				this.markers.push(marker);
@@ -156,27 +153,50 @@ export class DirectionPage extends BaseComponent {
 			});
 	}
 
+	createMarkerOptions(point: LatLng, title?: string, iconUrl?: string): MarkerOptions {
+		var markerParams: MarkerOptions = {
+			position: point,
+			title: title
+		};
+
+		if (iconUrl) {
+			markerParams.icon = {
+				url: iconUrl
+			}
+		}
+
+		return markerParams;
+	}
+
+	addSimpleMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
+		var markerParams = this.createMarkerOptions(point, title);
+		this.addMarker(markerParams, callback);
+	}
+
+	addStartPointMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
+		var markerParams = this.createMarkerOptions(point, title, AppConstant.MARKER_IMAGE.START);
+		this.addMarker(markerParams, callback);
+	}
+
+	addEndPointMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
+		var markerParams = this.createMarkerOptions(point, title, AppConstant.MARKER_IMAGE.END);
+		this.addMarker(markerParams, callback);
+	}
+
+	addTruckMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
+		var markerParams = this.createMarkerOptions(point, title, AppConstant.MARKER_IMAGE.TRUCK);
+		this.addMarker(markerParams, callback);
+	}
+
+	addCurrentLocationMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
+		var markerParams = this.createMarkerOptions(point, title, AppConstant.MARKER_IMAGE.CURRENT_LOCATION);
+		this.addMarker(markerParams, callback);
+	}
+
 	leaveCurentStop() {
 		this.showConfirm(this.translate.instant('CONFIRM_LEAVE_STOP'), this.translate.instant('CONFIRMAION_LEAVE'),
 			() => {
 				this.navCtrl.pop();
-			});
-	}
-
-	addMarker(point) {
-		var markerParams: MarkerOptions = {
-			position: point,
-			// title: '#' + this.markers.length,
-			icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-		};
-
-		this.map.addMarker(markerParams)
-			.then((marker: Marker) => {
-				if (this.markers.length > 1) {
-					var lastMarker = this.markers[this.markers.length - 1];
-					lastMarker.remove();
-				}
-				this.markers.push(marker);
 			});
 	}
 

@@ -1,10 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { DirectionPage } from '../direction-stop';
-import { CustomerLuggagePage } from '../customer-luggage';
 import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { CallNumber } from '@ionic-native/call-number';
+
+import { DirectionPage } from '../direction-stop';
+import { CustomerLuggagePage } from '../customer-luggage';
 
 @IonicPage()
 @Component({

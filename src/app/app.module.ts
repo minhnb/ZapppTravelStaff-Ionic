@@ -23,6 +23,7 @@ import { ListRequestPageModule } from '../pages/list-request';
 import { DirectionUserPageModule } from '../pages/direction-user';
 import { UncompletedOrderPageModule } from '../pages/uncompleted-order';
 import { FindTruckPageModule } from '../pages/find-truck';
+import { DirectionTruckPageModule } from '../pages/direction-truck';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -76,7 +77,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		ListRequestPageModule,
 		DirectionUserPageModule,
 		UncompletedOrderPageModule,
-		FindTruckPageModule
+		FindTruckPageModule,
+		DirectionTruckPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

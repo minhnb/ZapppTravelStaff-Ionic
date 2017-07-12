@@ -25,5 +25,11 @@ export const AppConstant = {
     FORMAT_TIME_FULL: 'HH:mm:ss',
     SERVER_FORMAT_DATE: 'YYYY-MM-DD',
     SERVER_FORMAT_DATE_WITH_SPLASH: 'YYYY/MM/DD',
-    PICTURE_MAX_SIZE_MB: 5
+    PICTURE_MAX_SIZE_MB: 5,
+    MARKER_IMAGE: {
+        START: 'www/assets/images/marker-start.png',
+        END: 'www/assets/images/marker-end.png',
+        TRUCK: 'www/assets/images/marker-truck.png',
+        CURRENT_LOCATION: 'www/assets/images/marker-current-location.png'
+    }
 };
