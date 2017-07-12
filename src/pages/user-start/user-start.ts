@@ -7,6 +7,7 @@ import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
 import { ListRequestPage } from '../list-request';
 import { UncompletedOrderPage } from '../uncompleted-order';
+import { FindTruckPage } from '../find-truck';
 import { StaffService } from '../../app/services/staff';
 
 @IonicPage()
@@ -38,8 +39,6 @@ export class UserStartPage extends BaseComponent {
 	}
 
     onStatusChange(event) {
-        // console.log(event);
-        // console.log(this.isActive);
 		this.staffService.updateStatus(this.isActive).subscribe(
 			res => {
 
@@ -52,8 +51,6 @@ export class UserStartPage extends BaseComponent {
     }
 
     onTruckChange(event) {
-        // console.log(event);
-        // console.log(this.truck);
 		this.chooseTruck(this.truck);
     }
 
@@ -101,5 +98,9 @@ export class UserStartPage extends BaseComponent {
 
 	goToListUncompletedOrder() {
 		this.navCtrl.push(UncompletedOrderPage);
+	}
+
+	goToFindTruckPage() {
+		this.navCtrl.push(FindTruckPage);
 	}
 }

@@ -10,6 +10,7 @@ export class StaffService {
 
 	private truckUrl = AppConfig.API_URL + 'truck';
 	private userUrl = AppConfig.API_URL + 'user';
+	private districtUrl = AppConfig.API_URL + 'district';
 
 	constructor(private zapppHttp: ZapppHttp) { }
 
@@ -29,5 +30,9 @@ export class StaffService {
 			truck_id: truckId
 		};
 		return this.zapppHttp.post(this.truckUrl + '/assign_driver', params);
+	}
+
+	listDistrict(): Observable<any> {
+		return this.zapppHttp.get(this.districtUrl + '/list_districts');
 	}
 }

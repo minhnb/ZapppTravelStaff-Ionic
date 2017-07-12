@@ -22,6 +22,7 @@ import { StayTimeCountDownPageModule } from '../pages/stay-time-count-down';
 import { ListRequestPageModule } from '../pages/list-request';
 import { DirectionUserPageModule } from '../pages/direction-user';
 import { UncompletedOrderPageModule } from '../pages/uncompleted-order';
+import { FindTruckPageModule } from '../pages/find-truck';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -74,7 +75,8 @@ import { ZapppHttp } from './services/zapppHttp';
 		StayTimeCountDownPageModule,
 		ListRequestPageModule,
 		DirectionUserPageModule,
-		UncompletedOrderPageModule
+		UncompletedOrderPageModule,
+		FindTruckPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
