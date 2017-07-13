@@ -9,14 +9,12 @@
 
 <ion-content padding>
   <ion-row full class="list-header info-row">
-    <ion-col col-12 class="label">{{ 'SENDER' | translate }}</ion-col>
-    <ion-col col-12>
-      <ion-list>
-        <button class="no-padding-left" ion-item no-lines *ngFor="let item of listOrder"
-        (click)="isDeliveryMode ? goToDeliveryInfo(item) : goToCustomerLugguagePage(item)">
-              {{ item.name }}
-          </button>
-      </ion-list>
-    </ion-col>
+    <ion-col col-6 class="label no-padding-left">{{ 'SENDER' | translate }}</ion-col>
+    <ion-col col-6 class="label no-padding-left text-align-right">{{ 'LUGGAGE_QUANTITY' | translate }}</ion-col>
   </ion-row>
+  <ion-list>
+    <button class="no-padding-left right-number" ion-item no-lines [ngClass]="item.completed ? 'completed' : ''" *ngFor="let item of listOrder" (click)="isDeliveryMode ? goToDeliveryInfo(item) : goToCustomerLugguagePage(item)">
+        {{ item.name }}<span>{{ item.listLuggage ? item.listLuggage.length : 0 }}</span>
+     </button>
+  </ion-list>
 </ion-content>

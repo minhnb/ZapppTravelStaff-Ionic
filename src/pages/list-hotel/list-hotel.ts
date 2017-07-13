@@ -18,23 +18,28 @@ export class ListHotelPage extends BaseComponent {
         this.listHotel = [
             {
                 name: "Sheraton Hotel",
-                address: "20 Nathan Rd, Hong Kong"
+                address: "20 Nathan Rd, Hong Kong",
+				luggageQuantity: 10
             },
             {
                 name: "The Plaza Hotel",
-                address: "193 Prince Edward Road West, Kowloon"
+                address: "193 Prince Edward Road West, Kowloon",
+				luggageQuantity: 8
             },
             {
                 name: "The Rex Hotel",
-                address: "141 Nguyen Hue"
+                address: "141 Nguyen Hue",
+				luggageQuantity: 15
             },
             {
                 name: "The Sayvoy",
-                address: "Strand LD"
+                address: "Strand LD",
+				luggageQuantity: 10
             },
             {
                 name: "The Gritti Palace",
-                address: "768 Eve"
+                address: "768 Eve",
+				luggageQuantity: 20
             }
         ];
 	}

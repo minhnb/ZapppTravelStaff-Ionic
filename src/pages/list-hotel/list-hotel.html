@@ -8,11 +8,15 @@
 
 
 <ion-content padding>
+  <ion-row full class="list-header info-row">
+    <ion-col col-6 class="label no-padding-left">{{ 'HOTEL' | translate }}</ion-col>
+    <ion-col col-6 class="label no-padding-left text-align-right">{{ 'LUGGAGE_QUANTITY' | translate }}</ion-col>
+  </ion-row>
   <ion-list>
-    <button class="hotel-item" ion-item no-lines *ngFor="let item of listHotel"
-    (click)="isAttedant() ? goToHotelOrderPage(item) : viewDirection(item)">
+    <button class="hotel-item right-number no-padding-left" ion-item no-lines *ngFor="let item of listHotel" (click)="isAttedant() ? goToHotelOrderPage(item) : viewDirection(item)">
       <div class="name">{{ item.name }}</div>
       <div class="address">{{ item.address }}</div>
+      <span>{{ item.luggageQuantity }}</span>
     </button>
   </ion-list>
 </ion-content>

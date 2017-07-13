@@ -38,7 +38,8 @@ ion-navbar {
   }
 }
 
-.ion-page, .scroll-content {
+.ion-page,
+.scroll-content {
   .button-bottom-full {
     position: absolute;
     width: 100%;
@@ -116,7 +117,7 @@ button.button-scanner {
 
   & > .label {
     font-weight: bold;
-    font-size: x-small;
+    font-size: small;
     margin-bottom: 5px;
   }
 }
@@ -147,23 +148,31 @@ button.button-scanner {
   }
 
   .address {
-    font-size: x-small;
+    font-size: small;
     margin-top: 5px;
   }
 }
 
 button.right-number {
-    ion-label {
-        padding-right: 30px;
-        position: relative;
+  ion-label {
+    padding-right: 30px;
+    position: relative;
 
-        span {
-            position: absolute;
-            right: 0;
-            top: 0;
-            text-align: right;
-        }
+    span {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      text-align: right;
+      transform: translate(0, -50%);
+      margin-top: -1px;
     }
+  }
+
+  &.completed {
+    ion-label {
+      color: green;
+    }
+  }
 }
 
 .middle-notice {
@@ -179,10 +188,14 @@ button.right-number {
   padding-left: 0;
 }
 
-ion-app._gmaps_cdv_ .nav-decor{
+.text-align-right {
+  text-align: right;
+}
+
+ion-app._gmaps_cdv_ .nav-decor {
   background-color: transparent !important;
 }
 
 .capitalize {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }

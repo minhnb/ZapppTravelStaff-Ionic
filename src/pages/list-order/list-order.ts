@@ -29,7 +29,8 @@ export class ListOrderPage extends BaseComponent {
 		this.events.subscribe('delivery:completed', (data) => {
 			this.deliveryItem = data.deliveryItem;
 			if (this.deliveryItem) {
-				this.removeDeliveryItem();
+				// this.removeDeliveryItem();
+				this.markDeliveryItemCompleted();
 				this.deliveryItem = null;
 			}
 		})
@@ -54,6 +55,12 @@ export class ListOrderPage extends BaseComponent {
 	removeDeliveryItem() {
 		let index = this.indexOfDeliveryItem(this.deliveryItem.name);
 		this.listOrder.splice(index, 1);
+	}
+
+	markDeliveryItemCompleted() {
+		let index = this.indexOfDeliveryItem(this.deliveryItem.name);
+		let item = this.listOrder[index];
+		item.completed = true;
 	}
 
 	indexOfDeliveryItem(name: string) {
