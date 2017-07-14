@@ -74,8 +74,6 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	goBackToUserStartPage() {
-        let currentPageIndex = this.navCtrl.getViews().length - 1;
-        let userStartPageIndex = currentPageIndex - 3;
-        this.navCtrl.popTo(this.navCtrl.getByIndex(userStartPageIndex));
+        this.navCtrl.popToRoot();
     }
 }
