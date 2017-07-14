@@ -22,6 +22,7 @@ export class DirectionPage extends BaseComponent {
 
 	markers: Array<any> = [];
 	currentLocationMarker: Marker;
+	watchPositionSubscription: any;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
@@ -81,7 +82,6 @@ export class DirectionPage extends BaseComponent {
 		};
 		let watchOption = geolocationOptions;
 		let watchTimeout = 30000;
-		watchOption.timeout = watchTimeout;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
@@ -103,18 +103,36 @@ export class DirectionPage extends BaseComponent {
 						});
 				});
 
-				let watch = this.geolocation.watchPosition(watchOption);
-				setTimeout(() => {
-					watch.subscribe((resp) => {
-						if (!resp.coords) {
-							return;
-						}
-						let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-						this.updateCurrentLocationMarker(currentLocation);
-					});
-				}, watchTimeout)
+				this.initWatchPosition(watchTimeout, watchOption);
 			}
 		);
+	}
+
+	initWatchPosition(watchTimeout: number, watchOption: GeolocationOptions) {
+		watchOption.timeout = watchTimeout;
+		this.watchPositionSubscription = this.geolocation.watchPosition(watchOption);
+		setTimeout(() => {
+			this.subcribeWatchPosition();
+		}, watchTimeout)
+	}
+
+	subcribeWatchPosition() {
+		if (!this.watchPositionSubscription) {
+			return;
+		}
+		this.watchPositionSubscription.subscribe((resp) => {
+			if (!resp.coords) {
+				return;
+			}
+			let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+			this.updateCurrentLocationMarker(currentLocation);
+		});
+	}
+
+	unsubcribeWatchPosition() {
+		if (this.watchPositionSubscription) {
+			this.watchPositionSubscription.unsubscribe();
+		}
 	}
 
 	drawDirectionFromCurrentLocationToDestination(currentLocation: LatLng, destinationName: string) {
