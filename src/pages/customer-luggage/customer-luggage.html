@@ -35,6 +35,7 @@
     <button class="transparent-button button-scanner" (click)="smartScanQRCode()">
           <ion-icon name="ios-qr-scanner-outline"></ion-icon>
       </button>
-    <button ion-button full [disabled]="!listLuggage.length" (click)="finishScanning()">{{ 'BUTTON_FINISH' | translate }}</button>
+    <button ion-button full [disabled]="!listLuggage.length" *ngIf="!isDeliveryMode" (click)="finishScanningForCollectionMode()">{{ (isUpdated ? 'BUTTON_FINISH' : 'BUTTON_DONE') | translate }}</button>
+    <button ion-button full [disabled]="!listLuggage.length" *ngIf="isDeliveryMode" (click)="finishScanningForDeliveryMode()">{{ 'BUTTON_FINISH' | translate }}</button>
   </div>
 </ion-content>

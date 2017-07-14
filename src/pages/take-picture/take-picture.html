@@ -1,14 +1,15 @@
 <ion-content padding>
-  <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
+  <button class="transparent-button dismiss-view-button" (click)="dismissView(event)" *ngIf="isDeliveryMode">
       <ion-icon name="close"></ion-icon>
     </button>
-    <div class="middle-center middle-camera" *ngIf="!base64Image">
-        <button class="transparent-button" (click)="takePicture()">
+  <div class="middle-center middle-camera" *ngIf="!base64Image">
+    <button class="transparent-button" (click)="takePicture()">
             <ion-icon name="camera"></ion-icon>
           </button>
-          <div>{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
-    </div>
-    <img class="middle-center" *ngIf="base64Image" src="{{ base64Image }}" />
-    <button ion-button class="above-button bottom-left" *ngIf="base64Image" (click)="takePicture()">{{ 'BUTTON_RETAKE' | translate }}</button>
-    <button ion-button class="above-button bottom-right" *ngIf="base64Image" (click)="savePicture()">{{ 'BUTTON_SAVE' | translate }}</button>
+    <div>{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
+  </div>
+  <img class="middle-center" *ngIf="base64Image" src="{{ base64Image }}" />
+  <button ion-button class="above-button bottom-left" *ngIf="base64Image" (click)="takePicture()">{{ 'BUTTON_RETAKE' | translate }}</button>
+  <button ion-button class="above-button bottom-right" *ngIf="base64Image && isDeliveryMode" (click)="savePictureForDeliveryMode()">{{ 'BUTTON_SAVE' | translate }}</button>
+  <button ion-button class="above-button bottom-right" *ngIf="base64Image && !isDeliveryMode" (click)="savePictureForCollectionMode()">{{ 'BUTTON_FINISH' | translate }}</button>
 </ion-content>

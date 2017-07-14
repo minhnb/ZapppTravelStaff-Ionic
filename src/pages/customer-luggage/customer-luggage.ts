@@ -189,22 +189,21 @@ export class CustomerLuggagePage extends BaseComponent {
         });
     }
 
-    finishScanning() {
-		if (this.isDeliveryMode) {
-			this.goToTakeProofPicturePage();
-			return;
-		}
+	finishScanningForDeliveryMode() {
+		this.goToTakeProofPicturePage();
+	}
+
+	finishScanningForCollectionMode() {
 		if (this.isFromCustomerInfoPage) {
 			this.updateLuggage();
 		} else {
 			if (this.isAttendantSaveMode || this.isTransferMode) {
 				this.goBackToPreviousPage();
 			} else {
-				this.goBackToUserStartPage();
+				this.goToTakeProofPicturePage();
 			}
 		}
-
-    }
+	}
 
     goBackToCollectionModePage() {
         let currentPageIndex = this.navCtrl.getViews().length - 1;
@@ -226,7 +225,9 @@ export class CustomerLuggagePage extends BaseComponent {
 	goToTakeProofPicturePage() {
 		this.customer.listLuggage = this.listLuggage;
 		let params: any = {
-			customer: this.customer
+			customer: this.customer,
+			isDeliveryMode: this.isDeliveryMode,
+			isFromCustomerInfoPage: this.isFromCustomerInfoPage
 		};
 		this.navCtrl.push(TakePicturePage, params);
 	}
@@ -236,7 +237,11 @@ export class CustomerLuggagePage extends BaseComponent {
 		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
 		this.collectionModeService.updateLuggage(orderId, listLuggage, this.isUpdated).subscribe(
 			res => {
-				this.goBackToCollectionModePage();
+				if (this.isUpdated) {
+					this.goBackToCollectionModePage();
+				} else {
+					this.goToTakeProofPicturePage();
+				}
 			},
 			err => {
 				this.showError(err.message);

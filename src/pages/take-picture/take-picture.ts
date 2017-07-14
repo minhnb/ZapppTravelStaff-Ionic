@@ -12,10 +12,14 @@ export class TakePicturePage extends BaseComponent {
 
 	base64Image: string = '';
 	customer: any;
+	isDeliveryMode: boolean = false;
+	isFromCustomerInfoPage: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera, public events: Events) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
+		this.isDeliveryMode = this.navParams.data.isDeliveryMode;
+		this.isFromCustomerInfoPage = this.navParams.data.isFromCustomerInfoPage;
 	}
 
 	ionViewDidLoad() {
@@ -39,11 +43,19 @@ export class TakePicturePage extends BaseComponent {
 			// If it's base64:
 			this.base64Image = 'data:image/jpeg;base64,' + imageData;
 		}, (err) => {
-			this.showError(JSON.stringify(err));
+			// this.showError(JSON.stringify(err));
 		});
 	}
 
-	savePicture() {
+	savePictureForCollectionMode() {
+		if (this.isFromCustomerInfoPage) {
+			this.goBackToCollectionModePage();
+		} else {
+			this.goBackToUserStartPage();
+		}
+
+	}
+	savePictureForDeliveryMode() {
 		this.goBackToListOrderPage();
 	}
 
@@ -56,4 +68,16 @@ export class TakePicturePage extends BaseComponent {
 		this.events.publish('delivery:completed', params);
         this.navCtrl.popTo(this.navCtrl.getByIndex(listOrderPageIndex));
 	}
+
+	goBackToCollectionModePage() {
+		let currentPageIndex = this.navCtrl.getViews().length - 1;
+        let collectionModePageIndex = currentPageIndex - 3;
+        this.navCtrl.popTo(this.navCtrl.getByIndex(collectionModePageIndex));
+	}
+
+	goBackToUserStartPage() {
+        let currentPageIndex = this.navCtrl.getViews().length - 1;
+        let userStartPageIndex = currentPageIndex - 4;
+        this.navCtrl.popTo(this.navCtrl.getByIndex(userStartPageIndex));
+    }
 }
