@@ -29,19 +29,56 @@ export class UserStartPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		if (this.isDriver() || this.isAttedant()) {
-			this.getListTruck();
-		}
+		this.loadPreviousState();
+		this.loadListTruckForActiveDirverAndAttendant();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
 		this.checkDevicePermission();
 	}
 
+	loadPreviousState() {
+		this.loadLocalPreviousState();
+	}
+
+	loadLocalPreviousState() {
+		let status = localStorage.getItem(AppConstant.STATUS);
+		if (status == 'true') {
+			this.isActive = true;
+			if ((this.isDriver() || this.isAttedant())) {
+				this.truck = localStorage.getItem(AppConstant.TRUCK);
+			}
+		}
+	}
+
+	saveStatusToLocalStorage(status: boolean) {
+		if (status) {
+			localStorage.setItem(AppConstant.STATUS, status.toString());
+		} else {
+			this.clearStatusInfo();
+		}
+	}
+
+	saveTruckInfoToLocalStorage(truckId: string) {
+		localStorage.setItem(AppConstant.TRUCK, truckId);
+	}
+
+	clearStatusInfo() {
+		localStorage.removeItem(AppConstant.STATUS);
+		localStorage.removeItem(AppConstant.TRUCK);
+	}
+
+	loadListTruckForActiveDirverAndAttendant() {
+		if (this.isActive && (this.isDriver() || this.isAttedant())) {
+			this.getListTruck();
+		}
+	}
+
     onStatusChange(event) {
 		this.staffService.updateStatus(this.isActive).subscribe(
 			res => {
-
+				this.saveStatusToLocalStorage(this.isActive);
+				this.loadListTruckForActiveDirverAndAttendant();
 			},
 			err => {
 				this.isActive = !this.isActive;
@@ -68,7 +105,7 @@ export class UserStartPage extends BaseComponent {
 	chooseTruck(truckId: string) {
 		this.staffService.chooseTruck(truckId).subscribe(
 			res => {
-
+				this.saveTruckInfoToLocalStorage(truckId);
 			},
 			err => {
 				this.showError(err.message);

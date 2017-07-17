@@ -8,6 +8,8 @@ export const AppConstant = {
         ATTENDANT: 'ATTENDANT',
         ZAPPPER: 'ZAPPPER'
     },
+    STATUS: 'status',
+    TRUCK: 'truck',
     PATTERN: {
         ONLY_DIGIT: '^[0-9]*$',
         VALID_USERNAME: '^[a-zA-Z][0-9a-zA-Z_.]+$',
