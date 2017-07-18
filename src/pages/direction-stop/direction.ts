@@ -23,6 +23,7 @@ export class DirectionPage extends BaseComponent {
 	markers: Array<any> = [];
 	currentLocationMarker: Marker;
 	watchPositionSubscription: any;
+	watchPositionObserverble: any;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
@@ -38,6 +39,14 @@ export class DirectionPage extends BaseComponent {
 			this.directionsService = new google.maps.DirectionsService;
 			this.loadMap();
 		});
+	}
+
+	ionViewWillEnter() {
+		this.subcribeWatchPosition();
+	}
+
+	ionViewWillLeave() {
+		this.unsubcribeWatchPosition();
 	}
 
 	ngOnDestroy() {
@@ -78,10 +87,10 @@ export class DirectionPage extends BaseComponent {
 
 		let geolocationOptions: GeolocationOptions = {
 			// enableHighAccuracy: true,
-			timeout: 5000
+			timeout: AppConstant.GET_LOCATION_TIMEOUT
 		};
 		let watchOption = geolocationOptions;
-		let watchTimeout = 30000;
+		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
@@ -110,17 +119,17 @@ export class DirectionPage extends BaseComponent {
 
 	initWatchPosition(watchTimeout: number, watchOption: GeolocationOptions) {
 		watchOption.timeout = watchTimeout;
-		this.watchPositionSubscription = this.geolocation.watchPosition(watchOption);
+		this.watchPositionObserverble = this.geolocation.watchPosition(watchOption);
 		setTimeout(() => {
 			this.subcribeWatchPosition();
 		}, watchTimeout)
 	}
 
 	subcribeWatchPosition() {
-		if (!this.watchPositionSubscription) {
+		if (!this.watchPositionObserverble) {
 			return;
 		}
-		this.watchPositionSubscription.subscribe((resp) => {
+		this.watchPositionSubscription = this.watchPositionObserverble.subscribe((resp) => {
 			if (!resp.coords) {
 				return;
 			}
@@ -132,6 +141,7 @@ export class DirectionPage extends BaseComponent {
 	unsubcribeWatchPosition() {
 		if (this.watchPositionSubscription) {
 			this.watchPositionSubscription.unsubscribe();
+			this.watchPositionSubscription = null;
 		}
 	}
 
