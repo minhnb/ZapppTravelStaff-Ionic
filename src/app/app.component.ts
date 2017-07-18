@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { FCM } from '@ionic-native/fcm';
 
 import { BaseComponent } from './base.component';
+import { AppConstant } from './app.constant';
 
 import { UserService } from './services/user';
 import { StaffService } from './services/staff';
@@ -123,7 +124,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	zappperUpdateCurrentLocation(lat: number, long: number) {
-		this.staffService.zappperUpdateCurrentLocation(lat, long).subscribe(
+		this.staffService.zappperUpdateCurrentLocation(lat, long, false).subscribe(
 			res => {
 
 			},
@@ -134,7 +135,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	driverUpdateCurrentLocation(lat: number, long: number) {
-		this.staffService.driverUpdateCurrentLocation(lat, long).subscribe(
+		this.staffService.driverUpdateCurrentLocation(lat, long, false).subscribe(
 			res => {
 
 			},
@@ -146,7 +147,7 @@ export class MyApp extends BaseComponent {
 
 	initWatchPosition() {
 		let watchOption: GeolocationOptions = {
-			timeout: 30000
+			timeout: AppConstant.WATCH_POSITION_INTERVAL
 		};
 		this.watchPositionObserverble = this.geolocation.watchPosition(watchOption);
 	}

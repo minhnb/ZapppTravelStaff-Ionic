@@ -41,19 +41,19 @@ export class StaffService {
 		return this.zapppHttp.get(this.zappperUrl + '/count_number_new_request_and_uncompleted_orders');
 	}
 
-	zappperUpdateCurrentLocation(lat: number, long: number) {
+	zappperUpdateCurrentLocation(lat: number, long: number, showSpinner: Boolean = true) {
 		let params = {
 			lat: lat,
 			lng: long
 		};
-		return this.zapppHttp.post(this.zappperUrl + '/update_lat_lng', params);
+		return this.zapppHttp.post(this.zappperUrl + '/update_lat_lng', params, null, showSpinner);
 	}
 
-	driverUpdateCurrentLocation(lat: number, long: number) {
+	driverUpdateCurrentLocation(lat: number, long: number, showSpinner: Boolean = true) {
 		let params = {
 			lat: lat,
 			lng: long
 		};
-		return this.zapppHttp.post(this.truckUrl + '/update_lat_lng', params);
+		return this.zapppHttp.post(this.truckUrl + '/update_lat_lng', params, null, showSpinner);
 	}
 }

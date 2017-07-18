@@ -38,23 +38,23 @@ export class ZapppHttp {
         return this.getRequestOptionsByToken(method, accessToken);
     }
 
-    get(url: string, params?: Object): Observable<any> {
-        return this.request(RequestMethod.Get, url, null, params);
+    get(url: string, params?: Object, showSpinner: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Get, url, null, params, showSpinner);
     }
 
-    post(url: string, data: Object, params?: Object): Observable<any> {
-        return this.request(RequestMethod.Post, url, data, params);
+    post(url: string, data: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Post, url, data, params, showSpinner);
     }
 
-    put(url: string, data: Object, params?: Object): Observable<any> {
-        return this.request(RequestMethod.Put, url, data, params);
+    put(url: string, data: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Put, url, data, params, showSpinner);
     }
 
-    delete(url: string, data: Object, params?: Object): Observable<any> {
-        return this.request(RequestMethod.Delete, url, data, params);
+    delete(url: string, data: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Delete, url, data, params, showSpinner);
     }
 
-    request(method: RequestMethod, url: string, data?: Object, params?: Object): Observable<any> {
+    request(method: RequestMethod, url: string, data?: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
         let options = this.getRequestOptions(method);
         if (method != RequestMethod.Get) {
             options.body = JSON.stringify(data);
@@ -66,7 +66,9 @@ export class ZapppHttp {
             }
             options.search = search;
         }
-        this._spinner.show();
+        if (showSpinner) {
+            this._spinner.show();
+        }
         let self = this;
         let observer: Observable<any> = Observable.create(observer => {
             let requestSub = this.http.request(url, options)
