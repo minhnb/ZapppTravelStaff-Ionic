@@ -176,7 +176,6 @@ export class MyApp extends BaseComponent {
 
 	subcribeUserActiveEvent() {
 		this.events.subscribe('user:active', (data: any) => {
-			console.log(data);
 			if (!this.isZappper() && this.isDriver()) {
 				return;
 			}

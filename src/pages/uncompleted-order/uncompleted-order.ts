@@ -14,32 +14,33 @@ export class UncompletedOrderPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
-        this.listOrder = [
-            {
-				name: 'Dolly Doe',
-				hotel: {
-                    name: 'The Sheration',
-                    address: '20 Nathan Rd, Tsim Sha Tsui, Hong Kong'
-                },
-                accepted: '2017/06/16 3:35PM'
-			},
-            {
-				name: 'Dolly Joe',
-				hotel: {
-                    name: 'The Sheration',
-                    address: '20 Nathan Rd, Tsim Sha Tsui, Hong Kong'
-                },
-                accepted: '2017/06/16 3:45PM'
-			},
-            {
-				name: 'Jolly Doe',
-				hotel: {
-                    name: 'The Sheration',
-                    address: '20 Nathan Rd, Tsim Sha Tsui, Hong Kong'
-                },
-                accepted: '2017/06/16 3:55PM'
-			}
-        ]
+		this.listOrder = navParams.data.listUncompleteOrder;
+        // this.listOrder = [
+        //     {
+		// 		name: 'Dolly Doe',
+		// 		hotel: {
+        //             name: 'The Sheration',
+        //             address: '20 Nathan Rd, Tsim Sha Tsui, Hong Kong'
+        //         },
+        //         accepted: '2017/06/16 3:35PM'
+		// 	},
+        //     {
+		// 		name: 'Dolly Joe',
+		// 		hotel: {
+        //             name: 'The Sheration',
+        //             address: '20 Nathan Rd, Tsim Sha Tsui, Hong Kong'
+        //         },
+        //         accepted: '2017/06/16 3:45PM'
+		// 	},
+        //     {
+		// 		name: 'Jolly Doe',
+		// 		hotel: {
+        //             name: 'The Sheration',
+        //             address: '20 Nathan Rd, Tsim Sha Tsui, Hong Kong'
+        //         },
+        //         accepted: '2017/06/16 3:55PM'
+		// 	}
+        // ]
 	}
 
 	ionViewDidLoad() {

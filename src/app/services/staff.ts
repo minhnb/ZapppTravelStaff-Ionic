@@ -56,4 +56,11 @@ export class StaffService {
 		};
 		return this.zapppHttp.post(this.truckUrl + '/update_lat_lng', params, null, showSpinner);
 	}
+
+	zappperAcceptLuggage(orderId: string) {
+		let params = {
+			order_id: orderId
+		};
+		return this.zapppHttp.post(this.zappperUrl + '/accept_order_request', params);
+	}
 }

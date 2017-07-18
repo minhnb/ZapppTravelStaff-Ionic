@@ -20,9 +20,9 @@ export const AppConstant = {
         DOWN: 40,
         ENTER: 13
     },
-    FORMAT_DATETIME: 'MM/DD/YYYY HH:mm',
-    FORMAT_DATETIME_WITH_SECOND: 'MM/DD/YYYY HH:mm:ss',
-    FORMAT_DATE: 'MM/DD/YYYY',
+    FORMAT_DATETIME: 'YYYY/MM/DD hh:mm A',
+    FORMAT_DATETIME_WITH_SECOND: 'YYYY/MM/DD hh:mm:ss A',
+    FORMAT_DATE: 'YYYY/MM/DD',
     FORMAT_TIME: 'HH:mm',
     FORMAT_TIME_FULL: 'HH:mm:ss',
     SERVER_FORMAT_DATE: 'YYYY-MM-DD',

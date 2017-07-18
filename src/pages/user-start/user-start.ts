@@ -22,8 +22,8 @@ export class UserStartPage extends BaseComponent {
     truck: any;
     listTruck: Array<any> = [];
 
-	numberOfRequest: number = 0;
-	numberOfCompletedOrder: number = 0;
+	listRequest: Array<any> = [];
+	listUncompleteOrder: Array<any> = [];
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService, private events: Events) {
@@ -135,8 +135,12 @@ export class UserStartPage extends BaseComponent {
 	loadNewRequestsAndUncompletedOrders() {
 		this.staffService.loadNewRequestsAndUncompletedOrders().subscribe(
 			res => {
-				this.numberOfRequest = res.new_request_info.length;
-				this.numberOfCompletedOrder = res.uncomplete_job_info.length;
+				this.listRequest = res.new_request_info.map(item => {
+					return this.requestTransform(item);
+				});
+				this.listUncompleteOrder = res.uncomplete_job_info.map(item => {
+					return this.uncompletedOrderTransform(item);
+				});
 			},
 			err => {
 				this.showError(err.message);
@@ -161,14 +165,57 @@ export class UserStartPage extends BaseComponent {
     }
 
 	goToListRequest() {
-		this.navCtrl.push(ListRequestPage);
+		if (this.listRequest.length == 0) {
+			return;
+		}
+		let params = {
+			listRequest: this.listRequest
+		}
+		this.navCtrl.push(ListRequestPage, params);
 	}
 
 	goToListUncompletedOrder() {
-		this.navCtrl.push(UncompletedOrderPage);
+		if (this.listUncompleteOrder.length == 0) {
+			return;
+		}
+		let params = {
+			listUncompleteOrder: this.listUncompleteOrder
+		}
+		this.navCtrl.push(UncompletedOrderPage, params);
 	}
 
 	goToFindTruckPage() {
 		this.navCtrl.push(FindTruckPage);
+	}
+
+	requestTransform(request: any) {
+		let fullName = '';
+		if (request.user_info) {
+			fullName = this.getFullName(request.user_info.first, request.user_info.last)
+		}
+		let result = {
+			name: fullName,
+			avatar: request.user_info ? request.user_info.avatar : '',
+			suitcase: request.order_info ? request.order_info.suit_case : 0,
+			bag: request.order_info ? request.order_info.bag : 0,
+			babyCarriage: request.order_info ? request.order_info.baby_carriage : 0,
+			other: request.order_info ? request.order_info.others : 0,
+			distance: request.distance_info ? request.distance_info.distance : '',
+			estimatedTime: request.distance_info ? request.distance_info.time : '',
+			phoneNumber: request.user_info ? request.user_info.phone : '',
+			lat: request.user_info ? request.user_info.lat : null,
+			long: request.user_info ? request.user_info.lng : null,
+			orderId: request.order_info ? request.order_info.id : ''
+		};
+		return result;
+	}
+
+	uncompletedOrderTransform(order: any) {
+		let result = {
+			name: order.guest_name,
+			hotel: order.hotel_info,
+			accepted: this.timeStampToDateTime(order.accepted_at)
+		};
+		return result;
 	}
 }

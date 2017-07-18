@@ -2,54 +2,22 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { DirectionUserPage } from '../direction-user';
+import { StaffService } from '../../app/services/staff';
 
 @IonicPage()
 @Component({
 	selector: 'page-list-request',
 	templateUrl: 'list-request.html',
+	providers: [StaffService]
 })
 export class ListRequestPage extends BaseComponent {
 
 	listRequest: Array<any> = [];
 	defaultAvatar: string = 'assets/images/no-photo.png';
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private staffService: StaffService) {
         super(injector);
-		this.listRequest = [
-			{
-				name: 'Dolly Doe',
-				avatar: '',
-				suitcase: 1,
-				bag: 2,
-				babyCarriage: 0,
-				other: 0,
-				distance: '330m',
-				estimatedTime: '8 mins',
-				phoneNumber: '0123456789'
-			},
-			{
-				name: 'Jolly Doe',
-				avatar: '',
-				suitcase: 1,
-				bag: 2,
-				babyCarriage: 0,
-				other: 0,
-				distance: '340m',
-				estimatedTime: '8 mins',
-				phoneNumber: '0123456789'
-			},
-			{
-				name: 'Dolly Joe',
-				avatar: '',
-				suitcase: 1,
-				bag: 2,
-				babyCarriage: 0,
-				other: 0,
-				distance: '900m',
-				estimatedTime: '9 mins',
-				phoneNumber: '0123456789'
-			}
-		]
+		this.listRequest = navParams.data.listRequest;
 	}
 
 	ionViewDidLoad() {
@@ -61,13 +29,20 @@ export class ListRequestPage extends BaseComponent {
     }
 
 	takeRequest(customer: any) {
-		this.gotoDirectionPage(customer);
+		this.staffService.zappperAcceptLuggage(customer.orderId).subscribe(
+			res => {
+				this.gotoDirectionPage(customer);
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 
 	gotoDirectionPage(customer: any) {
 		let params = {
-			long: 106.702013,
-			lat: 10.740790,
+			long: customer.long,
+			lat: customer.lat,
 			customer: customer
 		}
 		this.navCtrl.push(DirectionUserPage, params);
