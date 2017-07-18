@@ -9,6 +9,7 @@ import { AppConstant } from './app.constant';
 
 import { UserService } from './services/user';
 import { StaffService } from './services/staff';
+import { DataShare } from './helper/data.share';
 
 import { LoginPage } from '../pages/login/login';
 import { UserStartPage } from '../pages/user-start';
@@ -29,7 +30,8 @@ export class MyApp extends BaseComponent {
 	watchPositionObserverble: any;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation, private events: Events) {
+		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation,
+		private events: Events, private dataShare: DataShare) {
 		super(injector);
 
 		this.pages = [
@@ -66,6 +68,7 @@ export class MyApp extends BaseComponent {
 			fcm.getToken().then(token => {
 				// alert('registerToken' + token);
 				console.log('registerToken' + token);
+				this.dataShare.setFCMToken(token);
 			});
 
 			fcm.onNotification().subscribe((data: any) => {

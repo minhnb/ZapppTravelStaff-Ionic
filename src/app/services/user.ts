@@ -4,13 +4,15 @@ import { ZapppHttp } from './zapppHttp';
 
 import { AppConfig } from '../app.config';
 import { AppConstant } from '../app.constant';
+import { DataShare } from '../helper/data.share';
 
 @Injectable()
 export class UserService {
+
 	private userUrl = AppConfig.API_URL + 'user';
 	errorWrongUserNameOrPassword: any;
 
-	constructor(private zapppHttp: ZapppHttp) { }
+	constructor(private zapppHttp: ZapppHttp, private dataShare: DataShare) { }
 
 	saveUserToLocalStorage(user: any) {
 
@@ -37,17 +39,20 @@ export class UserService {
 		return data;
 	}
 
-	pureLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {
+	pureLogIn(loginName: string, password: string, deviceToken: string, countryCode?: string): Observable<any> {
 		let user = {
 			email: loginName,
 			password: password,
+			device_token: deviceToken,
 			country: countryCode
 		};
 		return this.zapppHttp.post(this.userUrl + '/login', user);
 	}
 
 	userLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {
-		return this.pureLogIn(loginName, password, countryCode)
+		console.log('this.fcmToken');
+		console.log(this.dataShare.fcmToken);
+		return this.pureLogIn(loginName, password, this.dataShare.fcmToken, countryCode)
 			.map(this.handleLoginSuccess.bind(this));
 	}
 
