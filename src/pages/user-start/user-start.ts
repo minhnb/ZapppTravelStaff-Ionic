@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 import { CollectionModePage } from '../collection-mode';
@@ -22,8 +22,11 @@ export class UserStartPage extends BaseComponent {
     truck: any;
     listTruck: Array<any> = [];
 
+	numberOfRequest: number = 0;
+	numberOfCompletedOrder: number = 0;
+
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService) {
+		private staffService: StaffService, private events: Events) {
 		super(injector);
 	}
 
@@ -31,6 +34,7 @@ export class UserStartPage extends BaseComponent {
 		console.log('ionViewDidLoad UserStartPage');
 		this.loadPreviousState();
 		this.loadListTruckForActiveDirverAndAttendant();
+		this.loadJobForActiveZappper();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -74,11 +78,26 @@ export class UserStartPage extends BaseComponent {
 		}
 	}
 
+	loadJobForActiveZappper() {
+		if (this.isActive && this.isZappper()) {
+			this.loadNewRequestsAndUncompletedOrders();
+		}
+	}
+
+	announceActiveEvent() {
+		let params = {
+			isActive: this.isActive
+		}
+		this.events.publish('user:active', params);
+	}
+
     onStatusChange(event) {
 		this.staffService.updateStatus(this.isActive).subscribe(
 			res => {
 				this.saveStatusToLocalStorage(this.isActive);
+				this.announceActiveEvent();
 				this.loadListTruckForActiveDirverAndAttendant();
+				this.loadJobForActiveZappper();
 			},
 			err => {
 				this.isActive = !this.isActive;
@@ -106,6 +125,18 @@ export class UserStartPage extends BaseComponent {
 		this.staffService.chooseTruck(truckId).subscribe(
 			res => {
 				this.saveTruckInfoToLocalStorage(truckId);
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	loadNewRequestsAndUncompletedOrders() {
+		this.staffService.loadNewRequestsAndUncompletedOrders().subscribe(
+			res => {
+				this.numberOfRequest = res.new_request_info.length;
+				this.numberOfCompletedOrder = res.uncomplete_job_info.length;
 			},
 			err => {
 				this.showError(err.message);
