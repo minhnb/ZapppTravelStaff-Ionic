@@ -50,6 +50,9 @@ export class ListHotelPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ListHotelPage');
+	}
+
+	ionViewWillEnter() {
 		this.loadListHotel();
 	}
 
@@ -111,6 +114,7 @@ export class ListHotelPage extends BaseComponent {
         this.navCtrl.push(DirectionStopPage, {
             station: {
 				name: hotel.name,
+				id: hotel.id
 			},
             long: hotel.lng,
             lat: hotel.lat,
