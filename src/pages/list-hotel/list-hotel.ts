@@ -19,33 +19,6 @@ export class ListHotelPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private deliveryModeService: DeliveryModeService) {
 		super(injector);
-        // this.listHotel = [
-        //     {
-        //         name: "Sheraton Hotel",
-        //         address: "20 Nathan Rd, Hong Kong",
-		// 		luggageQuantity: 10
-        //     },
-        //     {
-        //         name: "The Plaza Hotel",
-        //         address: "193 Prince Edward Road West, Kowloon",
-		// 		luggageQuantity: 8
-        //     },
-        //     {
-        //         name: "The Rex Hotel",
-        //         address: "141 Nguyen Hue",
-		// 		luggageQuantity: 15
-        //     },
-        //     {
-        //         name: "The Sayvoy",
-        //         address: "Strand LD",
-		// 		luggageQuantity: 10
-        //     },
-        //     {
-        //         name: "The Gritti Palace",
-        //         address: "768 Eve",
-		// 		luggageQuantity: 20
-        //     }
-        // ];
 	}
 
 	ionViewDidLoad() {
@@ -59,52 +32,7 @@ export class ListHotelPage extends BaseComponent {
 	goToHotelOrderPage(hotel: any) {
         let params = {
             pageName: hotel.name,
-            listOrder: [
-                {
-                    name: 'Dolly Doe',
-                    receiver: 'Dolly Doe',
-					room: 245,
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12789',
-                            storageBinCode: 'A12'
-                        }
-                    ]
-                },
-                {
-                    name: 'Jolly Doe',
-					receiver: 'Dolly Doe',
-					room: 245,
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12790',
-                            storageBinCode: 'A13'
-                        }
-                    ]
-                },
-                {
-                    name: 'Nanny San',
-					receiver: 'Dolly Doe',
-					room: 245,
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12791',
-                            storageBinCode: 'A14'
-                        }
-                    ]
-                },
-                {
-                    name: 'Fancy Lu',
-					receiver: 'Dolly Doe',
-					room: 245,
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12792',
-                            storageBinCode: 'A15'
-                        }
-                    ]
-                }
-            ],
+			listOrder: hotel.listOrder,
             isDeliveryMode: true
         }
         this.navCtrl.push(ListOrderPage, params);
@@ -125,6 +53,9 @@ export class ListHotelPage extends BaseComponent {
 	hotelTransform(data: any): any {
 		let result = data.hotel_info;
 		result.luggageQuantity = data.total_of_luggage;
+		result.listOrder = data.hotel_info.list_order_info.map(item => {
+			return this.customerInfoTransform(item);
+		});
 		return result;
 	}
 
