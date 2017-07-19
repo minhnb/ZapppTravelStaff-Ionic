@@ -43,6 +43,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Http, HttpModule } from '@angular/http';
 
 import { ZapppHttp } from './services/zapppHttp';
+import { DataShare } from './helper/data.share';
 
 @NgModule({
 	declarations: [
@@ -98,6 +99,7 @@ import { ZapppHttp } from './services/zapppHttp';
 		Camera,
 		CallNumber,
 		ZapppHttp,
+		DataShare,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]
 })

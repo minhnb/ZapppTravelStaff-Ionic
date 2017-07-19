@@ -8,6 +8,9 @@ export const AppConstant = {
         ATTENDANT: 'ATTENDANT',
         ZAPPPER: 'ZAPPPER'
     },
+    STATUS: 'status',
+    TRUCK: 'truck',
+    CURRENT_JOB: 'current_job',
     PATTERN: {
         ONLY_DIGIT: '^[0-9]*$',
         VALID_USERNAME: '^[a-zA-Z][0-9a-zA-Z_.]+$',
@@ -18,9 +21,9 @@ export const AppConstant = {
         DOWN: 40,
         ENTER: 13
     },
-    FORMAT_DATETIME: 'MM/DD/YYYY HH:mm',
-    FORMAT_DATETIME_WITH_SECOND: 'MM/DD/YYYY HH:mm:ss',
-    FORMAT_DATE: 'MM/DD/YYYY',
+    FORMAT_DATETIME: 'YYYY/MM/DD hh:mm A',
+    FORMAT_DATETIME_WITH_SECOND: 'YYYY/MM/DD hh:mm:ss A',
+    FORMAT_DATE: 'YYYY/MM/DD',
     FORMAT_TIME: 'HH:mm',
     FORMAT_TIME_FULL: 'HH:mm:ss',
     SERVER_FORMAT_DATE: 'YYYY-MM-DD',
@@ -31,5 +34,11 @@ export const AppConstant = {
         END: 'www/assets/images/marker-end.png',
         TRUCK: 'www/assets/images/marker-truck.png',
         CURRENT_LOCATION: 'www/assets/images/marker-current-location.png'
+    },
+    GET_LOCATION_TIMEOUT: 5000,
+    WATCH_POSITION_INTERVAL: 30000,
+    NOTIFICATION_TYPE: {
+        PREFIX: 'notification:',
+        REQUEST_ORDER: 'request_order'
     }
 };

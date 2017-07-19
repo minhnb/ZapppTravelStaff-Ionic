@@ -17,11 +17,11 @@
   <div [hidden]="!isActive || !isZappper()">
     <button class="right-number" ion-item no-lines (click)="goToListRequest()">
         <div>{{ 'NEW_REQUEST' | translate }}</div>
-        <span>3</span>
+        <span>{{ listRequest.length }}</span>
       </button>
     <button class="right-number" ion-item no-lines (click)="goToListUncompletedOrder()">
         <div>{{ 'UNCOMPLETED_ORDER' | translate }}</div>
-        <span>3</span>
+        <span>{{ listUncompleteOrder.length }}</span>
       </button>
     <button ion-item no-lines (click)="goToFindTruckPage()">
         <div>{{ 'FIND_TRUCK' | translate }}</div>

@@ -81,7 +81,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
 	isAllowedToRemoveLuggageCode() {
-		return !(this.isTransferMode || this.isAttendantSaveMode || !this.isFromCustomerInfoPage || this.isDeliveryMode);
+		return !(this.isTransferMode || this.isAttendantSaveMode || this.isDeliveryMode);
 	}
 
     indexOfLuggageCode(luggageCode: string): number {
@@ -200,7 +200,7 @@ export class CustomerLuggagePage extends BaseComponent {
 			if (this.isAttendantSaveMode || this.isTransferMode) {
 				this.goBackToPreviousPage();
 			} else {
-				this.goToTakeProofPicturePage();
+				this.updateLuggage();
 			}
 		}
 	}
@@ -212,9 +212,7 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     goBackToUserStartPage() {
-        let currentPageIndex = this.navCtrl.getViews().length - 1;
-        let userStartPageIndex = currentPageIndex - 3;
-        this.navCtrl.popTo(this.navCtrl.getByIndex(userStartPageIndex));
+        this.navCtrl.popToRoot();
     }
 
     goBackToPreviousPage() {

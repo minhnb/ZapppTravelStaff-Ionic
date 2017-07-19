@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>887424921355-0g1h2de2l314mfnklm3iv390s7oi961c.apps.googleusercontent.com</string>
+	<string>717569451415-14360vmls046fuitiuah4oekt3lbei4h.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.887424921355-0g1h2de2l314mfnklm3iv390s7oi961c</string>
+	<string>com.googleusercontent.apps.717569451415-14360vmls046fuitiuah4oekt3lbei4h</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDUlKexgqfFaHP94TCK-M3EQcnQQZmimbM</string>
+	<string>AIzaSyD7HVWWUxnwX0iEryNgHTg8lCT9UmEYq1E</string>
 	<key>GCM_SENDER_ID</key>
-	<string>887424921355</string>
+	<string>717569451415</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.zapppworld.staff</string>
 	<key>PROJECT_ID</key>
-	<string>zappphk</string>
+	<string>zappp-161811</string>
 	<key>STORAGE_BUCKET</key>
-	<string>zappphk.appspot.com</string>
+	<string>zappp-161811.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:887424921355:ios:6cb9e4cb87a57ce1</string>
+	<string>1:717569451415:ios:6cb9e4cb87a57ce1</string>
 	<key>DATABASE_URL</key>
-	<string>https://zappphk.firebaseio.com</string>
+	<string>https://zappp-161811.firebaseio.com</string>
 </dict>
 </plist>

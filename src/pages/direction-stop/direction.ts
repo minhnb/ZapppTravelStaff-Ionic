@@ -22,6 +22,8 @@ export class DirectionPage extends BaseComponent {
 
 	markers: Array<any> = [];
 	currentLocationMarker: Marker;
+	watchPositionSubscription: any;
+	watchPositionObserverble: any;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
@@ -37,6 +39,14 @@ export class DirectionPage extends BaseComponent {
 			this.directionsService = new google.maps.DirectionsService;
 			this.loadMap();
 		});
+	}
+
+	ionViewWillEnter() {
+		this.subcribeWatchPosition();
+	}
+
+	ionViewWillLeave() {
+		this.unsubcribeWatchPosition();
 	}
 
 	ngOnDestroy() {
@@ -77,11 +87,10 @@ export class DirectionPage extends BaseComponent {
 
 		let geolocationOptions: GeolocationOptions = {
 			// enableHighAccuracy: true,
-			timeout: 5000
+			timeout: AppConstant.GET_LOCATION_TIMEOUT
 		};
 		let watchOption = geolocationOptions;
-		let watchTimeout = 30000;
-		watchOption.timeout = watchTimeout;
+		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
@@ -103,18 +112,37 @@ export class DirectionPage extends BaseComponent {
 						});
 				});
 
-				let watch = this.geolocation.watchPosition(watchOption);
-				setTimeout(() => {
-					watch.subscribe((resp) => {
-						if (!resp.coords) {
-							return;
-						}
-						let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-						this.updateCurrentLocationMarker(currentLocation);
-					});
-				}, watchTimeout)
+				this.initWatchPosition(watchTimeout, watchOption);
 			}
 		);
+	}
+
+	initWatchPosition(watchTimeout: number, watchOption: GeolocationOptions) {
+		watchOption.timeout = watchTimeout;
+		this.watchPositionObserverble = this.geolocation.watchPosition(watchOption);
+		setTimeout(() => {
+			this.subcribeWatchPosition();
+		}, watchTimeout)
+	}
+
+	subcribeWatchPosition() {
+		if (!this.watchPositionObserverble) {
+			return;
+		}
+		this.watchPositionSubscription = this.watchPositionObserverble.subscribe((resp) => {
+			if (!resp.coords) {
+				return;
+			}
+			let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+			this.updateCurrentLocationMarker(currentLocation);
+		});
+	}
+
+	unsubcribeWatchPosition() {
+		if (this.watchPositionSubscription) {
+			this.watchPositionSubscription.unsubscribe();
+			this.watchPositionSubscription = null;
+		}
 	}
 
 	drawDirectionFromCurrentLocationToDestination(currentLocation: LatLng, destinationName: string) {

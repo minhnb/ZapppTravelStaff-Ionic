@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @IonicPage()
@@ -10,7 +11,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 })
 export class TakePicturePage extends BaseComponent {
 
-	base64Image: string = '';
+	imageUrl: string = '';
 	customer: any;
 	isDeliveryMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
@@ -32,16 +33,14 @@ export class TakePicturePage extends BaseComponent {
 
 	takePicture() {
 		let options: CameraOptions = {
-			quality: 100,
-			destinationType: this.camera.DestinationType.DATA_URL,
+			quality: 70,
+			destinationType: this.camera.DestinationType.FILE_URI,
 			encodingType: this.camera.EncodingType.JPEG,
 			mediaType: this.camera.MediaType.PICTURE
 		}
 
 		this.camera.getPicture(options).then((imageData) => {
-			// imageData is either a base64 encoded string or a file URI
-			// If it's base64:
-			this.base64Image = 'data:image/jpeg;base64,' + imageData;
+			this.imageUrl = imageData;
 		}, (err) => {
 			// this.showError(JSON.stringify(err));
 		});
@@ -76,8 +75,13 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	goBackToUserStartPage() {
-        let currentPageIndex = this.navCtrl.getViews().length - 1;
-        let userStartPageIndex = currentPageIndex - 4;
-        this.navCtrl.popTo(this.navCtrl.getByIndex(userStartPageIndex));
+		this.clearZappperCurrentJob();
+        this.navCtrl.popToRoot();
     }
+
+	clearZappperCurrentJob() {
+		if (this.isZappper()) {
+			localStorage.removeItem(AppConstant.CURRENT_JOB);
+		}
+	}
 }
