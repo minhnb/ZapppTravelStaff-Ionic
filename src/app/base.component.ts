@@ -1,5 +1,5 @@
 import { Component, Injector, ElementRef } from '@angular/core';
-import { Platform, AlertController } from 'ionic-angular';
+import { Platform, AlertController, NavController } from 'ionic-angular';
 import { AppConstant } from './app.constant';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -11,11 +11,14 @@ import * as moment from 'moment';
 
 })
 export class BaseComponent {
+
 	public alertController: AlertController;
 	public barcodeScanner: BarcodeScanner;
 	public diagnostic: Diagnostic;
 	public translate: TranslateService;
+
 	hasGoogleMapNative: boolean = false;
+
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
 		this.barcodeScanner = injector.get(BarcodeScanner);
@@ -44,6 +47,10 @@ export class BaseComponent {
 
 	getUserRole(): string {
 		return localStorage.getItem(AppConstant.ROLE);
+	}
+
+	isActiveCurrentPage(navCtrl: NavController) {
+		return navCtrl.getActive().instance == this;
 	}
 
 	isMobileDevice(platform: Platform): boolean {

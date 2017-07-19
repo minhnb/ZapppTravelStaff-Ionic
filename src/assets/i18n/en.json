@@ -79,5 +79,7 @@
   "TRUCK": "Truck",
   "UNCOMPLETED_ORDER": "Uncompleted orders",
   "USER_NOT_STAFF": "You are not staff, so you can not access to this app",
-  "USERNAME": "Username"
+  "USERNAME": "Username",
+  "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request. Press OK to take a look.",
+  "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"
 }

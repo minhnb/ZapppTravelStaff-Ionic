@@ -10,6 +10,7 @@ export const AppConstant = {
     },
     STATUS: 'status',
     TRUCK: 'truck',
+    CURRENT_JOB: 'current_job',
     PATTERN: {
         ONLY_DIGIT: '^[0-9]*$',
         VALID_USERNAME: '^[a-zA-Z][0-9a-zA-Z_.]+$',
@@ -35,5 +36,9 @@ export const AppConstant = {
         CURRENT_LOCATION: 'www/assets/images/marker-current-location.png'
     },
     GET_LOCATION_TIMEOUT: 5000,
-    WATCH_POSITION_INTERVAL: 30000
+    WATCH_POSITION_INTERVAL: 30000,
+    NOTIFICATION_TYPE: {
+        PREFIX: 'notification:',
+        REQUEST_ORDER: 'request_order'
+    }
 };

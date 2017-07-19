@@ -74,10 +74,11 @@ export class MyApp extends BaseComponent {
 			fcm.onNotification().subscribe((data: any) => {
 				if (data.wasTapped) {
 					console.log("Received in background");
+					console.log(JSON.stringify(data));
 				} else {
 					console.log("Received in foreground");
 					console.log(JSON.stringify(data));
-					this.showInfo(data.body, data.title);
+					this.handleZapppNotification(data);
 				};
 			});
 
@@ -185,5 +186,12 @@ export class MyApp extends BaseComponent {
 				this.unsubcribeWatchPosition();
 			}
 		});
+	}
+
+	handleZapppNotification(data: any) {
+		this.events.publish(AppConstant.NOTIFICATION_TYPE.PREFIX + data.type, data);
+		if (data.type != AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER) {
+			this.showInfo(data.body, data.title);
+		}
 	}
 }

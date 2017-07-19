@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @IonicPage()
@@ -74,6 +75,13 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	goBackToUserStartPage() {
+		this.clearZappperCurrentJob();
         this.navCtrl.popToRoot();
     }
+
+	clearZappperCurrentJob() {
+		if (this.isZappper()) {
+			localStorage.removeItem(AppConstant.CURRENT_JOB);
+		}
+	}
 }

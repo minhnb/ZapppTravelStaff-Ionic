@@ -2,12 +2,15 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, Events } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
+
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
 import { ListRequestPage } from '../list-request';
 import { UncompletedOrderPage } from '../uncompleted-order';
+import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
+
 import { StaffService } from '../../app/services/staff';
 
 @IonicPage()
@@ -33,12 +36,17 @@ export class UserStartPage extends BaseComponent {
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
 		this.loadPreviousState();
+		this.subscribeZappperNewRequestEvent();
 		this.loadListTruckForActiveDirverAndAttendant();
-		this.loadJobForActiveZappper();
+		this.loadCurrentJobForActiveZappper();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
 		this.checkDevicePermission();
+	}
+
+	ionViewWillEnter() {
+		this.loadJobForActiveZappper();
 	}
 
 	loadPreviousState() {
@@ -132,7 +140,7 @@ export class UserStartPage extends BaseComponent {
 		);
 	}
 
-	loadNewRequestsAndUncompletedOrders() {
+	loadNewRequestsAndUncompletedOrders(callback?: () => void) {
 		this.staffService.loadNewRequestsAndUncompletedOrders().subscribe(
 			res => {
 				this.listRequest = res.new_request_info.map(item => {
@@ -141,6 +149,9 @@ export class UserStartPage extends BaseComponent {
 				this.listUncompleteOrder = res.uncomplete_job_info.map(item => {
 					return this.uncompletedOrderTransform(item);
 				});
+				if (callback) {
+					callback();
+				}
 			},
 			err => {
 				this.showError(err.message);
@@ -217,5 +228,47 @@ export class UserStartPage extends BaseComponent {
 			accepted: this.timeStampToDateTime(order.accepted_at)
 		};
 		return result;
+	}
+
+	goToUserDirectionPage(customer: any) {
+		let params = {
+			long: customer.long,
+			lat: customer.lat,
+			customer: customer
+		}
+		this.navCtrl.push(DirectionUserPage, params);
+	}
+
+	loadCurrentJobForActiveZappper() {
+		if (!this.isZappper()) {
+			return;
+		}
+		if (!this.isActive) {
+			return;
+		}
+		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
+		if (!currentJob) {
+			return;
+		}
+		let customer = JSON.parse(currentJob);
+		this.goToUserDirectionPage(customer);
+	}
+
+	subscribeZappperNewRequestEvent() {
+		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
+			if (!this.isZappper()) {
+				return;
+			}
+			if (!this.isActiveCurrentPage(this.navCtrl)) {
+				return;
+			}
+			this.loadNewRequestsAndUncompletedOrders(() => {
+				this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
+					() => {
+						this.goToListRequest();
+					});
+			});
+
+		});
 	}
 }
