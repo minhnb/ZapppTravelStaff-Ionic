@@ -54,4 +54,8 @@ export class CollectionModeService {
 		};
 		return this.zapppHttp.post(this.orderUrl + '/add_luggage_to_order', params);
 	}
+
+	checkValidLuggage(luggageCode: string) {
+		return this.zapppHttp.get(this.orderUrl + '/is_luggage_exists_in_order/luggage_id/' + luggageCode);
+	}
 }
