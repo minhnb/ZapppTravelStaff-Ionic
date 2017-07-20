@@ -54,8 +54,19 @@ export class ListHotelPage extends BaseComponent {
 		let result = data.hotel_info;
 		result.luggageQuantity = data.total_of_luggage;
 		result.listOrder = data.hotel_info.list_order_info.map(item => {
-			return this.customerInfoTransform(item);
+			return this.orderInfoTransform(item);
 		});
+		return result;
+	}
+
+	orderInfoTransform(data: any): any {
+		let result = {
+			name: data.user_info ? this.getFullName(data.user_info.first, data.user_info.last) : '',
+			receiver: data.guest_name,
+			room: data.room_no,
+			orderId: data.order_id,
+			numberOfLuggage: data.no_of_luggage
+		};
 		return result;
 	}
 

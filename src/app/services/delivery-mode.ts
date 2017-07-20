@@ -10,6 +10,7 @@ export class DeliveryModeService {
 
 	private hotelUrl = AppConfig.API_URL + 'hotel';
 	private truckUrl = AppConfig.API_URL + 'truck';
+	private orderUrl = AppConfig.API_URL + 'orders';
 
 	constructor(private zapppHttp: ZapppHttp) { }
 
@@ -27,5 +28,15 @@ export class DeliveryModeService {
 			params.is_finish = true;
 		}
 		return this.zapppHttp.post(this.truckUrl + '/update_delivery_status', params);
+	}
+
+	deliveryLuggage(orderId: string, listLuggage: Array<any>, latitude: number, longitude: number) {
+		let params = {
+			order_id: orderId,
+			luggage_info: listLuggage,
+			lat: latitude,
+			lng: longitude
+		};
+		return this.zapppHttp.post(this.orderUrl + '/attendant_completed_delivery', params);
 	}
 }

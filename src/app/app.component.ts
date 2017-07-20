@@ -45,18 +45,19 @@ export class MyApp extends BaseComponent {
 	}
 
 	initializeApp() {
-		if (this.isLoggedIn()) {
-			this.rootPage = UserStartPage;
-			if (this.isZappper() || this.isDriver()) {
-				this.subcribeWatchPosition();
-			}
-		}
 		this.platform.ready().then(() => {
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
 			this.registerFCM();
 			this.defineLangs();
 			this.deviceHeight = this.platform.height();
+
+			if (this.isLoggedIn()) {
+				this.rootPage = UserStartPage;
+				if (this.isZappper() || this.isDriver()) {
+					this.subcribeWatchPosition();
+				}
+			}
 		});
 	}
 

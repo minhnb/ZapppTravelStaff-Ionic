@@ -13,7 +13,7 @@ export class CustomerInfoPage extends BaseComponent {
 	customer: any;
 	listRow: Array<any>;
 	hasLuggage: boolean = false;
-	attendantSaveMode: boolean = false;
+	isAttendantSaveMode: boolean = false;
 
 	@ViewChild(Navbar) navBar: Navbar;
 
@@ -29,7 +29,6 @@ export class CustomerInfoPage extends BaseComponent {
 
 	ionViewWillEnter() {
 		console.log('ionViewWillEnter');
-		console.log(JSON.stringify(this.customer));
 		this.initCustomerInfo();
 	}
 
@@ -70,7 +69,7 @@ export class CustomerInfoPage extends BaseComponent {
 		}
 
 		if (this.customer.isAttendantSaveMode) {
-			this.attendantSaveMode = true;
+			this.isAttendantSaveMode = true;
 		}
 
 	}

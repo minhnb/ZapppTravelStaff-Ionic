@@ -1,14 +1,23 @@
 import { Component, Injector, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
+
 import { TakePicturePage } from '../take-picture';
+
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { DeliveryModeService } from '../../app/services/delivery-mode';
+
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
 	selector: 'page-customer-luggage',
 	templateUrl: 'customer-luggage.html',
-	providers: [CollectionModeService]
+	providers: [
+		CollectionModeService,
+		DeliveryModeService
+	]
 })
 export class CustomerLuggagePage extends BaseComponent {
 
@@ -23,8 +32,8 @@ export class CustomerLuggagePage extends BaseComponent {
 
     @ViewChild(Navbar) navBar: Navbar;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
-		private collectionModeService: CollectionModeService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private geolocation: Geolocation,
+		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
         super(injector);
         this.initCustomerLuggage();
 	}
@@ -42,17 +51,6 @@ export class CustomerLuggagePage extends BaseComponent {
 
     initCustomerLuggage() {
         this.customer = this.navParams.data.customer;
-        let luggageCode = this.navParams.data.luggageCode;
-        if (luggageCode) {
-            this.addLuggageCode(luggageCode);
-        } else {
-            if (this.customer.listLuggage) {
-                this.listLuggage = this.customer.listLuggage;
-				if (this.listLuggage.length > 0) {
-					this.isUpdated = true;
-				}
-            }
-        }
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
 		}
@@ -65,6 +63,20 @@ export class CustomerLuggagePage extends BaseComponent {
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
 		}
+		if (this.customer.listLuggage) {
+			this.listLuggage = this.customer.listLuggage;
+			if (this.listLuggage.length > 0) {
+				this.isUpdated = true;
+			}
+		}
+        let luggageCode = this.navParams.data.luggageCode;
+        if (luggageCode) {
+			if (!this.isDeliveryMode) {
+				this.addLuggageCode(luggageCode);
+			} else {
+				this.findLuggageCodeInList(luggageCode);
+			}
+        }
 		if (this.isAcceptLuggageFromOtherTrucksMode()) {
 			this.removeAllOldStorageBinCode();
 		}
@@ -106,11 +118,14 @@ export class CustomerLuggagePage extends BaseComponent {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_ALREADY_ADDED'));
             return;
         }
-        let newItem = {
-            luggageCode: luggageCode,
-            storageBinCode: ''
-        }
-        this.listLuggage.push(newItem);
+		let newItem = {
+			luggageCode: luggageCode,
+			storageBinCode: ''
+		}
+		this.listLuggage.push(newItem);
+		// this.checkValidLuggage(luggageCode, () => {
+		// 	this.listLuggage.push(newItem);
+		// });
     }
 
     removeItem(index: number) {
@@ -158,10 +173,32 @@ export class CustomerLuggagePage extends BaseComponent {
         let luggageCodeIndex = this.indexOfLuggageCode(luggageCode);
         if (luggageCodeIndex > -1) {
             this.selectedIndex = luggageCodeIndex;
+			this.markDeliveredItem(luggageCodeIndex);
         } else {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST'));
         }
     }
+
+	markDeliveredItem(luggageIndex: number) {
+		if (!this.isDeliveryMode) {
+			return;
+		}
+		let item = this.listLuggage[luggageIndex];
+		item.isDelivered = true;
+	}
+
+	wereAllItemsDelivered() {
+		if (!this.isDeliveryMode) {
+			return false;
+		}
+		for (let i = 0; i < this.listLuggage.length; i++) {
+			let item = this.listLuggage[i];
+			if (!item.isDelivered) {
+				return false;
+			}
+		}
+		return true;
+	}
 
     helpAttendantSortLuggage(code: string) {
         if (this.isLuggageCode(code) || this.selectedIndex == -1 || this.isDeliveryMode) {
@@ -190,7 +227,13 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
 	finishScanningForDeliveryMode() {
-		this.goToTakeProofPicturePage();
+		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
+		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
+			this.deliveryLuggage(resp.coords.latitude, resp.coords.longitude);
+		}).catch((error) => {
+			console.log('Error getting location', error);
+			this.showLocationServiceProblemConfirmation();
+		});
 	}
 
 	finishScanningForCollectionMode() {
@@ -240,6 +283,30 @@ export class CustomerLuggagePage extends BaseComponent {
 				} else {
 					this.goToTakeProofPicturePage();
 				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	checkValidLuggage(luggageCode: string, callback?: () => void) {
+		this.collectionModeService.checkValidLuggage(luggageCode).subscribe(
+			res => {
+
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	deliveryLuggage(latitude: number, longitude: number) {
+		let orderId = this.customer.orderId;
+		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
+		this.deliveryModeService.deliveryLuggage(orderId, listLuggage, latitude, longitude).subscribe(
+			res => {
+				this.goToTakeProofPicturePage();
 			},
 			err => {
 				this.showError(err.message);
