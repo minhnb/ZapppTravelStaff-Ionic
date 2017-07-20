@@ -42,17 +42,6 @@ export class CustomerLuggagePage extends BaseComponent {
 
     initCustomerLuggage() {
         this.customer = this.navParams.data.customer;
-        let luggageCode = this.navParams.data.luggageCode;
-        if (luggageCode) {
-            this.addLuggageCode(luggageCode);
-        } else {
-            if (this.customer.listLuggage) {
-                this.listLuggage = this.customer.listLuggage;
-				if (this.listLuggage.length > 0) {
-					this.isUpdated = true;
-				}
-            }
-        }
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
 		}
@@ -65,6 +54,20 @@ export class CustomerLuggagePage extends BaseComponent {
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
 		}
+		if (this.customer.listLuggage) {
+			this.listLuggage = this.customer.listLuggage;
+			if (this.listLuggage.length > 0) {
+				this.isUpdated = true;
+			}
+		}
+        let luggageCode = this.navParams.data.luggageCode;
+        if (luggageCode) {
+			if (!this.isDeliveryMode) {
+				this.addLuggageCode(luggageCode);
+			} else {
+				this.findLuggageCodeInList(luggageCode);
+			}
+        }
 		if (this.isAcceptLuggageFromOtherTrucksMode()) {
 			this.removeAllOldStorageBinCode();
 		}
@@ -161,10 +164,32 @@ export class CustomerLuggagePage extends BaseComponent {
         let luggageCodeIndex = this.indexOfLuggageCode(luggageCode);
         if (luggageCodeIndex > -1) {
             this.selectedIndex = luggageCodeIndex;
+			this.markDeliveredItem(luggageCodeIndex);
         } else {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST'));
         }
     }
+
+	markDeliveredItem(luggageIndex: number) {
+		if (!this.isDeliveryMode) {
+			return;
+		}
+		let item = this.listLuggage[luggageIndex];
+		item.isDelivered = true;
+	}
+
+	wereAllItemsDelivered() {
+		if (!this.isDeliveryMode) {
+			return false;
+		}
+		for (let i = 0; i < this.listLuggage.length; i++) {
+			let item = this.listLuggage[i];
+			if (!item.isDelivered) {
+				return false;
+			}
+		}
+		return true;
+	}
 
     helpAttendantSortLuggage(code: string) {
         if (this.isLuggageCode(code) || this.selectedIndex == -1 || this.isDeliveryMode) {

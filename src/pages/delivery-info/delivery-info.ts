@@ -40,12 +40,19 @@ export class DeliveryInfoPage extends BaseComponent {
         }
 	}
 
-    goToCustomerLugguagePage() {
+    goToCustomerLugguagePage(luggageCode: string) {
 		let params: any = {
 			customer: this.customer,
+			luggageCode: luggageCode,
             isDeliveryMode: true
 		};
 		this.navCtrl.push(CustomerLuggagePage, params);
+	}
+
+	scanLuggageCode() {
+		this.scanQRCode((text) => {
+			this.goToCustomerLugguagePage(text);
+		});
 	}
 
 }
