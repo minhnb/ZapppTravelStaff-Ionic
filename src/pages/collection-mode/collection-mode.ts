@@ -31,6 +31,9 @@ export class CollectionModePage extends BaseComponent {
 		this.collectionModeService.getOrderDetail(orderId).subscribe(
 			res => {
 				let customerInfo = this.customerInfoTransform(res);
+				if (customerInfo.listLuggage && customerInfo.listLuggage.length > 0) {
+					customerInfo.isAttendantSaveMode = true;
+				}
 				this.goToCustomerInfoPage(customerInfo);
 			},
 			err => {
