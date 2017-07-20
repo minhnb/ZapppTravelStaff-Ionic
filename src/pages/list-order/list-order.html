@@ -14,7 +14,7 @@
   </ion-row>
   <ion-list>
     <button class="no-padding-left right-number" ion-item no-lines [ngClass]="item.completed ? 'completed' : ''" *ngFor="let item of listOrder" (click)="isDeliveryMode ? goToDeliveryInfo(item) : goToCustomerLugguagePage(item)">
-        {{ item.name }}<span>{{ item.listLuggage ? item.listLuggage.length : 0 }}</span>
+        {{ item.name }}<span>{{ item.listLuggage ? item.listLuggage.length : item.numberOfLuggage }}</span>
      </button>
   </ion-list>
 </ion-content>
