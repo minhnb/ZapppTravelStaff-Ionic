@@ -71,14 +71,14 @@ export class ListOrderPage extends BaseComponent {
 	}
 
 	markDeliveryItemCompleted() {
-		let index = this.indexOfDeliveryItem(this.deliveryItem.name);
+		let index = this.indexOfDeliveryItem(this.deliveryItem.orderId);
 		let item = this.listOrder[index];
 		item.completed = true;
 	}
 
-	indexOfDeliveryItem(name: string) {
+	indexOfDeliveryItem(orderId: string) {
 		for (let i = 0; i < this.listOrder.length; i++) {
-            if (this.listOrder[i].name == name) {
+            if (this.listOrder[i].orderId == orderId) {
                 return i;
             }
         }
