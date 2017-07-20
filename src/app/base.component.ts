@@ -4,6 +4,7 @@ import { AppConstant } from './app.constant';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
+import { GeolocationOptions } from '@ionic-native/geolocation';
 
 import * as moment from 'moment';
 
@@ -230,5 +231,20 @@ export class BaseComponent {
 			orderId: requestInfo.id
 		};
 		return customerInfo;
+	}
+
+	initGeolocationOption(): GeolocationOptions {
+		let geolocationOptions: GeolocationOptions = {
+			// enableHighAccuracy: true,
+			timeout: AppConstant.GET_LOCATION_TIMEOUT
+		};
+		return geolocationOptions;
+	}
+
+	showLocationServiceProblemConfirmation() {
+		this.showConfirm(this.translate.instant('CONFIRM_LOCATION_SERVICE_PROBLEM'), this.translate.instant('CONFIRMAION_LOCATION'),
+			() => {
+				this.diagnostic.switchToLocationSettings();
+			});
 	}
 }

@@ -85,10 +85,7 @@ export class DirectionPage extends BaseComponent {
 
 		this.map = this.googleMaps.create(element);
 
-		let geolocationOptions: GeolocationOptions = {
-			// enableHighAccuracy: true,
-			timeout: AppConstant.GET_LOCATION_TIMEOUT
-		};
+		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
 		let watchOption = geolocationOptions;
 		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
@@ -106,10 +103,7 @@ export class DirectionPage extends BaseComponent {
 
 				}).catch((error) => {
 					console.log('Error getting location', error);
-					this.showConfirm(this.translate.instant('CONFIRM_LOCATION_SERVICE_PROBLEM'), this.translate.instant('CONFIRMAION_LOCATION'),
-						() => {
-							this.diagnostic.switchToLocationSettings();
-						});
+					this.showLocationServiceProblemConfirmation();
 				});
 
 				this.initWatchPosition(watchTimeout, watchOption);

@@ -1,14 +1,23 @@
 import { Component, Injector, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
+
 import { TakePicturePage } from '../take-picture';
+
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { DeliveryModeService } from '../../app/services/delivery-mode';
+
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
 	selector: 'page-customer-luggage',
 	templateUrl: 'customer-luggage.html',
-	providers: [CollectionModeService]
+	providers: [
+		CollectionModeService,
+		DeliveryModeService
+	]
 })
 export class CustomerLuggagePage extends BaseComponent {
 
@@ -23,8 +32,8 @@ export class CustomerLuggagePage extends BaseComponent {
 
     @ViewChild(Navbar) navBar: Navbar;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
-		private collectionModeService: CollectionModeService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private geolocation: Geolocation,
+		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
         super(injector);
         this.initCustomerLuggage();
 	}
@@ -218,7 +227,13 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
 	finishScanningForDeliveryMode() {
-		this.goToTakeProofPicturePage();
+		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
+		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
+			this.deliveryLuggage(resp.coords.latitude, resp.coords.longitude);
+		}).catch((error) => {
+			console.log('Error getting location', error);
+			this.showLocationServiceProblemConfirmation();
+		});
 	}
 
 	finishScanningForCollectionMode() {
@@ -279,6 +294,19 @@ export class CustomerLuggagePage extends BaseComponent {
 		this.collectionModeService.checkValidLuggage(luggageCode).subscribe(
 			res => {
 
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	deliveryLuggage(latitude: number, longitude: number) {
+		let orderId = this.customer.orderId;
+		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
+		this.deliveryModeService.deliveryLuggage(orderId, listLuggage, latitude, longitude).subscribe(
+			res => {
+				this.goToTakeProofPicturePage();
 			},
 			err => {
 				this.showError(err.message);
