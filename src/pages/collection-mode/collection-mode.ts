@@ -64,25 +64,7 @@ export class CollectionModePage extends BaseComponent {
 
 	acceptLugguageFromZappper() {
 		this.scanQRCode(text => {
-			let customerInfo = {
-				name: 'Dolly Doe',
-				hotel: 'Sheraton',
-				address: '20 Nathan Rd, Hong Kong',
-				receiver: 'Dolly Doe',
-				room: '223',
-				isAttendantSaveMode: true,
-				listLuggage: [
-					{
-						luggageCode: 'ZTL12789',
-						storageBinCode: ''
-					},
-					{
-						luggageCode: 'ZTL127890',
-						storageBinCode: ''
-					}
-				]
-			}
-			this.navCtrl.push(CustomerInfoPage, customerInfo);
+			this.getLuggageCodeDetail(text);
         });
 	}
 	acceptLugguageFromOtherTruck() {

@@ -106,11 +106,14 @@ export class CustomerLuggagePage extends BaseComponent {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_ALREADY_ADDED'));
             return;
         }
-        let newItem = {
-            luggageCode: luggageCode,
-            storageBinCode: ''
-        }
-        this.listLuggage.push(newItem);
+		let newItem = {
+			luggageCode: luggageCode,
+			storageBinCode: ''
+		}
+		this.listLuggage.push(newItem);
+		// this.checkValidLuggage(luggageCode, () => {
+		// 	this.listLuggage.push(newItem);
+		// });
     }
 
     removeItem(index: number) {
@@ -240,6 +243,17 @@ export class CustomerLuggagePage extends BaseComponent {
 				} else {
 					this.goToTakeProofPicturePage();
 				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	checkValidLuggage(luggageCode: string, callback?: () => void) {
+		this.collectionModeService.checkValidLuggage(luggageCode).subscribe(
+			res => {
+
 			},
 			err => {
 				this.showError(err.message);
