@@ -10,6 +10,7 @@ import { ListRequestPage } from '../list-request';
 import { UncompletedOrderPage } from '../uncompleted-order';
 import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
+import { ListAssignmentPage } from '../list-assignment';
 
 import { StaffService } from '../../app/services/staff';
 
@@ -27,6 +28,7 @@ export class UserStartPage extends BaseComponent {
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
+	newAssignmentCount: number = 1;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService, private events: Events) {
@@ -237,6 +239,10 @@ export class UserStartPage extends BaseComponent {
 			customer: customer
 		}
 		this.navCtrl.push(DirectionUserPage, params);
+	}
+
+	goToListAssignmentPage() {
+		this.navCtrl.push(ListAssignmentPage);
 	}
 
 	loadCurrentJobForActiveZappper() {

@@ -1,3 +1,11 @@
 page-user-start {
-
+  ion-item {
+    img.right-image {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      height: 20px;
+      margin-top: -10px;
+    }
+  }
 }

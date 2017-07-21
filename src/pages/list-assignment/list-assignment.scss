@@ -1,0 +1,19 @@
+page-list-assignment {
+  .assignment-item {
+    color: gray;
+    white-space: normal;
+
+    &.collection {
+      color: green;
+    }
+
+    &.delivery {
+      color: red;
+    }
+
+    .time {
+      font-size: small;
+      margin-top: 5px;
+    }
+  }
+}
