@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { DirectionPage } from './direction';
@@ -20,12 +20,14 @@ export class DirectionStopPage extends DirectionPage {
 	isStartedDelivering: boolean = false;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, private deliveryModeService: DeliveryModeService) {
+		public geolocation: Geolocation, private deliveryModeService: DeliveryModeService, public events: Events) {
 		super(injector, navCtrl, navParams, googleMaps, geolocation);
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
 		}
 		this.station = this.navParams.data.station;
+
+		this.handleEventReloadDirectionStation();
 	}
 
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {
@@ -65,4 +67,12 @@ export class DirectionStopPage extends DirectionPage {
 		);
 	}
 
+	handleEventReloadDirectionStation() {
+		this.events.subscribe('direction:station', (data) => {
+			this.station = data.station;
+			this.destinationLocation = new LatLng(Number(this.station.lat), Number(this.station.lng));
+			this.removeAllMarkersAndPolyline();
+			this.loadMap();
+		});
+	}
 }

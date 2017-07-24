@@ -21,7 +21,7 @@ export class StayTimeCountDownPage extends BaseComponent {
     durationString: string;
     countDownTimer: any;
     isStarted: boolean = false;
-	isShowingNextStationInfo = false;
+	isShowingNextStationInfo: boolean = false;
 
 	@ViewChild(Navbar) navBar: Navbar;
 
@@ -125,7 +125,7 @@ export class StayTimeCountDownPage extends BaseComponent {
 		this.collectionModeService.leaveCurrentStation().subscribe(
 			res => {
 				this.isStarted = false;
-				this.goBackToListStationPage();
+				this.isShowingNextStationInfo = true;
 			},
 			err => {
 				this.showError(err.message);
@@ -137,6 +137,11 @@ export class StayTimeCountDownPage extends BaseComponent {
 		let currentPageIndex = this.navCtrl.getViews().length - 1;
         let listStationPageIndex = currentPageIndex - 2;
         this.navCtrl.popTo(this.navCtrl.getByIndex(listStationPageIndex));
+	}
+
+	goToNextStation() {
+		this.events.publish('direction:station', { station: this.nextStation });
+		this.navCtrl.pop();
 	}
 
 }

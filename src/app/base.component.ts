@@ -235,7 +235,7 @@ export class BaseComponent {
 
 	initGeolocationOption(): GeolocationOptions {
 		let geolocationOptions: GeolocationOptions = {
-			// enableHighAccuracy: true,
+			enableHighAccuracy: true,
 			timeout: AppConstant.GET_LOCATION_TIMEOUT
 		};
 		return geolocationOptions;

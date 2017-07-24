@@ -7,7 +7,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding *ngIf="!isShowingNextStationInfo">
   <div class="info-row top-content">
     <div>{{ 'STATION' | translate }}</div>
     <div class="content">{{ station.name }}</div>
@@ -31,6 +31,22 @@
   <div class="button-bottom-full">
     <button ion-button full *ngIf="!isStarted" [disabled]="!nextStation" (click)="updateStation()">{{ 'BUTTON_START' | translate }}</button>
     <button ion-button full *ngIf="isStarted" (click)="leaveCurrentStation()">{{ 'BUTTON_STOP_OR_LEAVE' | translate }}</button>
+  </div>
+
+</ion-content>
+
+<ion-content padding *ngIf="isShowingNextStationInfo">
+  <div class="info-row top-content next-station-info">
+    <div>{{ 'NEXT_STATION' | translate }}</div>
+    <div class="content">{{ nextStation.name }}</div>
+    <div class="content">{{ nextStation.address }}</div>
+  </div>
+  <div class="bottom-content">
+    <button ion-item no-lines (click)="chooseNextStation()">{{ 'CHOOSE_NEXT_STATION_ANOTHER' | translate }}</button>
+    <div class="content" *ngIf="nextStation">{{ nextStation.name }}</div>
+  </div>
+  <div class="button-bottom-full">
+    <button ion-button full (click)="goToNextStation()">{{ 'BUTTON_GO' | translate }}</button>
   </div>
 
 </ion-content>
