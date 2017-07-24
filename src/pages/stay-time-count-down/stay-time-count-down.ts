@@ -1,5 +1,5 @@
-import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { Component, Injector, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Events, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { ListStationPage } from '../list-station';
 import { CollectionModeService } from '../../app/services/collection-mode';
@@ -21,6 +21,9 @@ export class StayTimeCountDownPage extends BaseComponent {
     durationString: string;
     countDownTimer: any;
     isStarted: boolean = false;
+	isShowingNextStationInfo = false;
+
+	@ViewChild(Navbar) navBar: Navbar;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public events: Events, private collectionModeService: CollectionModeService) {
         super(injector);
@@ -30,9 +33,20 @@ export class StayTimeCountDownPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad StayTimeCountDownPage');
+		this.customBackButtonClick();
 		this.events.subscribe('collection:nextStation', (data) => {
 			this.nextStation = data.nextStation;
 		});
+	}
+
+	customBackButtonClick() {
+		this.navBar.backButtonClick = (e: UIEvent) => {
+			if (!this.isShowingNextStationInfo) {
+				this.navCtrl.pop();
+			} else {
+				this.navCtrl.popToRoot();
+			}
+		};
 	}
 
     chooseNextStation() {
@@ -98,7 +112,6 @@ export class StayTimeCountDownPage extends BaseComponent {
     }
 
 	manualChangeParkingTime(event) {
-		console.log(event);
 		if (event.length == 5) {
 			let durationString = '00:' + event;
 			let duration = moment.duration(durationString).asSeconds();
@@ -111,6 +124,7 @@ export class StayTimeCountDownPage extends BaseComponent {
 	leaveCurrentStation() {
 		this.collectionModeService.leaveCurrentStation().subscribe(
 			res => {
+				this.isStarted = false;
 				this.goBackToListStationPage();
 			},
 			err => {
