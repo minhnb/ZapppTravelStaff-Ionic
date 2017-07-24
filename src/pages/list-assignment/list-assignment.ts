@@ -13,36 +13,37 @@ export class ListAssignmentPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
-        this.listAssignment = [
-            {
-                modeText: this.translate.instant('COLLECTION'),
-                mode: 1,
-                in: 'Kowloon, Hong Kong Island',
-                createAt: '2017/07/12 11:15 AM',
-                modeClass: 'collection'
-            },
-            {
-                modeText: this.translate.instant('DELIVERY'),
-                mode: 2,
-                createAt: '2017/07/12 09:00 AM',
-                modeClass: 'delivery'
-            },
-            {
-                modeText: this.translate.instant('COLLECTION'),
-                in: 'Kowloon',
-                createAt: '2017/07/11 11:15 AM',
-                modeClass: 'collection'
-            },
-            {
-                modeText: this.translate.instant('UNASSIGNED'),
-                mode: 0,
-                createAt: '2017/07/11 10:00 AM'
-            }
-        ];
+		this.listAssignment = this.listAssignmentTransform(navParams.data.listAssignment);
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ListAssignmentPage');
+	}
+
+	getModeTextKey(mode: number) {
+		switch (mode) {
+			case 1:
+				return 'COLLECTION';
+			case 2:
+				return 'DELIVERY';
+			default:
+				return 'UNASSIGNED';
+		}
+	}
+
+	listAssignmentTransform(listAssignment: Array<any>) {
+		return listAssignment.map(item => {
+			let assignment: any = {};
+			assignment.mode = Number(item.type);
+			let modeTextKey = this.getModeTextKey(assignment.mode);
+			assignment.modeText = this.translate.instant(modeTextKey);
+			assignment.modeClass = modeTextKey.toLowerCase();
+			if (assignment.mode) {
+				assignment.in = item.content;
+			}
+			assignment.createAt = this.timeStampToDateTime(item.created_at);
+			return assignment;
+		});
 	}
 
 }

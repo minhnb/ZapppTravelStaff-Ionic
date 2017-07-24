@@ -28,7 +28,8 @@ export class UserStartPage extends BaseComponent {
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
-	newAssignmentCount: number = 1;
+	newAssignmentCount: number = 0;
+	listAssignment: Array<any> = [];
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService, private events: Events) {
@@ -39,8 +40,10 @@ export class UserStartPage extends BaseComponent {
 		console.log('ionViewDidLoad UserStartPage');
 		this.loadPreviousState();
 		this.subscribeZappperNewRequestEvent();
+		this.subscribeAssignTruckEvent();
 		this.loadListTruckForActiveDirverAndAttendant();
 		this.loadCurrentJobForActiveZappper();
+		this.loadListAssignment();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -242,7 +245,12 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	goToListAssignmentPage() {
-		this.navCtrl.push(ListAssignmentPage);
+		this.saveLastViewListAssignment();
+		let params = {
+			listAssignment: this.listAssignment
+		}
+		this.navCtrl.push(ListAssignmentPage, params);
+		this.newAssignmentCount = 0;
 	}
 
 	loadCurrentJobForActiveZappper() {
@@ -276,5 +284,67 @@ export class UserStartPage extends BaseComponent {
 			});
 
 		});
+	}
+
+	subscribeAssignTruckEvent() {
+		let listTruckAssignEvent = [
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_DELIVERY,
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION,
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_UNASSIGNED
+		];
+		for (let i = 0; i < listTruckAssignEvent.length; i++) {
+			let key = listTruckAssignEvent[i];
+			this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + key, (data: any) => {
+				this.handleAssignTruckEvent();
+			});
+		}
+	}
+
+	handleAssignTruckEvent() {
+		if (this.isZappper()) {
+			return;
+		}
+		this.loadListAssignment();
+	}
+
+	sortListAssignmentDescByCreatedAt() {
+		this.listAssignment.sort((a: any, b: any) => {
+			return b.created_at - a.created_at;
+		});
+	}
+
+	loadListAssignment() {
+		this.staffService.loadListAssignment().subscribe(
+			res => {
+				this.listAssignment = res;
+				this.sortListAssignmentDescByCreatedAt();
+				this.countNewAssignment();
+			},
+			err => {
+				// this.showError(err.message);
+			}
+		);
+	}
+
+	countNewAssignment() {
+		let lastViewAssignmentTimeStamp = this.getLastViewAssignment();
+		let newAssignment = this.listAssignment.filter((item) => {
+			return Number(item.created_at) >= lastViewAssignmentTimeStamp;
+		});
+		this.newAssignmentCount = newAssignment.length;
+	}
+
+	saveLastViewListAssignment() {
+		let currentTimeStamp: number = (new Date()).getTime() / 1000;
+		localStorage.setItem(AppConstant.LAST_VIEW_ASSIGNMENT, currentTimeStamp.toString());
+	}
+
+	getLastViewAssignment(): number {
+		let lastView = localStorage.getItem(AppConstant.LAST_VIEW_ASSIGNMENT);
+		if (lastView) {
+			return Number(lastView);
+		} else {
+			return 0;
+		}
 	}
 }

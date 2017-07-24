@@ -189,9 +189,23 @@ export class MyApp extends BaseComponent {
 		});
 	}
 
+	notificationTypeIsInList(type: string) {
+		let keys: Array<string> = Object.keys(AppConstant.NOTIFICATION_TYPE);
+		for (let i = 0; i < keys.length; i++) {
+			let key = AppConstant.NOTIFICATION_TYPE[keys[i]];
+			if (key == AppConstant.NOTIFICATION_TYPE.PREFIX) {
+				continue;
+			}
+			if (type == key) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	handleZapppNotification(data: any) {
 		this.events.publish(AppConstant.NOTIFICATION_TYPE.PREFIX + data.type, data);
-		if (data.type != AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER) {
+		if (!this.notificationTypeIsInList(data.type)) {
 			this.showInfo(data.body, data.title);
 		}
 	}
