@@ -6,6 +6,7 @@ import { FCM } from '@ionic-native/fcm';
 
 import { BaseComponent } from './base.component';
 import { AppConstant } from './app.constant';
+import { AppConfig } from './app.config';
 
 import { UserService } from './services/user';
 import { StaffService } from './services/staff';
@@ -28,6 +29,7 @@ export class MyApp extends BaseComponent {
 	pages: Array<{ title: string, component: any }>;
 	watchPositionSubscription: any;
 	watchPositionObserverble: any;
+	serverName: string;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
 		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation,
@@ -40,6 +42,7 @@ export class MyApp extends BaseComponent {
 		];
 		this.initWatchPosition();
 		this.subcribeUserActiveEvent();
+		this.getServerName();
 
 		this.initializeApp();
 	}
@@ -89,6 +92,13 @@ export class MyApp extends BaseComponent {
 			});
 
 			// fcm.unsubscribeFromTopic('marketing');
+		}
+	}
+
+	getServerName() {
+		let urlWithoutHttp = AppConfig.API_URL.split('://')[1];
+		if (urlWithoutHttp) {
+			this.serverName = urlWithoutHttp.split('.')[0];
 		}
 	}
 

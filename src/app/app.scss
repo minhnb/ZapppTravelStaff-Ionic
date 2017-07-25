@@ -13,6 +13,13 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+span.version-info {
+  position: absolute;
+  z-index: 3000;
+  color: white;
+  font-size: x-small;
+}
+
 ion-navbar,
 ion-toolbar {
   .toolbar-background {
