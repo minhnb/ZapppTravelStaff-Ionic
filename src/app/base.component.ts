@@ -231,7 +231,8 @@ export class BaseComponent {
 			room: requestInfo.room_no,
 			listLuggage: this.listLuggageTransform(requestInfo.order_luggage_bin),
 			isAttendantSaveMode: false,
-			orderId: requestInfo.id
+			orderId: requestInfo.id,
+			orderNo: requestInfo.order_no
 		};
 		return customerInfo;
 	}
