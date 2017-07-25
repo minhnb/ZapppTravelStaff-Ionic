@@ -27,14 +27,17 @@ export class ListOrderPage extends BaseComponent {
 		this.listOrder = navParams.data.listOrder;
 		this.isDeliveryMode = navParams.data.isDeliveryMode;
 		this.deliveryItem = navParams.data.deliveryItem;
+		this.subcribeDeliveryCompletedEvent();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ListOrderPage');
+	}
+
+	subcribeDeliveryCompletedEvent() {
 		this.events.subscribe('delivery:completed', (data) => {
 			this.deliveryItem = data.deliveryItem;
 			if (this.deliveryItem) {
-				// this.removeDeliveryItem();
 				this.markDeliveryItemCompleted();
 				this.deliveryItem = null;
 			}
@@ -72,13 +75,15 @@ export class ListOrderPage extends BaseComponent {
 
 	markDeliveryItemCompleted() {
 		let index = this.indexOfDeliveryItem(this.deliveryItem.orderId);
-		let item = this.listOrder[index];
-		item.completed = true;
+		if (index > -1) {
+			let item = this.listOrder[index];
+			item.completed = true;
+		}
 	}
 
 	indexOfDeliveryItem(orderId: string) {
 		for (let i = 0; i < this.listOrder.length; i++) {
-            if (this.listOrder[i].orderId == orderId) {
+            if (this.listOrder[i].orderId.toString() == orderId.toString()) {
                 return i;
             }
         }

@@ -59,13 +59,18 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	goBackToListOrderPage() {
-		let currentPageIndex = this.navCtrl.getViews().length - 1;
-        let listOrderPageIndex = currentPageIndex - 3;
-		let params: any = {
-			deliveryItem: this.customer
-		};
-		this.events.publish('delivery:completed', params);
-        this.navCtrl.popTo(this.navCtrl.getByIndex(listOrderPageIndex));
+		try {
+			let currentPageIndex = this.navCtrl.getViews().length - 1;
+			let listOrderPageIndex = currentPageIndex - 3;
+			let params: any = {
+				deliveryItem: this.customer
+			};
+			this.events.publish('delivery:completed', params);
+			let view = this.navCtrl.getByIndex(listOrderPageIndex);
+			this.navCtrl.popTo(this.navCtrl.getByIndex(listOrderPageIndex));
+		} catch (e) {
+			this.showError(e.message);
+		}
 	}
 
 	goBackToCollectionModePage() {
