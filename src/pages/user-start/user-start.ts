@@ -34,13 +34,13 @@ export class UserStartPage extends BaseComponent {
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService, private events: Events) {
 		super(injector);
+		this.loadPreviousState();
+		this.subscribeZappperNewRequestEvent();
+		this.subscribeAssignTruckEvent();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		this.loadPreviousState();
-		this.subscribeZappperNewRequestEvent();
-		this.subscribeAssignTruckEvent();
 		this.loadListTruckForActiveDirverAndAttendant();
 		this.loadCurrentJobForActiveZappper();
 		this.loadListAssignment();

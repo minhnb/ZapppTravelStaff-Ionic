@@ -29,11 +29,15 @@ export class StayTimeCountDownPage extends BaseComponent {
         super(injector);
         this.station = this.navParams.data.station;
         this.duration = Number(this.navParams.data.station.stop_time);
+		this.subcribeChooseNextStationEvent();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad StayTimeCountDownPage');
 		this.customBackButtonClick();
+	}
+
+	subcribeChooseNextStationEvent() {
 		this.events.subscribe('collection:nextStation', (data) => {
 			this.nextStation = data.nextStation;
 		});
