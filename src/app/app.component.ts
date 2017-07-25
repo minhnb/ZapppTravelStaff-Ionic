@@ -151,9 +151,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	initWatchPosition() {
-		let watchOption: GeolocationOptions = {
-			timeout: AppConstant.WATCH_POSITION_INTERVAL
-		};
+		let watchOption: GeolocationOptions = this.initGeolocationOption();
 		this.watchPositionObserverble = this.geolocation.watchPosition(watchOption);
 	}
 
@@ -162,7 +160,7 @@ export class MyApp extends BaseComponent {
 			return;
 		}
 		this.watchPositionSubscription = this.watchPositionObserverble.subscribe((resp) => {
-			if (!resp.coords) {
+			if (!resp.coords || !this.isNeedReceiveWatchPositionResult()) {
 				return;
 			}
 			this.updateCurrentLocation(resp.coords.latitude, resp.coords.longitude);

@@ -21,6 +21,7 @@ export class BaseComponent {
 	public spinnerDialog: SpinnerDialog;
 
 	hasGoogleMapNative: boolean = false;
+	lastWatchPosition: number = 0;
 
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
@@ -250,5 +251,14 @@ export class BaseComponent {
 			() => {
 				this.diagnostic.switchToLocationSettings();
 			});
+	}
+
+	isNeedReceiveWatchPositionResult(): boolean {
+		let currentTimeStamp = (new Date).getTime();
+		if (currentTimeStamp - this.lastWatchPosition < AppConstant.WATCH_POSITION_INTERVAL) {
+			return false;
+		}
+		this.lastWatchPosition = currentTimeStamp;
+		return true;
 	}
 }

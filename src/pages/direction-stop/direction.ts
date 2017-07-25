@@ -24,6 +24,7 @@ export class DirectionPage extends BaseComponent {
 	currentLocationMarker: Marker;
 	watchPositionSubscription: any;
 	watchPositionObserverble: any;
+	isLoadedMap: boolean = false;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
@@ -35,6 +36,10 @@ export class DirectionPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad DirectionStopPage');
+		if (this.isLoadedMap) {
+			return;
+		}
+		this.isLoadedMap = true;
 		GoogleMapsLoader.load((google) => {
 			this.directionsService = new google.maps.DirectionsService;
 			this.loadMap();
@@ -100,7 +105,6 @@ export class DirectionPage extends BaseComponent {
 					};
 					this.map.moveCamera(position);
 					this.afterLoadMapAndCurrentLocation(currentLocation);
-
 				}).catch((error) => {
 					console.log('Error getting location', error);
 					this.showLocationServiceProblemConfirmation();
@@ -120,11 +124,11 @@ export class DirectionPage extends BaseComponent {
 	}
 
 	subcribeWatchPosition() {
-		if (!this.watchPositionObserverble) {
+		if (!this.watchPositionObserverble || this.watchPositionSubscription) {
 			return;
 		}
 		this.watchPositionSubscription = this.watchPositionObserverble.subscribe((resp) => {
-			if (!resp.coords) {
+			if (!resp.coords || !this.isNeedReceiveWatchPositionResult()) {
 				return;
 			}
 			let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
@@ -142,7 +146,7 @@ export class DirectionPage extends BaseComponent {
 	drawDirectionFromCurrentLocationToDestination(currentLocation: LatLng, destinationName: string) {
 		this.removeAllMarkersAndPolyline();
 		this.addStartPointMarker(currentLocation, 'You are here', (marker: Marker) => {
-
+			this.updateCurrentLocationMarker(currentLocation);
 		});
 
 		if (this.destinationLocation) {
