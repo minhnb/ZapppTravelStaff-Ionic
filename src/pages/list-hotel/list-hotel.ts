@@ -77,8 +77,11 @@ export class ListHotelPage extends BaseComponent {
 					return this.hotelTransform(item);
 				});
 			},
-			err => {
-				this.showError(err.message);
+			(err: any) => {
+				this.listHotel = [];
+				if (err.code != -888) {
+					this.showError(err.message);
+				}
 			}
 		);
 	}

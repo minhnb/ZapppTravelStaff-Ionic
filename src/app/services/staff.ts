@@ -63,4 +63,8 @@ export class StaffService {
 		};
 		return this.zapppHttp.post(this.zappperUrl + '/accept_order_request', params);
 	}
+
+	loadListAssignment(showSpinner: Boolean = true) {
+		return this.zapppHttp.get(this.truckUrl + '/list_notify', null, showSpinner);
+	}
 }

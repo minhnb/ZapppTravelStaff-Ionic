@@ -27,6 +27,10 @@ export class DeliveryInfoPage extends BaseComponent {
     initCustomerInfo() {
 		this.listRow = [
 			{
+				label: this.translate.instant('ORDER_NUMBER'),
+				content: this.customer.orderNo
+			},
+			{
 				label: this.translate.instant('RECEIVER'),
 				content: this.customer.receiver
 			},

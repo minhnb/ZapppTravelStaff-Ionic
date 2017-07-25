@@ -8,6 +8,14 @@ page-stay-time-count-down {
   .top-content {
     margin-top: 30px;
     text-align: center;
+
+    &.next-station-info {
+      margin-top: 100px;
+
+      .content {
+        font-weight: bold;
+      }
+    }
   }
 
   .info-row.top-content {

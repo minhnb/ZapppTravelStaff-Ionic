@@ -11,6 +11,7 @@ export const AppConstant = {
     STATUS: 'status',
     TRUCK: 'truck',
     CURRENT_JOB: 'current_job',
+    LAST_VIEW_ASSIGNMENT: 'last_view_assignment',
     PATTERN: {
         ONLY_DIGIT: '^[0-9]*$',
         VALID_USERNAME: '^[a-zA-Z][0-9a-zA-Z_.]+$',
@@ -39,6 +40,9 @@ export const AppConstant = {
     WATCH_POSITION_INTERVAL: 30000,
     NOTIFICATION_TYPE: {
         PREFIX: 'notification:',
-        REQUEST_ORDER: 'request_order'
+        REQUEST_ORDER: 'request_order',
+        ASSIGN_TRUCK_DELIVERY: 'assign_truck_delivery',
+        ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
+        ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned'
     }
 };

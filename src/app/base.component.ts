@@ -5,6 +5,7 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
 import { GeolocationOptions } from '@ionic-native/geolocation';
+import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 
 import * as moment from 'moment';
 
@@ -17,14 +18,17 @@ export class BaseComponent {
 	public barcodeScanner: BarcodeScanner;
 	public diagnostic: Diagnostic;
 	public translate: TranslateService;
+	public spinnerDialog: SpinnerDialog;
 
 	hasGoogleMapNative: boolean = false;
+	lastWatchPosition: number = 0;
 
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
 		this.barcodeScanner = injector.get(BarcodeScanner);
 		this.diagnostic = injector.get(Diagnostic);
 		this.translate = injector.get(TranslateService);
+		this.spinnerDialog = injector.get(SpinnerDialog);
 	}
 
 	isLoggedIn(): boolean {
@@ -228,14 +232,15 @@ export class BaseComponent {
 			room: requestInfo.room_no,
 			listLuggage: this.listLuggageTransform(requestInfo.order_luggage_bin),
 			isAttendantSaveMode: false,
-			orderId: requestInfo.id
+			orderId: requestInfo.id,
+			orderNo: requestInfo.order_no
 		};
 		return customerInfo;
 	}
 
 	initGeolocationOption(): GeolocationOptions {
 		let geolocationOptions: GeolocationOptions = {
-			// enableHighAccuracy: true,
+			enableHighAccuracy: true,
 			timeout: AppConstant.GET_LOCATION_TIMEOUT
 		};
 		return geolocationOptions;
@@ -246,5 +251,14 @@ export class BaseComponent {
 			() => {
 				this.diagnostic.switchToLocationSettings();
 			});
+	}
+
+	isNeedReceiveWatchPositionResult(): boolean {
+		let currentTimeStamp = (new Date).getTime();
+		if (currentTimeStamp - this.lastWatchPosition < AppConstant.WATCH_POSITION_INTERVAL) {
+			return false;
+		}
+		this.lastWatchPosition = currentTimeStamp;
+		return true;
 	}
 }

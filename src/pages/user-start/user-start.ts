@@ -10,6 +10,7 @@ import { ListRequestPage } from '../list-request';
 import { UncompletedOrderPage } from '../uncompleted-order';
 import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
+import { ListAssignmentPage } from '../list-assignment';
 
 import { StaffService } from '../../app/services/staff';
 
@@ -27,18 +28,22 @@ export class UserStartPage extends BaseComponent {
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
+	newAssignmentCount: number = 0;
+	listAssignment: Array<any> = [];
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService, private events: Events) {
 		super(injector);
+		this.loadPreviousState();
+		this.subscribeZappperNewRequestEvent();
+		this.subscribeAssignTruckEvent();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		this.loadPreviousState();
-		this.subscribeZappperNewRequestEvent();
 		this.loadListTruckForActiveDirverAndAttendant();
 		this.loadCurrentJobForActiveZappper();
+		this.loadListAssignment();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -47,6 +52,7 @@ export class UserStartPage extends BaseComponent {
 
 	ionViewWillEnter() {
 		this.loadJobForActiveZappper();
+		this.countNewAssignment();
 	}
 
 	loadPreviousState() {
@@ -239,6 +245,14 @@ export class UserStartPage extends BaseComponent {
 		this.navCtrl.push(DirectionUserPage, params);
 	}
 
+	goToListAssignmentPage() {
+		this.saveLastViewListAssignment();
+		let params = {
+			listAssignment: this.listAssignment
+		}
+		this.navCtrl.push(ListAssignmentPage, params);
+	}
+
 	loadCurrentJobForActiveZappper() {
 		if (!this.isZappper()) {
 			return;
@@ -265,10 +279,92 @@ export class UserStartPage extends BaseComponent {
 			this.loadNewRequestsAndUncompletedOrders(() => {
 				this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
 					() => {
-						this.goToListRequest();
+						this.goToListAssignmentPage();
 					});
 			});
 
 		});
+	}
+
+	subscribeAssignTruckEvent() {
+		let listTruckAssignEvent = [
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_DELIVERY,
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION,
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_UNASSIGNED
+		];
+		for (let i = 0; i < listTruckAssignEvent.length; i++) {
+			let key = listTruckAssignEvent[i];
+			this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + key, (data: any) => {
+				this.handleAssignTruckEvent(key, data);
+			});
+		}
+	}
+
+	handleAssignTruckEvent(key: string, data: any) {
+		if (this.isZappper()) {
+			return;
+		}
+		this.loadListAssignment(() => {
+			let title = this.translate.instant('NOTIFICATION_ASSIGN_TITLE');
+			let message = this.getNotificationAssignMessage(key, data);
+			this.showInfo(message, title);
+		});
+	}
+
+	getNotificationAssignMessage(key: string, data: any): string {
+		switch (key) {
+			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_DELIVERY:
+				return this.translate.instant('NOTIFICATION_ASSIGN_DELIVERY');
+			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION:
+				return this.translate.instant('NOTIFICATION_ASSIGN_COLLECTION', { district: data.content });
+			default:
+				return this.translate.instant('NOTIFICATION_ASSIGN_UNASSIGNED');
+		}
+	}
+
+	sortListAssignmentDescByCreatedAt() {
+		this.listAssignment.sort((a: any, b: any) => {
+			return b.created_at - a.created_at;
+		});
+	}
+
+	loadListAssignment(callback?: () => void) {
+		this.staffService.loadListAssignment(false).subscribe(
+			res => {
+				this.listAssignment = res;
+				this.sortListAssignmentDescByCreatedAt();
+				this.countNewAssignment();
+				if (callback) {
+					callback();
+				}
+			},
+			err => {
+				// this.showError(err.message);
+			}
+		);
+	}
+
+	countNewAssignment() {
+		let lastViewAssignmentTimeStamp = this.getLastViewAssignment();
+		let newAssignment = this.listAssignment.filter((item) => {
+			return Number(item.created_at) >= lastViewAssignmentTimeStamp;
+		});
+		this.newAssignmentCount = newAssignment.length;
+	}
+
+	saveLastViewListAssignment() {
+		let currentTimeStamp: number = (new Date()).getTime() / 1000;
+		localStorage.setItem(AppConstant.LAST_VIEW_ASSIGNMENT, currentTimeStamp.toString());
+	}
+
+	getLastViewAssignment(): number {
+		let lastView = localStorage.getItem(AppConstant.LAST_VIEW_ASSIGNMENT);
+		if (lastView) {
+			return Number(lastView);
+		} else {
+			let startOfToday = new Date();
+			startOfToday.setHours(0, 0, 0, 0);
+			return startOfToday.getTime() / 1000;
+		}
 	}
 }

@@ -6,6 +6,7 @@ import { FCM } from '@ionic-native/fcm';
 
 import { BaseComponent } from './base.component';
 import { AppConstant } from './app.constant';
+import { AppConfig } from './app.config';
 
 import { UserService } from './services/user';
 import { StaffService } from './services/staff';
@@ -28,6 +29,7 @@ export class MyApp extends BaseComponent {
 	pages: Array<{ title: string, component: any }>;
 	watchPositionSubscription: any;
 	watchPositionObserverble: any;
+	serverName: string;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
 		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation,
@@ -40,6 +42,7 @@ export class MyApp extends BaseComponent {
 		];
 		this.initWatchPosition();
 		this.subcribeUserActiveEvent();
+		this.getServerName();
 
 		this.initializeApp();
 	}
@@ -89,6 +92,13 @@ export class MyApp extends BaseComponent {
 			});
 
 			// fcm.unsubscribeFromTopic('marketing');
+		}
+	}
+
+	getServerName() {
+		let urlWithoutHttp = AppConfig.API_URL.split('://')[1];
+		if (urlWithoutHttp) {
+			this.serverName = urlWithoutHttp.split('.')[0];
 		}
 	}
 
@@ -151,9 +161,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	initWatchPosition() {
-		let watchOption: GeolocationOptions = {
-			timeout: AppConstant.WATCH_POSITION_INTERVAL
-		};
+		let watchOption: GeolocationOptions = this.initGeolocationOption();
 		this.watchPositionObserverble = this.geolocation.watchPosition(watchOption);
 	}
 
@@ -162,7 +170,7 @@ export class MyApp extends BaseComponent {
 			return;
 		}
 		this.watchPositionSubscription = this.watchPositionObserverble.subscribe((resp) => {
-			if (!resp.coords) {
+			if (!resp.coords || !this.isNeedReceiveWatchPositionResult()) {
 				return;
 			}
 			this.updateCurrentLocation(resp.coords.latitude, resp.coords.longitude);
@@ -189,9 +197,23 @@ export class MyApp extends BaseComponent {
 		});
 	}
 
+	notificationTypeIsInList(type: string) {
+		let keys: Array<string> = Object.keys(AppConstant.NOTIFICATION_TYPE);
+		for (let i = 0; i < keys.length; i++) {
+			let key = AppConstant.NOTIFICATION_TYPE[keys[i]];
+			if (key == AppConstant.NOTIFICATION_TYPE.PREFIX) {
+				continue;
+			}
+			if (type == key) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	handleZapppNotification(data: any) {
 		this.events.publish(AppConstant.NOTIFICATION_TYPE.PREFIX + data.type, data);
-		if (data.type != AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER) {
+		if (!this.notificationTypeIsInList(data.type)) {
 			this.showInfo(data.body, data.title);
 		}
 	}
