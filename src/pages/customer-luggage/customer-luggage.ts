@@ -228,9 +228,12 @@ export class CustomerLuggagePage extends BaseComponent {
 
 	finishScanningForDeliveryMode() {
 		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
+		this.spinnerDialog.show();
 		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
+			this.spinnerDialog.hide();
 			this.deliveryLuggage(resp.coords.latitude, resp.coords.longitude);
 		}).catch((error) => {
+			this.spinnerDialog.hide();
 			console.log('Error getting location', error);
 			this.showLocationServiceProblemConfirmation();
 		});

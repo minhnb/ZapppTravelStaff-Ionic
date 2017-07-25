@@ -5,6 +5,7 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
 import { GeolocationOptions } from '@ionic-native/geolocation';
+import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 
 import * as moment from 'moment';
 
@@ -17,6 +18,7 @@ export class BaseComponent {
 	public barcodeScanner: BarcodeScanner;
 	public diagnostic: Diagnostic;
 	public translate: TranslateService;
+	public spinnerDialog: SpinnerDialog;
 
 	hasGoogleMapNative: boolean = false;
 
@@ -25,6 +27,7 @@ export class BaseComponent {
 		this.barcodeScanner = injector.get(BarcodeScanner);
 		this.diagnostic = injector.get(Diagnostic);
 		this.translate = injector.get(TranslateService);
+		this.spinnerDialog = injector.get(SpinnerDialog);
 	}
 
 	isLoggedIn(): boolean {
