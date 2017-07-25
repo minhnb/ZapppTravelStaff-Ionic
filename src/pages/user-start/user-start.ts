@@ -52,6 +52,7 @@ export class UserStartPage extends BaseComponent {
 
 	ionViewWillEnter() {
 		this.loadJobForActiveZappper();
+		this.countNewAssignment();
 	}
 
 	loadPreviousState() {
@@ -250,7 +251,6 @@ export class UserStartPage extends BaseComponent {
 			listAssignment: this.listAssignment
 		}
 		this.navCtrl.push(ListAssignmentPage, params);
-		this.newAssignmentCount = 0;
 	}
 
 	loadCurrentJobForActiveZappper() {
@@ -279,7 +279,7 @@ export class UserStartPage extends BaseComponent {
 			this.loadNewRequestsAndUncompletedOrders(() => {
 				this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
 					() => {
-						this.goToListRequest();
+						this.goToListAssignmentPage();
 					});
 			});
 
@@ -295,16 +295,31 @@ export class UserStartPage extends BaseComponent {
 		for (let i = 0; i < listTruckAssignEvent.length; i++) {
 			let key = listTruckAssignEvent[i];
 			this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + key, (data: any) => {
-				this.handleAssignTruckEvent();
+				this.handleAssignTruckEvent(key, data);
 			});
 		}
 	}
 
-	handleAssignTruckEvent() {
+	handleAssignTruckEvent(key: string, data: any) {
 		if (this.isZappper()) {
 			return;
 		}
-		this.loadListAssignment();
+		this.loadListAssignment(() => {
+			let title = this.translate.instant('NOTIFICATION_ASSIGN_TITLE');
+			let message = this.getNotificationAssignMessage(key, data);
+			this.showInfo(message, title);
+		});
+	}
+
+	getNotificationAssignMessage(key: string, data: any): string {
+		switch (key) {
+			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_DELIVERY:
+				return this.translate.instant('NOTIFICATION_ASSIGN_DELIVERY');
+			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION:
+				return this.translate.instant('NOTIFICATION_ASSIGN_COLLECTION', { district: data.content });
+			default:
+				return this.translate.instant('NOTIFICATION_ASSIGN_UNASSIGNED');
+		}
 	}
 
 	sortListAssignmentDescByCreatedAt() {
@@ -313,12 +328,15 @@ export class UserStartPage extends BaseComponent {
 		});
 	}
 
-	loadListAssignment() {
-		this.staffService.loadListAssignment().subscribe(
+	loadListAssignment(callback?: () => void) {
+		this.staffService.loadListAssignment(false).subscribe(
 			res => {
 				this.listAssignment = res;
 				this.sortListAssignmentDescByCreatedAt();
 				this.countNewAssignment();
+				if (callback) {
+					callback();
+				}
 			},
 			err => {
 				// this.showError(err.message);
@@ -344,7 +362,9 @@ export class UserStartPage extends BaseComponent {
 		if (lastView) {
 			return Number(lastView);
 		} else {
-			return 0;
+			let startOfToday = new Date();
+			startOfToday.setHours(0, 0, 0, 0);
+			return startOfToday.getTime() / 1000;
 		}
 	}
 }

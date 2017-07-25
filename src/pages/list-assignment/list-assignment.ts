@@ -38,7 +38,7 @@ export class ListAssignmentPage extends BaseComponent {
 			let modeTextKey = this.getModeTextKey(assignment.mode);
 			assignment.modeText = this.translate.instant(modeTextKey);
 			assignment.modeClass = modeTextKey.toLowerCase();
-			if (assignment.mode) {
+			if (assignment.mode == 1) {
 				assignment.in = item.content;
 			}
 			assignment.createAt = this.timeStampToDateTime(item.created_at);
