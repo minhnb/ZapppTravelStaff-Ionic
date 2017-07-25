@@ -74,6 +74,7 @@
   "NOTIFICATION_ASSIGN_DELIVERY": "You were assigned for Delivery now.",
   "NOTIFICATION_ASSIGN_TITLE": "Assignment",
   "NOTIFICATION_ASSIGN_UNASSIGNED": "You were unassigned.",
+  "ORDER_NUMBER": "Order Number",
   "OTHERS": "Others",
   "PASSWORD": "Password",
   "PROMPT_BARCODE_SCANNER": "Place a barcode inside the scan area",
