@@ -105,10 +105,19 @@ export class UserStartPage extends BaseComponent {
 		this.events.publish('user:active', params);
 	}
 
+	resetInfoForDriverAndAttendant() {
+		this.truck = null;
+		this.listAssignment = [];
+		this.countNewAssignment();
+	}
+
     onStatusChange(event) {
 		this.staffService.updateStatus(this.isActive).subscribe(
 			res => {
 				this.saveStatusToLocalStorage(this.isActive);
+				if (!this.isActive) {
+					this.resetInfoForDriverAndAttendant();
+				}
 				this.announceActiveEvent();
 				this.loadListTruckForActiveDirverAndAttendant();
 				this.loadJobForActiveZappper();
@@ -139,6 +148,7 @@ export class UserStartPage extends BaseComponent {
 		this.staffService.chooseTruck(truckId).subscribe(
 			res => {
 				this.saveTruckInfoToLocalStorage(truckId);
+				this.loadListAssignment();
 			},
 			err => {
 				this.showError(err.message);
@@ -329,6 +339,9 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	loadListAssignment(callback?: () => void) {
+		if (this.isZappper() || !this.isActive) {
+			return;
+		}
 		this.staffService.loadListAssignment(false).subscribe(
 			res => {
 				this.listAssignment = res;
