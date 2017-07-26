@@ -158,21 +158,15 @@ export class DirectionPage extends BaseComponent {
 	}
 
 	removeAllMarkersAndPolyline() {
-		this.polyLines.forEach((polyLine: Polyline) => {
-			polyLine.remove();
-		});
-		this.polyLines = [];
-
-		this.markers.forEach((marker: Marker) => {
-			marker.remove();
-		});
-		this.markers = [];
+		if (this.map) {
+			this.map.clear();
+		}
 	}
 
 	addMarker(markerParams: MarkerOptions, callback?: (marker: Marker) => void) {
 		this.map.addMarker(markerParams)
 			.then((marker: Marker) => {
-				this.markers.push(marker);
+				// this.markers.push(marker);
 				if (callback) {
 					callback(marker);
 				}
@@ -235,7 +229,7 @@ export class DirectionPage extends BaseComponent {
 		};
 		this.map.addPolyline(polylineOptions)
 			.then((polyLine: Polyline) => {
-				this.polyLines.push(polyLine);
+				// this.polyLines.push(polyLine);
 			});
 	}
 
