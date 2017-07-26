@@ -113,19 +113,18 @@ export class MyApp extends BaseComponent {
 	}
 
 	logOut() {
-		localStorage.clear();
-		this.nav.setRoot(LoginPage);
-		// this.userService.logOut().subscribe(
-		// 	res => {
-		// 		this.nav.setRoot(LoginPage);
-		// 	},
-		// 	err => {
-		// 		this.showError(err.message);
-		// 	}
-		// )
-		if (this.isZappper()) {
+		if (this.isZappper() || this.isDriver()) {
 			this.unsubcribeWatchPosition();
 		}
+		this.userService.logOut().subscribe(
+			res => {
+				this.nav.setRoot(LoginPage);
+			},
+			err => {
+				this.userService.handleLogout(err);
+				this.showError(err.message);
+			}
+		);
 	}
 
 	updateCurrentLocation(lat: number, long: number) {
