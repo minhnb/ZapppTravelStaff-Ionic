@@ -62,6 +62,14 @@ export class BaseComponent {
 		return platform.is('cordova') && (platform.is('ios') || platform.is('android'));
 	}
 
+	isPlatformiOS(platform: Platform): boolean {
+		return platform.is('cordova') && platform.is('ios');
+	}
+
+	isPlatformAndroid(platform: Platform): boolean {
+		return platform.is('cordova') && platform.is('android');
+	}
+
 	checkDevicePermission() {
 		this.diagnostic.isLocationEnabled().then(isEnabled => {
 			if (isEnabled) return;

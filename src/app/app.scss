@@ -18,6 +18,10 @@ span.version-info {
   z-index: 3000;
   color: white;
   font-size: x-small;
+
+  &.margin-top {
+    margin-top: 20px;
+  }
 }
 
 ion-navbar,

@@ -279,7 +279,7 @@ export class UserStartPage extends BaseComponent {
 			this.loadNewRequestsAndUncompletedOrders(() => {
 				this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
 					() => {
-						this.goToListAssignmentPage();
+						this.goToListRequest();
 					});
 			});
 
