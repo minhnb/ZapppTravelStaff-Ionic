@@ -31,7 +31,7 @@
   <div full padding [hidden]="isActive  || !isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS_ZAPPPER' | translate }}</div>
   <ion-item no-lines [hidden]="!isActive || isZappper()">
     <ion-label>{{ 'CHOOSE_TRUCK' | translate }}</ion-label>
-    <ion-select [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
+    <ion-select [disabled]="truck" [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
       <ion-option *ngFor="let item of listTruck" value="{{ item.id }}">{{ item.truck_number }}</ion-option>
     </ion-select>
   </ion-item>
