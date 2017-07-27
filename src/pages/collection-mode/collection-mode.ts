@@ -47,6 +47,7 @@ export class CollectionModePage extends BaseComponent {
 			res => {
 				let customerInfo = this.customerInfoTransform(res);
 				customerInfo.isAttendantSaveMode = true;
+				customerInfo.luggageCode = luggageCode;
 				this.goToCustomerInfoPage(customerInfo);
 			},
 			err => {

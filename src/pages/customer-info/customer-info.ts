@@ -14,12 +14,14 @@ export class CustomerInfoPage extends BaseComponent {
 	listRow: Array<any>;
 	hasLuggage: boolean = false;
 	isAttendantSaveMode: boolean = false;
+	luggageCode: string;
 
 	@ViewChild(Navbar) navBar: Navbar;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams) {
 		super(injector);
 		this.customer = this.navParams.data;
+		this.luggageCode = this.customer.luggageCode;
 	}
 
 	ionViewDidLoad() {

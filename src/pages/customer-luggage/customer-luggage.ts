@@ -71,7 +71,7 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
         let luggageCode = this.navParams.data.luggageCode;
         if (luggageCode) {
-			if (!this.isDeliveryMode) {
+			if (!this.isDeliveryMode && !this.isAttendantSaveMode) {
 				this.addLuggageCode(luggageCode);
 			} else {
 				this.findLuggageCodeInList(luggageCode);
