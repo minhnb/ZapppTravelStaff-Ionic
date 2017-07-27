@@ -56,6 +56,6 @@ export class CollectionModeService {
 	}
 
 	checkValidLuggage(luggageCode: string) {
-		return this.zapppHttp.get(this.orderUrl + '/is_luggage_exists_in_order/luggage_id/' + luggageCode);
+		return this.zapppHttp.get(this.orderUrl + '/is_luggage_valid/luggage_id/' + luggageCode);
 	}
 }
