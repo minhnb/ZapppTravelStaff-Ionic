@@ -19,8 +19,6 @@ export class LoginPage extends BaseComponent {
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private userService: UserService) {
 		super(injector);
-		this.username = 'test@driver.zappp.com';
-		this.password = '1234567';
 	}
 
 	ionViewDidLoad() {

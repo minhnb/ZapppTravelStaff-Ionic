@@ -7,6 +7,7 @@ import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
 import { ListStationPage } from '../list-station';
 import { ListRequestPage } from '../list-request';
+import { ListRequestWithDirectionPage } from '../list-request-with-direction';
 import { UncompletedOrderPage } from '../uncompleted-order';
 import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
@@ -198,7 +199,7 @@ export class UserStartPage extends BaseComponent {
 		let params = {
 			listRequest: this.listRequest
 		}
-		this.navCtrl.push(ListRequestPage, params);
+		this.navCtrl.push(ListRequestWithDirectionPage, params);
 	}
 
 	goToListUncompletedOrder() {
@@ -222,7 +223,7 @@ export class UserStartPage extends BaseComponent {
 		}
 		let result = {
 			name: fullName,
-			avatar: request.user_info ? request.user_info.avatar : '',
+			avatar: request.user_info ? request.user_info.pic_url : '',
 			suitcase: request.order_info ? request.order_info.suit_case : 0,
 			bag: request.order_info ? request.order_info.bag : 0,
 			babyCarriage: request.order_info ? request.order_info.baby_carriage : 0,
