@@ -139,6 +139,20 @@ export class BaseComponent {
         this.presentAlert(title || this.translate.instant('INFO'), message, [{ text: buttonTitle || this.translate.instant('BUTTON_CLOSE') }]);
 	}
 
+	showInfoWithOkAction(message: string, title?: string, okCallback?: () => void, okButtonTitle?: string) {
+		let buttons = [
+            {
+                text: okButtonTitle || this.translate.instant('BUTTON_OK'),
+                handler: () => {
+                    if (okCallback) {
+                        okCallback();
+                    }
+                }
+            }
+        ];
+        this.presentAlert(title || this.translate.instant('INFO'), message, buttons);
+	}
+
     showConfirm(message: string, title?: string, okCallback?: () => void, cancelCallback?: () => void, okButtonTitle?: string, cancelButtonTitle?: string) {
         let buttons = [
             {
@@ -183,7 +197,11 @@ export class BaseComponent {
         };
 		this.barcodeScanner.scan(barcodeScannerOptions).then((barcodeData) => {
             if (!barcodeData.cancelled) {
-				callback(barcodeData.text);
+				if (barcodeData.text) {
+					callback(barcodeData.text);
+				} else {
+					this.showError(this.translate.instant('ERROR_EMPTY_QR_CODE'));
+				}
             }
 		}, (err) => {
 			this.showError(JSON.stringify(err));
@@ -191,14 +209,27 @@ export class BaseComponent {
 	}
 
 	isLuggageCode(code: string): boolean {
-        if (code.startsWith('ZTL')) {
+        if (code.startsWith(AppConstant.CODE_PREFIX.LUGGAGE)) {
             return true;
         }
         return false;
     }
 
     isStorageBinCode(code: string): boolean {
-        return true;
+		if (code.startsWith(AppConstant.CODE_PREFIX.BIN)) {
+            return true;
+        }
+        return false;
+    }
+
+    getOrderIdFromOrderCode(code: string): string {
+		if (code.startsWith(AppConstant.CODE_PREFIX.ORDER)) {
+			let codeSplitedArray = code.split(AppConstant.CODE_PREFIX.ORDER);
+			if (codeSplitedArray.length > 1 && codeSplitedArray[1].length) {
+				return codeSplitedArray[1];
+			}
+        }
+        return null;
     }
 
 	getFullName(firstName: string, lastName: string): string {

@@ -43,6 +43,12 @@ export const AppConstant = {
         REQUEST_ORDER: 'request_order',
         ASSIGN_TRUCK_DELIVERY: 'assign_truck_delivery',
         ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
-        ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned'
+        ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
+        USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
+    },
+    CODE_PREFIX: {
+        LUGGAGE: 'L-',
+        BIN: 'B-',
+        ORDER: 'O-'
     }
 };
