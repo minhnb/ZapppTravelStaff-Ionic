@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -22,7 +22,7 @@ export class TakePicturePage extends BaseComponent {
 	userAlreadyPaid: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera,
-		public events: Events, private staffService: StaffService, private collectionModeService: CollectionModeService) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
 		this.isDeliveryMode = this.navParams.data.isDeliveryMode;
@@ -69,8 +69,7 @@ export class TakePicturePage extends BaseComponent {
 			let params: any = {
 				deliveryItem: this.customer
 			};
-			this.events.publish('delivery:completed', params);
-			let view = this.navCtrl.getByIndex(listOrderPageIndex);
+			this.events.publish(AppConstant.EVENT_TOPIC.DELIVERY_COMPLETED, params);
 			this.navCtrl.popTo(this.navCtrl.getByIndex(listOrderPageIndex));
 		} catch (e) {
 			this.showError(e.message);
@@ -113,16 +112,22 @@ export class TakePicturePage extends BaseComponent {
 			return;
 		}
 		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.USER_COMPLETED_PICKUP_CHARGE, (data: any) => {
-			if (!this.isActiveCurrentPage(this.navCtrl)) {
+			if (this.isDestroyed) {
 				return;
 			}
-			this.userAlreadyPaid = true;
-			this.showInfoWithOkAction(this.translate.instant('USER_HAS_PAID'), null,
-				() => {
-					this.takePicture();
-				});
-
+			this.handleEventUserCompletedPickupCharge(data);
 		});
+	}
+
+	handleEventUserCompletedPickupCharge(data: any) {
+		if (!this.isActiveCurrentPage(this.navCtrl)) {
+			return;
+		}
+		this.userAlreadyPaid = true;
+		this.showInfoWithOkAction(this.translate.instant('USER_HAS_PAID'), null,
+			() => {
+				this.takePicture();
+			});
 	}
 
 	uploadPhoto(callback?: (url: string) => void) {

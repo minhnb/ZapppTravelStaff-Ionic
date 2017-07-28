@@ -56,7 +56,8 @@ export class DirectionPage extends BaseComponent {
 		this.unsubcribeWatchPosition();
 	}
 
-	ngOnDestroy() {
+	ionViewWillUnload() {
+		super.ionViewWillUnload();
 		this.destinationLocation = null;
 		this.removeAllMarkersAndPolyline();
 	}

@@ -1,5 +1,5 @@
 import { Component, ViewChild, Injector } from '@angular/core';
-import { Nav, Platform, Events } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FCM } from '@ionic-native/fcm';
@@ -33,7 +33,7 @@ export class MyApp extends BaseComponent {
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
 		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation,
-		private events: Events, private dataShare: DataShare) {
+		private dataShare: DataShare) {
 		super(injector);
 
 		this.pages = [
@@ -185,7 +185,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	subcribeUserActiveEvent() {
-		this.events.subscribe('user:active', (data: any) => {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.USER_ACTIVE, (data: any) => {
 			if (!this.isZappper() && !this.isDriver()) {
 				return;
 			}
@@ -197,23 +197,15 @@ export class MyApp extends BaseComponent {
 		});
 	}
 
-	notificationTypeIsInList(type: string) {
-		let keys: Array<string> = Object.keys(AppConstant.NOTIFICATION_TYPE);
-		for (let i = 0; i < keys.length; i++) {
-			let key = AppConstant.NOTIFICATION_TYPE[keys[i]];
-			if (key == AppConstant.NOTIFICATION_TYPE.PREFIX) {
-				continue;
-			}
-			if (type == key) {
-				return true;
-			}
-		}
-		return false;
+	notificationTypeIsInList(topic: string) {
+		let listServerNotificationEvent = this.listServerNotificationEvent();
+		return listServerNotificationEvent.indexOf(topic) > -1;
 	}
 
 	handleZapppNotification(data: any) {
-		this.events.publish(AppConstant.NOTIFICATION_TYPE.PREFIX + data.type, data);
-		if (!this.notificationTypeIsInList(data.type)) {
+		let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + data.type;
+		this.events.publish(topic, data);
+		if (!this.notificationTypeIsInList(topic)) {
 			this.showInfo(data.body, data.title);
 		}
 	}

@@ -46,6 +46,12 @@ export const AppConstant = {
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
         USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
     },
+    EVENT_TOPIC: {
+        USER_ACTIVE: 'user:active',
+        DIRECTION_STATION: 'direction:station',
+        DELIVERY_COMPLETED: 'delivery:completed',
+        COLLECTION_NEXTSTATION: 'collection:nextStation'
+    },
     CODE_PREFIX: {
         LUGGAGE: 'L-',
         BIN: 'B-',

@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 
@@ -33,7 +33,7 @@ export class UserStartPage extends BaseComponent {
 	listAssignment: Array<any> = [];
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService, private events: Events) {
+		private staffService: StaffService) {
 		super(injector);
 		this.loadPreviousState();
 		this.subscribeZappperNewRequestEvent();
@@ -103,7 +103,7 @@ export class UserStartPage extends BaseComponent {
 		let params = {
 			isActive: this.isActive
 		}
-		this.events.publish('user:active', params);
+		this.events.publish(AppConstant.EVENT_TOPIC.USER_ACTIVE, params);
 	}
 
 	resetInfoForDriverAndAttendant() {
@@ -281,19 +281,25 @@ export class UserStartPage extends BaseComponent {
 
 	subscribeZappperNewRequestEvent() {
 		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
-			if (!this.isZappper()) {
+			if (this.isDestroyed) {
 				return;
 			}
-			if (!this.isActiveCurrentPage(this.navCtrl)) {
-				return;
-			}
-			this.loadNewRequestsAndUncompletedOrders(() => {
-				this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
-					() => {
-						this.goToListRequest();
-					});
-			});
+			this.handleZappperNewRequest(data);
+		});
+	}
 
+	handleZappperNewRequest(data: any) {
+		if (!this.isZappper()) {
+			return;
+		}
+		if (!this.isActiveCurrentPage(this.navCtrl)) {
+			return;
+		}
+		this.loadNewRequestsAndUncompletedOrders(() => {
+			this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
+				() => {
+					this.goToListRequest();
+				});
 		});
 	}
 
@@ -306,6 +312,9 @@ export class UserStartPage extends BaseComponent {
 		for (let i = 0; i < listTruckAssignEvent.length; i++) {
 			let key = listTruckAssignEvent[i];
 			this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + key, (data: any) => {
+				if (this.isDestroyed) {
+					return;
+				}
 				this.handleAssignTruckEvent(key, data);
 			});
 		}

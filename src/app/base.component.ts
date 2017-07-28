@@ -1,5 +1,5 @@
 import { Component, Injector, ElementRef } from '@angular/core';
-import { Platform, AlertController, NavController } from 'ionic-angular';
+import { Platform, AlertController, NavController, Events } from 'ionic-angular';
 import { AppConstant } from './app.constant';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -19,9 +19,11 @@ export class BaseComponent {
 	public diagnostic: Diagnostic;
 	public translate: TranslateService;
 	public spinnerDialog: SpinnerDialog;
+	public events: Events;
 
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
+	isDestroyed: boolean = false;
 
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
@@ -29,6 +31,11 @@ export class BaseComponent {
 		this.diagnostic = injector.get(Diagnostic);
 		this.translate = injector.get(TranslateService);
 		this.spinnerDialog = injector.get(SpinnerDialog);
+		this.events = injector.get(Events);
+	}
+
+	ionViewWillUnload() {
+		this.isDestroyed = true;
 	}
 
 	isLoggedIn(): boolean {
@@ -299,5 +306,31 @@ export class BaseComponent {
 		}
 		this.lastWatchPosition = currentTimeStamp;
 		return true;
+	}
+
+	listLocalEvent() {
+		return Object.keys(AppConstant.EVENT_TOPIC).map((item) => {
+			let topic = AppConstant.EVENT_TOPIC[item];
+			return topic;
+		});
+	}
+
+	listServerNotificationEvent() {
+		let serverNotificationValues: Array<string> = Object.keys(AppConstant.NOTIFICATION_TYPE).map((item) => {
+			let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE[item];
+			return topic;
+		});
+		return serverNotificationValues.filter((item) => {
+			return item != (AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.PREFIX);
+		});
+	}
+
+	unsubcribeAllEvent() {
+		let listLocalEvent = this.listLocalEvent();
+		let listServerNotificationEvent = this.listServerNotificationEvent();
+		let allEvents = listLocalEvent.concat(listServerNotificationEvent);
+		allEvents.forEach(topic => {
+			this.events.unsubscribe(topic);
+		});
 	}
 }

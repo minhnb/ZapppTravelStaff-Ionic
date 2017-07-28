@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AppConstant } from '../../app/app.constant';
 
 import { GoogleMaps, LatLng, Marker } from '@ionic-native/google-maps';
@@ -23,7 +23,7 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 	slideIndex: number = 0;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, private staffService: StaffService, private events: Events) {
+		public geolocation: Geolocation, private staffService: StaffService) {
         super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.listRequest = navParams.data.listRequest;
 		this.autoMoveCamera = false;
@@ -72,18 +72,24 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 
 	subscribeZappperNewRequestEvent() {
 		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
-			if (!this.isZappper()) {
+			if (this.isDestroyed) {
 				return;
 			}
-			if (!this.isActiveCurrentPage(this.navCtrl)) {
-				return;
-			}
-			this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
-				() => {
-					this.navCtrl.popToRoot();
-				});
-
+			this.handleZappperNewRequestEvent(data);
 		});
+	}
+
+	handleZappperNewRequestEvent(data: any) {
+		if (!this.isZappper()) {
+			return;
+		}
+		if (!this.isActiveCurrentPage(this.navCtrl)) {
+			return;
+		}
+		this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
+			() => {
+				this.navCtrl.popToRoot();
+			});
 	}
 
 	addEndPointMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {

@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 
 import { CustomerLuggagePage } from '../customer-luggage';
 import { DeliveryInfoPage } from '../delivery-info';
@@ -20,8 +21,7 @@ export class ListOrderPage extends BaseComponent {
 	isDeliveryMode: boolean = false;
 	deliveryItem: any;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public events: Events,
-		private collectionModeService: CollectionModeService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private collectionModeService: CollectionModeService) {
 		super(injector);
 		this.pageName = navParams.data.pageName;
 		this.listOrder = navParams.data.listOrder;
@@ -35,13 +35,20 @@ export class ListOrderPage extends BaseComponent {
 	}
 
 	subcribeDeliveryCompletedEvent() {
-		this.events.subscribe('delivery:completed', (data) => {
-			this.deliveryItem = data.deliveryItem;
-			if (this.deliveryItem) {
-				this.markDeliveryItemCompleted();
-				this.deliveryItem = null;
+		this.events.subscribe(AppConstant.EVENT_TOPIC.DELIVERY_COMPLETED, (data) => {
+			if (this.isDestroyed) {
+				return;
 			}
+			this.handleDeliveryCompletedEvent(data);
 		})
+	}
+
+	handleDeliveryCompletedEvent(data: any) {
+		this.deliveryItem = data.deliveryItem;
+		if (this.deliveryItem) {
+			this.markDeliveryItemCompleted();
+			this.deliveryItem = null;
+		}
 	}
 
     goToCustomerLugguagePage(customer: any) {
