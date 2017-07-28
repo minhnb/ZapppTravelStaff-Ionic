@@ -19,11 +19,13 @@ export class CollectionModeService {
 	}
 
 	updateStation(currentStationId: string, nextStationId: string, stayTime: number) {
-		let params = {
-			current_stop_id: currentStationId,
+		let params: any = {
 			next_stop_id: nextStationId,
 			stay_time: stayTime
 		};
+		if (currentStationId) {
+			params.current_stop_id = currentStationId;
+		}
 		return this.zapppHttp.post(this.truckUrl + '/update_station', params);
 	}
 

@@ -37,9 +37,22 @@ export class StayTimeCountDownPage extends BaseComponent {
 		this.customBackButtonClick();
 	}
 
+	ionViewWillUnload() {
+		this.events.unsubscribe('collection:nextStation');
+	}
+
 	subcribeChooseNextStationEvent() {
 		this.events.subscribe('collection:nextStation', (data) => {
-			this.nextStation = data.nextStation;
+			if (this.nextStation && this.nextStation.id == data.nextStation.id) {
+				return;
+			}
+			if (this.isStarted || this.isShowingNextStationInfo) {
+				this.updateStation(data.nextStation, () => {
+					this.nextStation = data.nextStation;
+				});
+			} else {
+				this.nextStation = data.nextStation;
+			}
 		});
 	}
 
@@ -79,14 +92,22 @@ export class StayTimeCountDownPage extends BaseComponent {
 		if (this.isStarted) this.updateParkingTime();
 	}
 
-	updateStation() {
-		let currentStationId = this.station.id;
-		let nextStationId = this.nextStation.id;
+	updateStation(nextStation?: any, callback?: () => void) {
+		let currentStationId = this.isShowingNextStationInfo ? null : this.station.id;
+		if (!nextStation) {
+			nextStation = this.nextStation;
+		}
+		let nextStationId = nextStation.id;
 		let stayTime = this.duration;
 
 		this.collectionModeService.updateStation(currentStationId, nextStationId, stayTime).subscribe(
 			res => {
-				this.startCountDown();
+				if (!this.isStarted && !this.isShowingNextStationInfo) {
+					this.startCountDown();
+				}
+				if (callback) {
+					callback();
+				}
 			},
 			err => {
 				this.showError(err.message);
