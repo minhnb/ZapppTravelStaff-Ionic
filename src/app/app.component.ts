@@ -177,6 +177,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	unsubcribeWatchPosition() {
+		this.lastWatchPosition = 0;
 		if (this.watchPositionSubscription) {
 			this.watchPositionSubscription.unsubscribe();
 			this.watchPositionSubscription = null;
@@ -185,7 +186,7 @@ export class MyApp extends BaseComponent {
 
 	subcribeUserActiveEvent() {
 		this.events.subscribe('user:active', (data: any) => {
-			if (!this.isZappper() && this.isDriver()) {
+			if (!this.isZappper() && !this.isDriver()) {
 				return;
 			}
 			if (data.isActive) {
