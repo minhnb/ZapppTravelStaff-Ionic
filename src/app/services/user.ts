@@ -34,7 +34,7 @@ export class UserService {
 		return data;
 	}
 
-	handleLogout(data: any): any {
+	public handleLogout(data: any): any {
 		this.clearLocalStorage();
 		return data;
 	}
@@ -50,16 +50,13 @@ export class UserService {
 	}
 
 	userLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {
-		console.log('this.fcmToken');
-		console.log(this.dataShare.fcmToken);
 		return this.pureLogIn(loginName, password, this.dataShare.fcmToken, countryCode)
 			.map(this.handleLoginSuccess.bind(this));
 	}
 
     logOut(): Observable<any> {
         return this.zapppHttp.post(this.userUrl + '/logout', {})
-			.map(this.handleLogout.bind(this))
-			.catch(this.handleLogout.bind(this));;
+			.map(this.handleLogout.bind(this));
     }
 
 	getUserInfo(): Observable<any> {

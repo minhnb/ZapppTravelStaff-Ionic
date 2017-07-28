@@ -20,6 +20,7 @@ import { TakePicturePageModule } from '../pages/take-picture';
 import { ListStationPageModule } from '../pages/list-station';
 import { StayTimeCountDownPageModule } from '../pages/stay-time-count-down';
 import { ListRequestPageModule } from '../pages/list-request';
+import { ListRequestWithDirectionPageModule } from '../pages/list-request-with-direction';
 import { DirectionUserPageModule } from '../pages/direction-user';
 import { UncompletedOrderPageModule } from '../pages/uncompleted-order';
 import { FindTruckPageModule } from '../pages/find-truck';
@@ -77,6 +78,7 @@ import { DataShare } from './helper/data.share';
 		ListStationPageModule,
 		StayTimeCountDownPageModule,
 		ListRequestPageModule,
+		ListRequestWithDirectionPageModule,
 		DirectionUserPageModule,
 		UncompletedOrderPageModule,
 		FindTruckPageModule,

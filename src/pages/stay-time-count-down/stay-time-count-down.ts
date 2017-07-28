@@ -1,6 +1,7 @@
 import { Component, Injector, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events, Navbar } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 import { ListStationPage } from '../list-station';
 import { CollectionModeService } from '../../app/services/collection-mode';
 import * as moment from 'moment';
@@ -25,7 +26,7 @@ export class StayTimeCountDownPage extends BaseComponent {
 
 	@ViewChild(Navbar) navBar: Navbar;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public events: Events, private collectionModeService: CollectionModeService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private collectionModeService: CollectionModeService) {
         super(injector);
         this.station = this.navParams.data.station;
         this.duration = Number(this.navParams.data.station.stop_time);
@@ -38,9 +39,25 @@ export class StayTimeCountDownPage extends BaseComponent {
 	}
 
 	subcribeChooseNextStationEvent() {
-		this.events.subscribe('collection:nextStation', (data) => {
-			this.nextStation = data.nextStation;
+		this.events.subscribe(AppConstant.EVENT_TOPIC.COLLECTION_NEXTSTATION, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleChooseNextStationEvent(data);
 		});
+	}
+
+	handleChooseNextStationEvent(data: any) {
+		if (this.nextStation && this.nextStation.id == data.nextStation.id) {
+			return;
+		}
+		if (this.isStarted || this.isShowingNextStationInfo) {
+			this.updateStation(data.nextStation, () => {
+				this.nextStation = data.nextStation;
+			});
+		} else {
+			this.nextStation = data.nextStation;
+		}
 	}
 
 	customBackButtonClick() {
@@ -79,14 +96,22 @@ export class StayTimeCountDownPage extends BaseComponent {
 		if (this.isStarted) this.updateParkingTime();
 	}
 
-	updateStation() {
-		let currentStationId = this.station.id;
-		let nextStationId = this.nextStation.id;
+	updateStation(nextStation?: any, callback?: () => void) {
+		let currentStationId = this.isShowingNextStationInfo ? null : this.station.id;
+		if (!nextStation) {
+			nextStation = this.nextStation;
+		}
+		let nextStationId = nextStation.id;
 		let stayTime = this.duration;
 
 		this.collectionModeService.updateStation(currentStationId, nextStationId, stayTime).subscribe(
 			res => {
-				this.startCountDown();
+				if (!this.isStarted && !this.isShowingNextStationInfo) {
+					this.startCountDown();
+				}
+				if (callback) {
+					callback();
+				}
 			},
 			err => {
 				this.showError(err.message);
@@ -144,7 +169,7 @@ export class StayTimeCountDownPage extends BaseComponent {
 	}
 
 	goToNextStation() {
-		this.events.publish('direction:station', { station: this.nextStation });
+		this.events.publish(AppConstant.EVENT_TOPIC.DIRECTION_STATION, { station: this.nextStation });
 		this.navCtrl.pop();
 	}
 

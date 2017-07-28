@@ -1,0 +1,45 @@
+page-list-request-with-direction {
+  #map {
+    height: 60%;
+  }
+
+  .slider-content {
+    height: 40%;
+    border-top: solid 1px #bbbbbb;
+    // padding: 10px;
+  }
+
+  ion-slide {
+    .slide-zoom {
+      height: 100%;
+    }
+
+    .user-request {
+      color: #666666;
+      font-size: 14px;
+      height: calc(100% - 25px);
+      position: relative;
+      text-align: left;
+      padding: 10px;
+
+      .estimated-time {
+        min-width: 100%;
+        border-bottom: solid 1px #dddddd;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding-left: 15px;
+      }
+
+      .luggage-info {
+        margin-top: 20px;
+      }
+
+      .button-bottom-full {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+}

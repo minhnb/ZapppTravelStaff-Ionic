@@ -25,6 +25,8 @@ export class DirectionPage extends BaseComponent {
 	watchPositionSubscription: any;
 	watchPositionObserverble: any;
 	isLoadedMap: boolean = false;
+	currentLocation: LatLng = null;
+	autoMoveCamera: boolean = true;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
@@ -54,7 +56,8 @@ export class DirectionPage extends BaseComponent {
 		this.unsubcribeWatchPosition();
 	}
 
-	ngOnDestroy() {
+	ionViewWillUnload() {
+		super.ionViewWillUnload();
 		this.destinationLocation = null;
 		this.removeAllMarkersAndPolyline();
 	}
@@ -98,21 +101,28 @@ export class DirectionPage extends BaseComponent {
 				console.log('Map is ready!');
 				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-					let position: CameraPosition = {
-						target: currentLocation,
-						zoom: 15,
-						tilt: 30
-					};
-					this.map.moveCamera(position);
+					if (this.autoMoveCamera) {
+						this.moveCamera(currentLocation);
+					}
 					this.afterLoadMapAndCurrentLocation(currentLocation);
+					if (!this.watchPositionObserverble) {
+						this.initWatchPosition(watchTimeout, watchOption);
+					}
 				}).catch((error) => {
 					console.log('Error getting location', error);
 					this.showLocationServiceProblemConfirmation();
 				});
-
-				this.initWatchPosition(watchTimeout, watchOption);
 			}
 		);
+	}
+
+	moveCamera(location: LatLng) {
+		let position: CameraPosition = {
+			target: location,
+			zoom: 15,
+			tilt: 30
+		};
+		this.map.moveCamera(position);
 	}
 
 	initWatchPosition(watchTimeout: number, watchOption: GeolocationOptions) {
@@ -132,6 +142,7 @@ export class DirectionPage extends BaseComponent {
 				return;
 			}
 			let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+			this.currentLocation = currentLocation;
 			this.updateCurrentLocationMarker(currentLocation);
 		});
 	}
@@ -173,16 +184,20 @@ export class DirectionPage extends BaseComponent {
 			});
 	}
 
-	createMarkerOptions(point: LatLng, title?: string, iconUrl?: string): MarkerOptions {
+	createMarkerOptions(point: LatLng, title?: string, iconUrl?: string, size?: any): MarkerOptions {
 		var markerParams: MarkerOptions = {
 			position: point,
 			title: title
 		};
 
 		if (iconUrl) {
-			markerParams.icon = {
+			let icon: any = {
 				url: iconUrl
+			};
+			if (size) {
+				icon.size = size;
 			}
+			markerParams.icon = icon;
 		}
 
 		return markerParams;

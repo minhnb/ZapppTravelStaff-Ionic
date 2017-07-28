@@ -71,7 +71,7 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
         let luggageCode = this.navParams.data.luggageCode;
         if (luggageCode) {
-			if (!this.isDeliveryMode) {
+			if (!this.isDeliveryMode && !this.isAttendantSaveMode) {
 				this.addLuggageCode(luggageCode);
 			} else {
 				this.findLuggageCodeInList(luggageCode);
@@ -118,14 +118,19 @@ export class CustomerLuggagePage extends BaseComponent {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_ALREADY_ADDED'));
             return;
         }
+
 		let newItem = {
 			luggageCode: luggageCode,
 			storageBinCode: ''
 		}
-		this.listLuggage.push(newItem);
-		// this.checkValidLuggage(luggageCode, () => {
-		// 	this.listLuggage.push(newItem);
-		// });
+
+		this.checkValidLuggage(luggageCode, () => {
+			let newItem = {
+				luggageCode: luggageCode,
+				storageBinCode: ''
+			}
+			this.listLuggage.push(newItem);
+		});
     }
 
     removeItem(index: number) {
@@ -296,7 +301,9 @@ export class CustomerLuggagePage extends BaseComponent {
 	checkValidLuggage(luggageCode: string, callback?: () => void) {
 		this.collectionModeService.checkValidLuggage(luggageCode).subscribe(
 			res => {
-
+				if (callback) {
+					callback();
+				}
 			},
 			err => {
 				this.showError(err.message);

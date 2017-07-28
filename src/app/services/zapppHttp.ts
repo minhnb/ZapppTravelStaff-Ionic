@@ -9,12 +9,13 @@ import 'rxjs/add/operator/toPromise';
 import { AppConstant } from '../app.constant';
 import { AppConfig } from '../app.config';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { TranslateService } from '@ngx-translate/core';
 
 var ENV: string = 'dev';
 
 @Injectable()
 export class ZapppHttp {
-    constructor(private http: Http, private _spinner: SpinnerDialog) { }
+    constructor(private http: Http, private _spinner: SpinnerDialog, private translate: TranslateService) { }
 
     private getRequestOptionsByToken(method: string | RequestMethod, accessToken: string): RequestOptions {
         let headerParams = {};
@@ -78,12 +79,12 @@ export class ZapppHttp {
                 });
             requestSub.subscribe(
                 (res: any) => {
-                    if (res.status.code > 0) {
+                    if (res.status && res.status.code > 0) {
                         observer.next(res.data);
                         observer.complete();
                     } else {
                         let err = res.status;
-                        err.message = err.msg;
+                        err.message = err.msg || this.translate.instant('ERROR_ZAPPP_HTTP_SERVER_ERROR');
                         observer.error(err);
                     }
                 },
@@ -105,12 +106,25 @@ export class ZapppHttp {
     }
 
     handleError(error: Response | any, url: string, options: RequestOptions): any {
-		let errMsg = this.jsonError(error);
+        this._spinner.hide();
+        if (error.status == 404) {
+            error.message = this.translate.instant('ERROR_ZAPPP_HTTP_NOT_FOUND');
+            return Observable.throw(error);
+        }
+        let errMsg;
+        try {
+            errMsg = this.jsonError(error);
+        } catch (ex) {
+            errMsg = {
+                code: error.code,
+                message: this.translate.instant('ERROR_ZAPPP_HTTP_SERVER_ERROR')
+            }
+            return Observable.throw(errMsg);
+        }
         if (errMsg.status == 401) {
             return this.refreshToken(url, options);
         }
-        this._spinner.hide();
-		return Observable.throw(errMsg);
+        return Observable.throw(errMsg);
     }
 
     jsonError(error: Response | any): any {
@@ -120,7 +134,7 @@ export class ZapppHttp {
         }
 		if (error instanceof Response) {
             if (error.status == 0) {
-                let message = 'Connection Error';
+                let message = this.translate.instant('ERROR_ZAPPP_HTTP_CONNECTION_ERROR');
                 errMsg = {
                     status: error.status,
                     message: message

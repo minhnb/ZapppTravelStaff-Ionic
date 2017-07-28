@@ -14,7 +14,7 @@
   </div>
   <div class="info-row" *ngIf="customer.listLuggage && customer.listLuggage.length">
     <div class="label">{{ 'LUGGAGE' | translate }}</div>
-    <button class="no-padding-left" menuClose ion-item no-lines (click)="goToCustomerLugguagePage()">{{ customer.listLuggage.length }}</button>
+    <button class="no-padding-left" menuClose ion-item no-lines (click)="goToCustomerLugguagePage(luggageCode)">{{ customer.listLuggage.length }}</button>
   </div>
   <div class="button-bottom-full">
     <button ion-button full (click)="scanLuggageQRCode()" [hidden]="hasLuggage">{{ 'BUTTON_SCAN_LUGGAGE' | translate }}</button>

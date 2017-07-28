@@ -19,11 +19,13 @@ export class CollectionModeService {
 	}
 
 	updateStation(currentStationId: string, nextStationId: string, stayTime: number) {
-		let params = {
-			current_stop_id: currentStationId,
+		let params: any = {
 			next_stop_id: nextStationId,
 			stay_time: stayTime
 		};
+		if (currentStationId) {
+			params.current_stop_id = currentStationId;
+		}
 		return this.zapppHttp.post(this.truckUrl + '/update_station', params);
 	}
 
@@ -56,6 +58,14 @@ export class CollectionModeService {
 	}
 
 	checkValidLuggage(luggageCode: string) {
-		return this.zapppHttp.get(this.orderUrl + '/is_luggage_exists_in_order/luggage_id/' + luggageCode);
+		return this.zapppHttp.get(this.orderUrl + '/is_luggage_valid/luggage_id/' + luggageCode);
+	}
+
+	completedPickup(orderId: string, proofImageUrl: string) {
+		let params = {
+			order_id: orderId,
+			pic_url: proofImageUrl
+		};
+		return this.zapppHttp.post(this.orderUrl + '/pickup_completed', params);
 	}
 }

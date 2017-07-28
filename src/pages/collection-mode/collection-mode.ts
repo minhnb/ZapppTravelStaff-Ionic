@@ -47,6 +47,7 @@ export class CollectionModePage extends BaseComponent {
 			res => {
 				let customerInfo = this.customerInfoTransform(res);
 				customerInfo.isAttendantSaveMode = true;
+				customerInfo.luggageCode = luggageCode;
 				this.goToCustomerInfoPage(customerInfo);
 			},
 			err => {
@@ -59,9 +60,14 @@ export class CollectionModePage extends BaseComponent {
         this.scanQRCode(text => {
 			if (this.isLuggageCode(text)) {
 				this.getLuggageCodeDetail(text);
-			} else {
-				this.getOrderDetail(text);
+				return;
 			}
+			let orderId = this.getOrderIdFromOrderCode(text);
+			if (orderId) {
+				this.getOrderDetail(orderId);
+				return;
+			}
+			this.showError(this.translate.instant('ERROR_INVALID_CODE'));
         });
 	}
 

@@ -1,6 +1,8 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
+
 import { DirectionStopPage } from '../direction-stop';
 import { CollectionModeService } from '../../app/services/collection-mode';
 
@@ -16,7 +18,7 @@ export class ListStationPage extends BaseComponent {
 	isSelectNextStationMode: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
-		private collectionModeService: CollectionModeService, public events: Events) {
+		private collectionModeService: CollectionModeService) {
 		super(injector);
 		if (navParams.data.isSelectNextStationMode) {
 			this.isSelectNextStationMode = true;
@@ -73,7 +75,7 @@ export class ListStationPage extends BaseComponent {
 		let params = {
 			nextStation: station
 		}
-		this.events.publish('collection:nextStation', params);
+		this.events.publish(AppConstant.EVENT_TOPIC.COLLECTION_NEXTSTATION, params);
 		this.navCtrl.pop();
 	}
 

@@ -54,6 +54,11 @@
   "DESTINATION": "Destination",
   "DISTRICT": "District",
   "ERROR": "Error",
+  "ERROR_EMPTY_QR_CODE": "Code is empty",
+  "ERROR_ZAPPP_HTTP_CONNECTION_ERROR": "Connection Error",
+  "ERROR_ZAPPP_HTTP_NOT_FOUND": "Not Found API URL",
+  "ERROR_ZAPPP_HTTP_SERVER_ERROR": "Server Error",
+  "ERROR_INVALID_CODE": "Invalid code",
   "ERROR_INVALID_LUGGAGE_CODE": "Invalid luggage code",
   "ERROR_LUGGAGE_CODE_ALREADY_ADDED": "This luggage code was already added",
   "ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST": "This code is not in list",
@@ -91,8 +96,10 @@
   "UNASSIGNED": "Unassigned",
   "UNCOMPLETED_ORDER": "Uncompleted orders",
   "USER_NOT_STAFF": "You are not staff, so you can not access to this app",
+  "USER_HAS_PAID": "User has paid. Now take a picture as pickup proof.",
   "USERNAME": "Username",
   "VIEW_ASSIGNMENT": "View assignments",
+  "WAIT_FOR_USER_TO_COMPLETE_PAYMENT": "Wait for user to complete payment",
   "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request. Press OK to take a look.",
   "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"
 }
