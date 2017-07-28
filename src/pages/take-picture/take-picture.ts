@@ -139,7 +139,7 @@ export class TakePicturePage extends BaseComponent {
 					}
 				},
 				err => {
-					this.showError(err);
+					this.showError(err.message);
 				}
 			);
 		});
