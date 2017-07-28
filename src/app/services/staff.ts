@@ -12,6 +12,7 @@ export class StaffService {
 	private userUrl = AppConfig.API_URL + 'user';
 	private districtUrl = AppConfig.API_URL + 'district';
 	private zappperUrl = AppConfig.API_URL + 'zappper';
+	private uploadUrl = AppConfig.API_URL + 'uploadfile';
 
 	constructor(private zapppHttp: ZapppHttp) { }
 
@@ -66,5 +67,12 @@ export class StaffService {
 
 	loadListAssignment(showSpinner: Boolean = true) {
 		return this.zapppHttp.get(this.truckUrl + '/list_notify', null, showSpinner);
+	}
+
+	uploadPhoto(base64Data: string, showSpinner: Boolean = true) {
+		let params = {
+			data: base64Data
+		};
+		return this.zapppHttp.post(this.uploadUrl + '/save_photo', params, null, showSpinner);
 	}
 }

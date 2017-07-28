@@ -58,4 +58,12 @@ export class CollectionModeService {
 	checkValidLuggage(luggageCode: string) {
 		return this.zapppHttp.get(this.orderUrl + '/is_luggage_valid/luggage_id/' + luggageCode);
 	}
+
+	completedPickup(orderId: string, proofImageUrl: string) {
+		let params = {
+			order_id: orderId,
+			pic_url: proofImageUrl
+		};
+		return this.zapppHttp.post(this.orderUrl + '/pickup_completed', params);
+	}
 }
