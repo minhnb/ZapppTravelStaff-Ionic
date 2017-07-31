@@ -47,16 +47,15 @@ export class ListRequestWithDirectionPage extends DirectionPage {
     }
 
 	takeRequest(customer: any) {
-		this.goToDirectionPage(customer);
-		// this.staffService.zappperAcceptLuggage(customer.orderId).subscribe(
-		// 	res => {
-		// 		this.saveLocalCurrentJob(customer);
-		// 		this.goToDirectionPage(customer);
-		// 	},
-		// 	err => {
-		// 		this.showError(err.message);
-		// 	}
-		// );
+		this.staffService.zappperAcceptLuggage(customer.orderId).subscribe(
+			res => {
+				this.saveLocalCurrentJob(customer);
+				this.goToDirectionPage(customer);
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 
 	goToDirectionPage(customer: any) {
