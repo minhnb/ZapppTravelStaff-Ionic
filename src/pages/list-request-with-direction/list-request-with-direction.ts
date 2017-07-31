@@ -26,6 +26,7 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 		public geolocation: Geolocation, private staffService: StaffService) {
         super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.listRequest = navParams.data.listRequest;
+		this.mapId = 'aboveMap';
 		this.autoMoveCamera = false;
 		this.subscribeZappperNewRequestEvent();
 	}
@@ -46,15 +47,16 @@ export class ListRequestWithDirectionPage extends DirectionPage {
     }
 
 	takeRequest(customer: any) {
-		this.staffService.zappperAcceptLuggage(customer.orderId).subscribe(
-			res => {
-				this.saveLocalCurrentJob(customer);
-				this.goToDirectionPage(customer);
-			},
-			err => {
-				this.showError(err.message);
-			}
-		);
+		this.goToDirectionPage(customer);
+		// this.staffService.zappperAcceptLuggage(customer.orderId).subscribe(
+		// 	res => {
+		// 		this.saveLocalCurrentJob(customer);
+		// 		this.goToDirectionPage(customer);
+		// 	},
+		// 	err => {
+		// 		this.showError(err.message);
+		// 	}
+		// );
 	}
 
 	goToDirectionPage(customer: any) {

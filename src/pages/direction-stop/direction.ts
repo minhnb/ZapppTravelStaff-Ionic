@@ -19,6 +19,7 @@ export class DirectionPage extends BaseComponent {
 	map: GoogleMap;
 	destinationLocation: LatLng = null;
 	polyLines: Array<any> = [];
+	mapId: string = 'map';
 
 	markers: Array<any> = [];
 	currentLocationMarker: Marker;
@@ -89,7 +90,7 @@ export class DirectionPage extends BaseComponent {
 
 	loadMap() {
 		console.log('Loading map!');
-		let element: HTMLElement = document.getElementById('map');
+		let element: HTMLElement = document.getElementById(this.mapId);
 
 		this.map = this.googleMaps.create(element);
 
