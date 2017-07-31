@@ -3,11 +3,11 @@
       <ion-icon name="close"></ion-icon>
     </button>
   <div class="middle-center middle-camera" *ngIf="!imageUrl">
-    <button class="transparent-button" (click)="takePicture()" [disabled]="!userAlreadyPaid">
+    <button class="transparent-button" (click)="takePicture()" [disabled]="!userAlreadyPaid && !isDeliveryMode">
             <ion-icon name="camera"></ion-icon>
           </button>
-    <div *ngIf="userAlreadyPaid">{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
-    <div *ngIf="!userAlreadyPaid">{{ 'WAIT_FOR_USER_TO_COMPLETE_PAYMENT' | translate }}</div>
+    <div *ngIf="userAlreadyPaid || isDeliveryMode">{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
+    <div *ngIf="!userAlreadyPaid && !isDeliveryMode">{{ 'WAIT_FOR_USER_TO_COMPLETE_PAYMENT' | translate }}</div>
   </div>
   <img class="middle-center" *ngIf="imageUrl" src="{{ imageUrl }}" />
   <button ion-button class="above-button bottom-left" *ngIf="imageUrl" (click)="takePicture()">{{ 'BUTTON_RETAKE' | translate }}</button>

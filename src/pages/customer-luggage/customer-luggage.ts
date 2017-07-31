@@ -232,16 +232,7 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
 	finishScanningForDeliveryMode() {
-		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
-		this.spinnerDialog.show();
-		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
-			this.spinnerDialog.hide();
-			this.deliveryLuggage(resp.coords.latitude, resp.coords.longitude);
-		}).catch((error) => {
-			this.spinnerDialog.hide();
-			console.log('Error getting location', error);
-			this.showLocationServiceProblemConfirmation();
-		});
+		this.goToTakeProofPicturePage();
 	}
 
 	finishScanningForCollectionMode() {
@@ -304,19 +295,6 @@ export class CustomerLuggagePage extends BaseComponent {
 				if (callback) {
 					callback();
 				}
-			},
-			err => {
-				this.showError(err.message);
-			}
-		);
-	}
-
-	deliveryLuggage(latitude: number, longitude: number) {
-		let orderId = this.customer.orderId;
-		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
-		this.deliveryModeService.deliveryLuggage(orderId, listLuggage, latitude, longitude).subscribe(
-			res => {
-				this.goToTakeProofPicturePage();
 			},
 			err => {
 				this.showError(err.message);
