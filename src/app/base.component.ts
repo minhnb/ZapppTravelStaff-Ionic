@@ -279,7 +279,7 @@ export class BaseComponent {
 			listLuggage: this.listLuggageTransform(requestInfo.order_luggage_bin),
 			isAttendantSaveMode: false,
 			orderId: requestInfo.id,
-			orderNo: requestInfo.order_no
+			orderNo: requestInfo.id
 		};
 		return customerInfo;
 	}
