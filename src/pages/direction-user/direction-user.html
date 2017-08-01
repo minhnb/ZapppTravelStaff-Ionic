@@ -1,6 +1,6 @@
 <ion-content>
   <div #map id="map" data-tap-disabled="true" style="height:100%;">
       <button ion-button class="above-button bottom-left" (click)="callCustomer()" [disabled]="!customer || !customer.phoneNumber">{{ 'BUTTON_CALL' | translate }}</button>
-      <button ion-button class="above-button bottom-right" (click)="scanLuggage()">{{ 'BUTTON_PICKUP' | translate }}</button>
+      <button ion-button class="above-button bottom-right" (click)="scanLuggageQRCode()">{{ 'BUTTON_PICKUP' | translate }}</button>
   </div>
 </ion-content>

@@ -6,12 +6,15 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { DeliveryModeService } from '../../app/services/delivery-mode';
+
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
 	selector: 'page-take-picture',
 	templateUrl: 'take-picture.html',
-	providers: [StaffService, CollectionModeService]
+	providers: [StaffService, CollectionModeService, DeliveryModeService]
 })
 export class TakePicturePage extends BaseComponent {
 
@@ -22,7 +25,8 @@ export class TakePicturePage extends BaseComponent {
 	userAlreadyPaid: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera,
-		private staffService: StaffService, private collectionModeService: CollectionModeService) {
+		private geolocation: Geolocation, private staffService: StaffService,
+		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
 		this.isDeliveryMode = this.navParams.data.isDeliveryMode;
@@ -40,14 +44,17 @@ export class TakePicturePage extends BaseComponent {
 
 	takePicture() {
 		let options: CameraOptions = {
-			quality: 20,
-			destinationType: this.camera.DestinationType.FILE_URI,
+			quality: 50,
+			destinationType: this.camera.DestinationType.DATA_URL,
 			encodingType: this.camera.EncodingType.JPEG,
-			mediaType: this.camera.MediaType.PICTURE
+			mediaType: this.camera.MediaType.PICTURE,
+			targetWidth: 800,
+			targetHeight: 800
 		}
 
 		this.camera.getPicture(options).then((imageData) => {
-			this.imageUrl = imageData;
+			this.imageUrl = 'data:image/jpeg;base64,' + imageData;
+			console.log(this.imageUrl.length);
 		}, (err) => {
 			// this.showError(JSON.stringify(err));
 		});
@@ -58,8 +65,11 @@ export class TakePicturePage extends BaseComponent {
 			this.completedPickup(proofImageUrl);
 		});
 	}
+
 	savePictureForDeliveryMode() {
-		this.goBackToListOrderPage();
+		this.uploadPhoto((proofImageUrl: string) => {
+			this.deliveryLuggage(proofImageUrl);
+		});
 	}
 
 	goBackToListOrderPage() {
@@ -131,18 +141,16 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	uploadPhoto(callback?: (url: string) => void) {
-		this.imageToBase64(this.imageUrl, base64Data => {
-			this.staffService.uploadPhoto(base64Data).subscribe(
-				res => {
-					if (callback) {
-						callback(res);
-					}
-				},
-				err => {
-					this.showError(err);
+		this.staffService.uploadPhoto(this.imageUrl).subscribe(
+			res => {
+				if (callback) {
+					callback(res);
 				}
-			);
-		});
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 
 	completedPickup(proofImageUrl: string) {
@@ -159,5 +167,27 @@ export class TakePicturePage extends BaseComponent {
 				this.showError(err.message);
 			}
 		);
+	}
+
+	deliveryLuggage(proofImageUrl: string) {
+		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
+		this.spinnerDialog.show();
+		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
+			this.spinnerDialog.hide();
+			let orderId = this.customer.orderId;
+			let listLuggage = this.listLuggageReverseTransform(this.customer.listLuggage);
+			this.deliveryModeService.deliveryLuggage(orderId, listLuggage, resp.coords.latitude, resp.coords.longitude, proofImageUrl).subscribe(
+				res => {
+					this.goBackToListOrderPage();
+				},
+				err => {
+					this.showError(err.message);
+				}
+			);
+		}).catch((error) => {
+			this.spinnerDialog.hide();
+			console.log('Error getting location', error);
+			this.showLocationServiceProblemConfirmation();
+		});
 	}
 }

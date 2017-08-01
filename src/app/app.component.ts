@@ -57,9 +57,6 @@ export class MyApp extends BaseComponent {
 
 			if (this.isLoggedIn()) {
 				this.rootPage = UserStartPage;
-				if (this.isZappper() || this.isDriver()) {
-					this.subcribeWatchPosition();
-				}
 			}
 		});
 	}
@@ -113,9 +110,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	logOut() {
-		if (this.isZappper() || this.isDriver()) {
-			this.unsubcribeWatchPosition();
-		}
+		this.unsubcribeWatchPosition();
 		this.userService.logOut().subscribe(
 			res => {
 				this.nav.setRoot(LoginPage);
@@ -132,8 +127,9 @@ export class MyApp extends BaseComponent {
 			this.zappperUpdateCurrentLocation(lat, long);
 			return;
 		}
+		this.staffUpdateCurrentLocation(lat, long);
 		if (this.isDriver()) {
-			this.driverUpdateCurrentLocation(lat, long);
+			this.truckUpdateCurrentLocation(lat, long);
 		}
 	}
 
@@ -148,8 +144,19 @@ export class MyApp extends BaseComponent {
 		)
 	}
 
-	driverUpdateCurrentLocation(lat: number, long: number) {
-		this.staffService.driverUpdateCurrentLocation(lat, long, false).subscribe(
+	staffUpdateCurrentLocation(lat: number, long: number) {
+		this.staffService.staffUpdateCurrentLocation(lat, long, false).subscribe(
+			res => {
+
+			},
+			err => {
+
+			}
+		)
+	}
+
+	truckUpdateCurrentLocation(lat: number, long: number) {
+		this.staffService.truckUpdateCurrentLocation(lat, long, false).subscribe(
 			res => {
 
 			},
@@ -186,9 +193,6 @@ export class MyApp extends BaseComponent {
 
 	subcribeUserActiveEvent() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.USER_ACTIVE, (data: any) => {
-			if (!this.isZappper() && !this.isDriver()) {
-				return;
-			}
 			if (data.isActive) {
 				this.subcribeWatchPosition();
 			} else {

@@ -41,6 +41,7 @@ import { CallNumber } from '@ionic-native/call-number';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TextMaskModule } from 'angular2-text-mask';
 
 import { Http, HttpModule } from '@angular/http';
 
@@ -55,7 +56,7 @@ import { DataShare } from './helper/data.share';
 	],
 	imports: [
 		BrowserModule,
-		IonicModule.forRoot(MyApp, { mode: 'ios' }),
+		IonicModule.forRoot(MyApp, { mode: 'ios', scrollAssist: false }),
 		HttpModule,
 		TranslateModule.forRoot({
 			loader: {
@@ -64,6 +65,7 @@ import { DataShare } from './helper/data.share';
 				deps: [Http]
 			}
 		}),
+		TextMaskModule,
 		SchedulePageModule,
 		DirectionStopPageModule,
 		UserStartPageModule,

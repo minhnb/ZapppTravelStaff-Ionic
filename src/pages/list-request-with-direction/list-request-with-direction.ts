@@ -26,6 +26,7 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 		public geolocation: Geolocation, private staffService: StaffService) {
         super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.listRequest = navParams.data.listRequest;
+		this.mapId = 'aboveMap';
 		this.autoMoveCamera = false;
 		this.subscribeZappperNewRequestEvent();
 	}
