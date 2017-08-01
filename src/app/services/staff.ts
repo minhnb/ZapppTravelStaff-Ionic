@@ -50,7 +50,15 @@ export class StaffService {
 		return this.zapppHttp.post(this.zappperUrl + '/update_lat_lng', params, null, showSpinner);
 	}
 
-	driverUpdateCurrentLocation(lat: number, long: number, showSpinner: Boolean = true) {
+	staffUpdateCurrentLocation(lat: number, long: number, showSpinner: Boolean = true) {
+		let params = {
+			lat: lat,
+			lng: long
+		};
+		return this.zapppHttp.post(this.userUrl + '/update_lat_lng', params, null, showSpinner);
+	}
+
+	truckUpdateCurrentLocation(lat: number, long: number, showSpinner: Boolean = true) {
 		let params = {
 			lat: lat,
 			lng: long
