@@ -68,6 +68,7 @@ export class UserStartPage extends BaseComponent {
 				this.truck = localStorage.getItem(AppConstant.TRUCK);
 			}
 		}
+		this.announceActiveEvent();
 	}
 
 	saveStatusToLocalStorage(status: boolean) {

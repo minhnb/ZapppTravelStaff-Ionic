@@ -57,9 +57,6 @@ export class MyApp extends BaseComponent {
 
 			if (this.isLoggedIn()) {
 				this.rootPage = UserStartPage;
-				if (this.isZappper() || this.isDriver()) {
-					this.subcribeWatchPosition();
-				}
 			}
 		});
 	}
