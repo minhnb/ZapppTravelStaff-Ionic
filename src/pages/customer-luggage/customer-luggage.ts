@@ -209,6 +209,10 @@ export class CustomerLuggagePage extends BaseComponent {
         if (this.isLuggageCode(code) || this.selectedIndex == -1 || this.isDeliveryMode) {
             this.findLuggageCodeInList(code);
         } else {
+			if (!this.isStorageBinCode(code)) {
+				this.showError(this.translate.instant('ERROR_INVALID_CODE'));
+				return;
+            }
             this.updateStorageBinCodeToItemByIndex(code, this.selectedIndex);
         }
     }
@@ -225,9 +229,11 @@ export class CustomerLuggagePage extends BaseComponent {
 
     scanBinStorageCode(index) {
         this.scanQRCode(text => {
-            if (this.isStorageBinCode(text)) {
-                this.updateStorageBinCodeToItemByIndex(text, index);
+            if (!this.isStorageBinCode(text)) {
+				this.showError(this.translate.instant('ERROR_INVALID_BIN_CODE'));
+				return;
             }
+			this.updateStorageBinCodeToItemByIndex(text, index);
         });
     }
 
