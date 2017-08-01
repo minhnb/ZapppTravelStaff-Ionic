@@ -67,7 +67,7 @@ export class CollectionModePage extends BaseComponent {
 				this.getOrderDetail(orderId);
 				return;
 			}
-			this.showError(this.translate.instant('ERROR_INVALID_CODE'));
+			this.showError(this.translate.instant('ERROR_INVALID_CODE_FOR_ORDER_OR_LUGGAGE'));
         });
 	}
 

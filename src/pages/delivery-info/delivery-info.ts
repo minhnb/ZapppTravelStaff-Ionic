@@ -53,10 +53,10 @@ export class DeliveryInfoPage extends BaseComponent {
 		this.navCtrl.push(CustomerLuggagePage, params);
 	}
 
-	scanLuggageCode() {
+	scanLuggageQRCode() {
 		this.scanQRCode((text) => {
 			this.goToCustomerLugguagePage(text);
-		});
+		}, this.translate.instant('PROMPT_BARCODE_SCANNER_LUGGAGE'));
 	}
 
 }

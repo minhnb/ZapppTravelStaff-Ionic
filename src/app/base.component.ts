@@ -196,11 +196,11 @@ export class BaseComponent {
 		});
 	}
 
-	scanQRCode(callback: (result: string) => void) {
+	scanQRCode(callback: (result: string) => void, label?: string) {
         let barcodeScannerOptions: BarcodeScannerOptions = {
             showFlipCameraButton: false,
             resultDisplayDuration: 0,
-            prompt: this.translate.instant('PROMPT_BARCODE_SCANNER')
+            prompt: label ? label : this.translate.instant('PROMPT_BARCODE_SCANNER')
         };
 		this.barcodeScanner.scan(barcodeScannerOptions).then((barcodeData) => {
             if (!barcodeData.cancelled) {
