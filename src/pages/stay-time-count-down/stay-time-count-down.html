@@ -18,7 +18,7 @@
               <ion-icon name="md-remove"></ion-icon>
           </button>
     <div class="count-down">
-      <ion-input type="tel" [readonly]="isStarted" [ngModel]="displayDuration(duration)" (ngModelChange)="manualChangeParkingTime($event)"></ion-input>
+      <ion-input type="tel" [textMask]="{mask: timeMask}" [readonly]="isStarted" [ngModel]="displayDuration(duration)" (change)="manualChangeParkingTime($event)"></ion-input>
     </div>
     <button class="transparent-button" (click)="increaseOneMinute()">
               <ion-icon name="md-add"></ion-icon>

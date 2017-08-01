@@ -2,8 +2,11 @@ import { Component, Injector, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
+
 import { ListStationPage } from '../list-station';
+
 import { CollectionModeService } from '../../app/services/collection-mode';
+
 import * as moment from 'moment';
 
 var MINUTE_TO_SECOND = 60;
@@ -23,6 +26,7 @@ export class StayTimeCountDownPage extends BaseComponent {
     countDownTimer: any;
     isStarted: boolean = false;
 	isShowingNextStationInfo: boolean = false;
+	timeMask = [/[0-2]/, /\d/, ':', /[0-6]/, /\d/, ':', /[0-6]/, /\d/];
 
 	@ViewChild(Navbar) navBar: Navbar;
 
@@ -79,7 +83,7 @@ export class StayTimeCountDownPage extends BaseComponent {
     }
 
     displayDuration(duration: number): string {
-		return moment(duration * 1000).format('mm:ss');
+		return moment().startOf('day').add(duration, 'seconds').format('HH:mm:ss');
 	}
 
 	increaseOneMinute() {
@@ -141,10 +145,11 @@ export class StayTimeCountDownPage extends BaseComponent {
     }
 
 	manualChangeParkingTime(event) {
-		if (event.length == 5) {
-			let durationString = '00:' + event;
+		let formatString = '00:00:00';
+		let durationString = event.target.value;
+		if (durationString.length == formatString.length) {
 			let duration = moment.duration(durationString).asSeconds();
-			if (durationString != '00:00:00' && duration != 0) {
+			if (durationString != formatString && duration != 0) {
 				this.duration = duration;
 			}
 		}

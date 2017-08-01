@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { TextMaskModule } from 'angular2-text-mask';
 import { StayTimeCountDownPage } from './stay-time-count-down';
 
 @NgModule({
@@ -9,7 +10,8 @@ import { StayTimeCountDownPage } from './stay-time-count-down';
 	],
 	imports: [
 		IonicPageModule.forChild(StayTimeCountDownPage),
-		TranslateModule
+		TranslateModule,
+		TextMaskModule
 	],
 	exports: [
 		StayTimeCountDownPage
