@@ -42,8 +42,8 @@
     </ion-label>
   </ion-item>
   <div class="button-bottom-full" [hidden]="!isActive || isZappper()">
-    <button ion-button full (click)="goToCollectionMode()">{{ 'BUTTON_COLLECTION_MODE' | translate }}</button>
-    <button ion-button full (click)="goToDeliveryMode()">{{ 'BUTTON_DELIVERY_MODE' | translate }}</button>
+    <button ion-button full (click)="goToCollectionMode()" [disabled]="!truck">{{ 'BUTTON_COLLECTION_MODE' | translate }}</button>
+    <button ion-button full (click)="goToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }}</button>
   </div>
 
 </ion-content>
