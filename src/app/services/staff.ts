@@ -83,4 +83,11 @@ export class StaffService {
 		};
 		return this.zapppHttp.post(this.uploadUrl + '/save_photo', params, null, showSpinner);
 	}
+
+	countOrderByMode(truckId: string, showSpinner: Boolean = true) {
+		let params = {
+			truck_id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/count_orders_by_mode', params, null, showSpinner);
+	}
 }

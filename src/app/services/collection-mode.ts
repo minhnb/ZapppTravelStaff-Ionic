@@ -68,4 +68,18 @@ export class CollectionModeService {
 		};
 		return this.zapppHttp.post(this.orderUrl + '/pickup_completed', params);
 	}
+
+	listAccepOrderFromOtherTrucks(truckId: string) {
+		let params = {
+			truck_id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/list_get_orders', params);
+	}
+
+	listTransferOrderToOtherTrucks(truckId: string) {
+		let params = {
+			truck_id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/list_transfer_orders', params);
+	}
 }

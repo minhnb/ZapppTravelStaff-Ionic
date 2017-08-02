@@ -11,15 +11,17 @@ import { ListRequestWithDirectionPage } from '../list-request-with-direction';
 import { UncompletedOrderPage } from '../uncompleted-order';
 import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
+import { ListTruckPage } from '../list-truck';
 import { ListAssignmentPage } from '../list-assignment';
 
 import { StaffService } from '../../app/services/staff';
+import { CollectionModeService } from '../../app/services/collection-mode';
 
 @IonicPage()
 @Component({
 	selector: 'page-user-start',
 	templateUrl: 'user-start.html',
-	providers: [StaffService]
+	providers: [StaffService, CollectionModeService]
 })
 export class UserStartPage extends BaseComponent {
 
@@ -31,9 +33,11 @@ export class UserStartPage extends BaseComponent {
 	listUncompleteOrder: Array<any> = [];
 	newAssignmentCount: number = 0;
 	listAssignment: Array<any> = [];
+	countDeliveryItem: number = 0;
+	countTransferItem: number = 0;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService) {
 		super(injector);
 		this.loadPreviousState();
 		this.subscribeZappperNewRequestEvent();
@@ -44,7 +48,6 @@ export class UserStartPage extends BaseComponent {
 		console.log('ionViewDidLoad UserStartPage');
 		this.loadListTruckForActiveDirverAndAttendant();
 		this.loadCurrentJobForActiveZappper();
-		this.loadListAssignment();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -52,8 +55,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	ionViewWillEnter() {
-		this.loadJobForActiveZappper();
-		this.countNewAssignment();
+		this.loadStaffStatistic();
 	}
 
 	loadPreviousState() {
@@ -88,6 +90,11 @@ export class UserStartPage extends BaseComponent {
 		localStorage.removeItem(AppConstant.TRUCK);
 	}
 
+	loadStaffStatistic() {
+		this.loadJobForActiveZappper();
+		this.loadListAssignment();
+	}
+
 	loadListTruckForActiveDirverAndAttendant() {
 		if (this.isActive && (this.isDriver() || this.isAttedant())) {
 			this.getListTruck();
@@ -119,6 +126,7 @@ export class UserStartPage extends BaseComponent {
 				this.saveStatusToLocalStorage(this.isActive);
 				if (!this.isActive) {
 					this.resetInfoForDriverAndAttendant();
+					this.resetCountOrder();
 				}
 				this.announceActiveEvent();
 				this.loadListTruckForActiveDirverAndAttendant();
@@ -189,8 +197,26 @@ export class UserStartPage extends BaseComponent {
 		}
     }
 
-    goToDeliveryMode() {
+    attendantGoToDeliveryMode() {
 		this.navCtrl.push(ListHotelPage);
+    }
+
+    driverGoToDeliveryMode() {
+
+    }
+
+    driverGoToTransferMode() {
+		this.listTransferOrderToOtherTrucks((listTruck) => {
+			let listTruckTransform = listTruck.map(item => {
+				return this.truckTransform(item);
+			});
+			let params = {
+				pageName: this.translate.instant('TRANSFER_TO_OTHER_TRUCKS'),
+				listTruck: listTruckTransform,
+				isTransferMode: true
+			}
+			this.navCtrl.push(ListTruckPage, params);
+		});
     }
 
 	goToListRequest() {
@@ -358,6 +384,7 @@ export class UserStartPage extends BaseComponent {
 				this.listAssignment = res;
 				this.sortListAssignmentDescByCreatedAt();
 				this.countNewAssignment();
+				this.countOrderByMode();
 				if (callback) {
 					callback();
 				}
@@ -390,5 +417,42 @@ export class UserStartPage extends BaseComponent {
 			startOfToday.setHours(0, 0, 0, 0);
 			return startOfToday.getTime() / 1000;
 		}
+	}
+
+	resetCountOrder() {
+		this.countDeliveryItem = 0;
+		this.countTransferItem = 0;
+	}
+
+	countOrderByMode() {
+		if (!this.isDriver() || !this.truck || !this.isActive) {
+			this.resetCountOrder();
+			return;
+		}
+		this.staffService.countOrderByMode(this.truck, false).subscribe(
+			res => {
+				this.countDeliveryItem = res.no_of_delivery ? Number(res.no_of_delivery) : 0;
+				this.countTransferItem = res.no_of_transfer ? Number(res.no_of_transfer) : 0;
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	listTransferOrderToOtherTrucks(callback?: (listTruck: Array<any>) => void) {
+		if (!this.truck) {
+			return;
+		}
+		this.collectionModeService.listTransferOrderToOtherTrucks(this.truck).subscribe(
+			res => {
+				if (callback) {
+					callback(res);
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 }

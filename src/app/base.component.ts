@@ -284,6 +284,16 @@ export class BaseComponent {
 		return customerInfo;
 	}
 
+	truckTransform(truck: any): any {
+		let truckTransform = {
+			name: truck.truck_name,
+			number: truck.truck_number,
+			id: truck.truck_id,
+			orderQuantity: truck.total ? truck.total : 0
+		}
+		return truckTransform;
+	}
+
 	initGeolocationOption(): GeolocationOptions {
 		let geolocationOptions: GeolocationOptions = {
 			enableHighAccuracy: true,
