@@ -86,7 +86,7 @@ export class CollectionModePage extends BaseComponent {
 			}
 		];
 		let params = {
-			pageName: 'Accept luggage from other trucks',
+			pageName: this.translate.instant('ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS'),
 			listTruck: listTruck
 		}
 		this.navCtrl.push(ListTruckPage, params);
@@ -102,7 +102,7 @@ export class CollectionModePage extends BaseComponent {
 			}
 		];
 		let params = {
-			pageName: 'Transfer to other trucks',
+			pageName: this.translate.instant('TRANSFER_TO_OTHER_TRUCKS'),
 			listTruck: listTruck,
 			isTransferMode: true
 		}

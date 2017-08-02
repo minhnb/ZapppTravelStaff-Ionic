@@ -29,7 +29,9 @@ export class DirectionUserPage extends DirectionPage {
 
 	callCustomer() {
 		this.callNumber.callNumber(this.customer.phoneNumber, true)
-			.then(() => console.log('Launched dialer!'))
+			.then(() => {
+
+			})
 			.catch(() => console.log('Error launching dialer'));
 	}
 

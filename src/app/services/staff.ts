@@ -66,6 +66,13 @@ export class StaffService {
 		return this.zapppHttp.post(this.truckUrl + '/update_lat_lng', params, null, showSpinner);
 	}
 
+	getTruckDetail(truckId: string, showSpinner: Boolean = true) {
+		let params = {
+			id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/detail', params, null, showSpinner);
+	}
+
 	zappperAcceptLuggage(orderId: string) {
 		let params = {
 			order_id: orderId

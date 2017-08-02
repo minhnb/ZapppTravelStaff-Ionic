@@ -3,5 +3,9 @@
     <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
         <ion-icon name="close"></ion-icon>
       </button>
+    <button class="button-ios call-driver" (click)="callDriver()" [disabled]="!hasDriverPhoneNumber()">{{ 'BUTTON_CALL_DRIVER' | translate }}</button>
+    <button class="button-ios direction-button left" (click)="drawDirectionToCurrentStation()" [disabled]="!hasCurrentStopLocation()">{{ 'BUTTON_CURRENT_STATION' | translate }}</button>
+    <button class="button-ios direction-button middle" (click)="drawDirectionToNextStation()" [disabled]="!hasNextStopLocation()">{{ 'BUTTON_NEXT_STATION' | translate }}</button>
+    <button class="button-ios direction-button right" (click)="drawDirectionToCurrentLocation()" [disabled]="!hasCurrentLocation()">{{ 'BUTTON_TRUCK_LOCATION' | translate }}</button>
   </div>
 </ion-content>

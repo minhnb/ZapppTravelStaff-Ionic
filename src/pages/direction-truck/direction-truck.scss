@@ -1,3 +1,36 @@
 page-direction-truck {
+  button.direction-button {
+    position: absolute;
+    width: 25%;
+    bottom: 20px;
+    padding: 10px;
+    margin: 0;
+    font-size: 14px;
+    height: auto;
 
+    &.left {
+      left: 20px;
+    }
+
+    &.right {
+      right: 20px;
+    }
+
+    &.middle {
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  button.call-driver {
+    position: absolute;
+    bottom: 80px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    left: 20px;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px;
+  }
 }
