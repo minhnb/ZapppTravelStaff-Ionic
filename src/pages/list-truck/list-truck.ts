@@ -4,6 +4,7 @@ import { BaseComponent } from '../../app/base.component';
 
 import { ListOrderPage } from '../list-order';
 import { DirectionTruckPage } from '../direction-truck';
+import { ListHotelPage } from '../list-hotel';
 
 import { StaffService } from '../../app/services/staff';
 
@@ -17,14 +18,14 @@ export class ListTruckPage extends BaseComponent {
 
     pageName: string = 'Trucks';
     listTruck: Array<any> = [];
-	isAcceptLuggage: boolean = false;
+	isAcceptLuggageMode: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private staffService: StaffService) {
 		super(injector);
         this.pageName = navParams.data.pageName;
         this.listTruck = navParams.data.listTruck;
-		if (navParams.data.isAcceptLuggage) {
-			this.isAcceptLuggage = navParams.data.isAcceptLuggage;
+		if (navParams.data.isAcceptLuggageMode) {
+			this.isAcceptLuggageMode = navParams.data.isAcceptLuggageMode;
 		}
 	}
 
@@ -77,6 +78,10 @@ export class ListTruckPage extends BaseComponent {
         }
         this.navCtrl.push(ListOrderPage, params);
     }
+
+	viewHotelForDelivery() {
+		this.navCtrl.push(ListHotelPage);
+	}
 
 	goToTruckDirection(truck: any) {
 		this.staffService.getTruckDetail(truck.id).subscribe(

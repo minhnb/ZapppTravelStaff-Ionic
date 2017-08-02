@@ -202,22 +202,37 @@ export class UserStartPage extends BaseComponent {
     }
 
     driverGoToDeliveryMode() {
-
+		this.listAccepOrderFromOtherTrucks((listTruck) => {
+			if (listTruck.length == 0) {
+				this.navCtrl.push(ListHotelPage);
+				return;
+			}
+			this.goToLisTruckPage(listTruck, true);
+		});
     }
 
     driverGoToTransferMode() {
 		this.listTransferOrderToOtherTrucks((listTruck) => {
-			let listTruckTransform = listTruck.map(item => {
-				return this.truckTransform(item);
-			});
-			let params = {
-				pageName: this.translate.instant('TRANSFER_TO_OTHER_TRUCKS'),
-				listTruck: listTruckTransform,
-				isTransferMode: true
-			}
-			this.navCtrl.push(ListTruckPage, params);
+			this.goToLisTruckPage(listTruck);
 		});
     }
+
+	goToLisTruckPage(listTruck: Array<any>, isAcceptLuggageMode: boolean = false) {
+		let listTruckTransform = listTruck.map(item => {
+			return this.truckTransform(item);
+		});
+		let pageName = this.translate.instant('TRANSFER_TO_OTHER_TRUCKS');
+		if (isAcceptLuggageMode) {
+			pageName = this.translate.instant('ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS');
+		}
+		let params = {
+			pageName: pageName,
+			listTruck: listTruckTransform,
+			isTransferMode: true,
+			isAcceptLuggageMode: isAcceptLuggageMode
+		}
+		this.navCtrl.push(ListTruckPage, params);
+	}
 
 	goToListRequest() {
 		if (this.listRequest.length == 0) {
@@ -452,6 +467,24 @@ export class UserStartPage extends BaseComponent {
 			},
 			err => {
 				this.showError(err.message);
+			}
+		);
+	}
+
+	listAccepOrderFromOtherTrucks(callback?: (listTruck: Array<any>) => void) {
+		if (!this.truck) {
+			return;
+		}
+		this.collectionModeService.listAccepOrderFromOtherTrucks(this.truck).subscribe(
+			res => {
+				if (callback) {
+					callback(res);
+				}
+			},
+			err => {
+				if (callback) {
+					callback([]);
+				}
 			}
 		);
 	}
