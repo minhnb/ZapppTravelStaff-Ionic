@@ -18,69 +18,28 @@ export class ListTruckPage extends BaseComponent {
 
     pageName: string = 'Trucks';
     listTruck: Array<any> = [];
+	isTransferMode: boolean = false;
 	isAcceptLuggageMode: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private staffService: StaffService) {
 		super(injector);
         this.pageName = navParams.data.pageName;
         this.listTruck = navParams.data.listTruck;
-		if (navParams.data.isAcceptLuggageMode) {
-			this.isAcceptLuggageMode = navParams.data.isAcceptLuggageMode;
-		}
+		this.isTransferMode = navParams.data.isTransferMode;
+		this.isAcceptLuggageMode = navParams.data.isAcceptLuggageMode;
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ListTruckPage');
 	}
 
-    goToTruckOrderPage(truck: any) {
-        let params = {
-            pageName: truck.name,
-            listOrder: [
-                {
-                    name: 'Dolly Doe',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12789',
-                            storageBinCode: 'A12'
-                        }
-                    ]
-                },
-                {
-                    name: 'Jolly Doe',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12790',
-                            storageBinCode: 'A13'
-                        }
-                    ]
-                },
-                {
-                    name: 'Nanny San',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12791',
-                            storageBinCode: 'A14'
-                        }
-                    ]
-                },
-                {
-                    name: 'Fancy Lu',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12792',
-                            storageBinCode: 'A15'
-                        }
-                    ]
-                }
-            ],
-            isTransferMode: this.navParams.data.isTransferMode
-        }
-        this.navCtrl.push(ListOrderPage, params);
-    }
-
-	viewHotelForDelivery() {
-		this.navCtrl.push(ListHotelPage);
+	goToListHotelPage(truck?: any) {
+		let params: any = {
+			isTransferMode: this.isTransferMode,
+			isAcceptLuggageMode: this.isAcceptLuggageMode,
+			truck: truck
+		}
+		this.navCtrl.push(ListHotelPage, params);
 	}
 
 	goToTruckDirection(truck: any) {

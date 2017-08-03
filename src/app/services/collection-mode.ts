@@ -69,17 +69,32 @@ export class CollectionModeService {
 		return this.zapppHttp.post(this.orderUrl + '/pickup_completed', params);
 	}
 
-	listAccepOrderFromOtherTrucks(truckId: string) {
+	listOtherTruckNeedToGetOrder(truckId: string) {
 		let params = {
 			truck_id: truckId
 		};
 		return this.zapppHttp.post(this.truckUrl + '/list_get_orders', params);
 	}
 
-	listTransferOrderToOtherTrucks(truckId: string) {
+	listOtherTruckNeedToTransfer(truckId: string) {
 		let params = {
 			truck_id: truckId
 		};
 		return this.zapppHttp.post(this.truckUrl + '/list_transfer_orders', params);
+	}
+
+	listHotelByTruckToTransfer(truckId: string) {
+		let params = {
+			truck_id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/list_transfer_orders_by_hotel', params);
+	}
+
+	listOrderByTruckAndHotelToTransfer(truckId: string, hotelId: string) {
+		let params = {
+			truck_id: truckId,
+			hotel_id: hotelId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/list_relevant_orders', params);
 	}
 }

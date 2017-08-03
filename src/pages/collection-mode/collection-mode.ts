@@ -14,9 +14,12 @@ import { CollectionModeService } from '../../app/services/collection-mode';
 })
 export class CollectionModePage extends BaseComponent {
 
+	currentTruckId: string;
+
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
 		private collectionModeService: CollectionModeService) {
 		super(injector);
+		this.currentTruckId = this.navParams.data.currentTruckId;
 	}
 
 	ionViewDidLoad() {
@@ -77,36 +80,15 @@ export class CollectionModePage extends BaseComponent {
         });
 	}
 	acceptLugguageFromOtherTruck() {
-		let listTruck = [
-			{
-				name: 'LY123'
-			},
-			{
-				name: 'LY834'
-			}
-		];
-		let params = {
-			pageName: this.translate.instant('ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS'),
-			listTruck: listTruck
-		}
-		this.navCtrl.push(ListTruckPage, params);
+		this.listOtherTruckNeedToGetOrder((listTruck) => {
+			this.goToLisTruckPage(listTruck, true);
+		});
 	}
 
 	transferToOtherTruck() {
-		let listTruck = [
-			{
-				name: 'LY123'
-			},
-			{
-				name: 'LY834'
-			}
-		];
-		let params = {
-			pageName: this.translate.instant('TRANSFER_TO_OTHER_TRUCKS'),
-			listTruck: listTruck,
-			isTransferMode: true
-		}
-		this.navCtrl.push(ListTruckPage, params);
+		this.listOtherTruckNeedToTransfer((listTruck) => {
+			this.goToLisTruckPage(listTruck);
+		});
 	}
 
 	viewOrder() {
@@ -152,5 +134,48 @@ export class CollectionModePage extends BaseComponent {
             ]
         }
         this.navCtrl.push(ListOrderPage, params);
+	}
+
+	listOtherTruckNeedToTransfer(callback?: (listTruck: Array<any>) => void) {
+		this.collectionModeService.listOtherTruckNeedToTransfer(this.currentTruckId).subscribe(
+			res => {
+				if (callback) {
+					callback(res);
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	listOtherTruckNeedToGetOrder(callback?: (listTruck: Array<any>) => void) {
+		this.collectionModeService.listOtherTruckNeedToGetOrder(this.currentTruckId).subscribe(
+			res => {
+				if (callback) {
+					callback(res);
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	goToLisTruckPage(listTruck: Array<any>, isAcceptLuggageMode: boolean = false) {
+		let listTruckTransform = listTruck.map(item => {
+			return this.truckTransform(item);
+		});
+		let pageName = this.translate.instant('TRANSFER_TO_OTHER_TRUCKS');
+		if (isAcceptLuggageMode) {
+			pageName = this.translate.instant('ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS');
+		}
+		let params = {
+			pageName: pageName,
+			listTruck: listTruckTransform,
+			isTransferMode: true,
+			isAcceptLuggageMode: isAcceptLuggageMode
+		}
+		this.navCtrl.push(ListTruckPage, params);
 	}
 }

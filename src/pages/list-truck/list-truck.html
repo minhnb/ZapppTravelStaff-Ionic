@@ -14,12 +14,12 @@
     <ion-col col-6 class="label no-padding-left text-align-right">{{ 'ORDER_QUANTITY' | translate }}</ion-col>
   </ion-row>
   <ion-list>
-    <button class="right-number no-padding-left" ion-item no-lines *ngFor="let item of listTruck" (click)="isDriver() ? goToTruckDirection(item) : goToTruckOrderPage(item)">
+    <button class="right-number no-padding-left" ion-item no-lines *ngFor="let item of listTruck" (click)="isDriver() ? goToTruckDirection(item) : goToListHotelPage(item)">
         {{ item.number }}
         <span>{{ item.orderQuantity }}</span>
     </button>
   </ion-list>
   <div class="button-bottom-full" *ngIf="isDriver() && isAcceptLuggageMode">
-    <button ion-button full (click)="viewHotelForDelivery()">{{ 'BUTTON_VIEW_HOTEL_FOR_DELIVERY' | translate }}</button>
+    <button ion-button full (click)="goToListHotelPage()">{{ 'BUTTON_VIEW_HOTEL_FOR_DELIVERY' | translate }}</button>
   </div>
 </ion-content>

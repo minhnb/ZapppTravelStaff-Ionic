@@ -191,7 +191,7 @@ export class UserStartPage extends BaseComponent {
 				this.navCtrl.push(ListStationPage);
 				break;
 			case AppConstant.USER_ROLE.ATTENDANT:
-				this.navCtrl.push(CollectionModePage);
+				this.navCtrl.push(CollectionModePage, { currentTruckId: this.truck });
 				break;
 			default:
 		}
@@ -202,7 +202,7 @@ export class UserStartPage extends BaseComponent {
     }
 
     driverGoToDeliveryMode() {
-		this.listAccepOrderFromOtherTrucks((listTruck) => {
+		this.listOtherTruckNeedToGetOrder((listTruck) => {
 			if (listTruck.length == 0) {
 				this.navCtrl.push(ListHotelPage);
 				return;
@@ -212,7 +212,7 @@ export class UserStartPage extends BaseComponent {
     }
 
     driverGoToTransferMode() {
-		this.listTransferOrderToOtherTrucks((listTruck) => {
+		this.listOtherTruckNeedToTransfer((listTruck) => {
 			this.goToLisTruckPage(listTruck);
 		});
     }
@@ -455,11 +455,11 @@ export class UserStartPage extends BaseComponent {
 		);
 	}
 
-	listTransferOrderToOtherTrucks(callback?: (listTruck: Array<any>) => void) {
+	listOtherTruckNeedToTransfer(callback?: (listTruck: Array<any>) => void) {
 		if (!this.truck) {
 			return;
 		}
-		this.collectionModeService.listTransferOrderToOtherTrucks(this.truck).subscribe(
+		this.collectionModeService.listOtherTruckNeedToTransfer(this.truck).subscribe(
 			res => {
 				if (callback) {
 					callback(res);
@@ -471,11 +471,11 @@ export class UserStartPage extends BaseComponent {
 		);
 	}
 
-	listAccepOrderFromOtherTrucks(callback?: (listTruck: Array<any>) => void) {
+	listOtherTruckNeedToGetOrder(callback?: (listTruck: Array<any>) => void) {
 		if (!this.truck) {
 			return;
 		}
-		this.collectionModeService.listAccepOrderFromOtherTrucks(this.truck).subscribe(
+		this.collectionModeService.listOtherTruckNeedToGetOrder(this.truck).subscribe(
 			res => {
 				if (callback) {
 					callback(res);
