@@ -157,7 +157,7 @@ export class TakePicturePage extends BaseComponent {
 		let orderId = this.customer.orderId;
 		this.collectionModeService.completedPickup(orderId, proofImageUrl).subscribe(
 			res => {
-				if (this.isFromCustomerInfoPage) {
+				if (this.isFromCustomerInfoPage && !this.isZappper()) {
 					this.goBackToCollectionModePage();
 				} else {
 					this.goBackToUserStartPage();
