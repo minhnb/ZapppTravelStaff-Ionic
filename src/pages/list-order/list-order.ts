@@ -60,8 +60,7 @@ export class ListOrderPage extends BaseComponent {
 			let params = {
 				customer: customerInfo,
 				isTransferMode: this.isTransferMode,
-				isAcceptLuggageMode: this.isAcceptLuggageMode,
-				isAttendantSaveMode: true
+				isAcceptLuggageMode: this.isAcceptLuggageMode
 			}
 			this.navCtrl.push(CustomerLuggagePage, params);
 		});

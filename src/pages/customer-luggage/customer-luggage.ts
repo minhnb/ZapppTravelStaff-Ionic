@@ -26,6 +26,7 @@ export class CustomerLuggagePage extends BaseComponent {
     isAttendantSaveMode: boolean = false;
     selectedIndex: number = -1;
 	isTransferMode: boolean = false;
+	isAcceptLuggageMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
 	isDeliveryMode: boolean = false;
 	isUpdated: boolean = false;
@@ -50,6 +51,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
     initCustomerLuggage() {
+		console.log(JSON.stringify(this.navParams.data));
         this.customer = this.navParams.data.customer;
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
@@ -62,6 +64,10 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
+		}
+		if (this.navParams.data.isAcceptLuggageMode) {
+			this.isAcceptLuggageMode = true;
+			this.isAttendantSaveMode = true;
 		}
 		if (this.customer.listLuggage) {
 			this.listLuggage = this.customer.listLuggage;
@@ -77,7 +83,7 @@ export class CustomerLuggagePage extends BaseComponent {
 				this.findLuggageCodeInList(luggageCode);
 			}
         }
-		if (this.isAcceptLuggageFromOtherTrucksMode()) {
+		if (this.isAcceptLuggageMode) {
 			this.removeAllOldStorageBinCode();
 		}
     }
@@ -88,9 +94,6 @@ export class CustomerLuggagePage extends BaseComponent {
 		});
 	}
 
-	isAcceptLuggageFromOtherTrucksMode(): boolean {
-		return this.isAttendantSaveMode && !this.isFromCustomerInfoPage && !this.isTransferMode && !this.isDeliveryMode;
-	}
 
 	isAllowedToRemoveLuggageCode() {
 		return !(this.isTransferMode || this.isAttendantSaveMode || this.isDeliveryMode);
@@ -178,27 +181,27 @@ export class CustomerLuggagePage extends BaseComponent {
         let luggageCodeIndex = this.indexOfLuggageCode(luggageCode);
         if (luggageCodeIndex > -1) {
             this.selectedIndex = luggageCodeIndex;
-			this.markDeliveredItem(luggageCodeIndex);
+			this.markScannedItem(luggageCodeIndex);
         } else {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST'));
         }
     }
 
-	markDeliveredItem(luggageIndex: number) {
-		if (!this.isDeliveryMode) {
+	markScannedItem(luggageIndex: number) {
+		if (!this.isDeliveryMode && !this.isAcceptLuggageMode) {
 			return;
 		}
 		let item = this.listLuggage[luggageIndex];
-		item.isDelivered = true;
+		item.isScanned = true;
 	}
 
-	wereAllItemsDelivered() {
-		if (!this.isDeliveryMode) {
+	wereAllItemsScanned() {
+		if (!this.isDeliveryMode && !this.isAcceptLuggageMode) {
 			return false;
 		}
 		for (let i = 0; i < this.listLuggage.length; i++) {
 			let item = this.listLuggage[i];
-			if (!item.isDelivered) {
+			if (!item.isScanned) {
 				return false;
 			}
 		}
@@ -242,15 +245,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
 	finishScanningForCollectionMode() {
-		if (this.isFromCustomerInfoPage) {
-			this.updateLuggage();
-		} else {
-			if (this.isAttendantSaveMode || this.isTransferMode) {
-				this.goBackToPreviousPage();
-			} else {
-				this.updateLuggage();
-			}
-		}
+		this.updateLuggage();
 	}
 
     goBackToCollectionModePage() {
@@ -283,6 +278,10 @@ export class CustomerLuggagePage extends BaseComponent {
 		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
 		this.collectionModeService.updateLuggage(orderId, listLuggage, this.isUpdated).subscribe(
 			res => {
+				if (this.isAcceptLuggageMode) {
+					this.goBackToPreviousPage();
+					return;
+				}
 				if (this.isUpdated) {
 					this.goBackToCollectionModePage();
 				} else {

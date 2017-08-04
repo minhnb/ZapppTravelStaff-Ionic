@@ -73,7 +73,7 @@ export class CollectionModeService {
 		let params = {
 			truck_id: truckId
 		};
-		return this.zapppHttp.post(this.truckUrl + '/list_get_orders', params);
+		return this.zapppHttp.post(this.truckUrl + '/list_accept_orders', params);
 	}
 
 	listOtherTruckNeedToTransfer(truckId: string) {
@@ -96,5 +96,20 @@ export class CollectionModeService {
 			hotel_id: hotelId
 		};
 		return this.zapppHttp.post(this.truckUrl + '/list_relevant_orders', params);
+	}
+
+	listHotelByTruckToAccept(truckId: string) {
+		let params = {
+			truck_id: truckId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/list_accept_orders_by_hotel', params);
+	}
+
+	listOrderByTruckAndHotelToAccept(truckId: string, hotelId: string) {
+		let params = {
+			truck_id: truckId,
+			hotel_id: hotelId
+		};
+		return this.zapppHttp.post(this.truckUrl + '/list_accept_relevant_orders', params);
 	}
 }
