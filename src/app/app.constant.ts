@@ -53,8 +53,8 @@ export const AppConstant = {
         COLLECTION_NEXTSTATION: 'collection:nextStation'
     },
     CODE_PREFIX: {
-        LUGGAGE: 'L-',
-        BIN: 'B-',
+        LUGGAGE: 'B-',
+        BIN: 'L-',
         ORDER: 'O-'
     }
 };

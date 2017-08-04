@@ -8,14 +8,18 @@
 
 
 <ion-content padding>
+  <div class="driver-notice" *ngIf="isDriver()">{{ (isAcceptLuggageMode ? 'DRIVER_ACCEPT_LUGGAGE_LABEL' : 'DRIVER_TRANSFER_LUGGAGE_LABEL') | translate }}</div>
   <ion-row full class="list-header info-row">
-    <ion-col col-12 class="label">{{ 'TRUCK' | translate }}</ion-col>
-    <ion-col col-12>
-      <ion-list>
-        <button class="no-padding-left" ion-item no-lines *ngFor="let item of listTruck" (click)="goToTruckOrderPage(item)">
-              {{ item.name }}
-          </button>
-      </ion-list>
-    </ion-col>
+    <ion-col col-6 class="label no-padding-left">{{ (isAcceptLuggageMode ? 'PICKUP_TRUCKS' : 'TRUCK') | translate }}</ion-col>
+    <ion-col col-6 class="label no-padding-left text-align-right">{{ 'ORDER_QUANTITY' | translate }}</ion-col>
   </ion-row>
+  <ion-list>
+    <button class="right-number no-padding-left" ion-item no-lines *ngFor="let item of listTruck" (click)="isDriver() ? goToTruckDirection(item) : goToListHotelPage(item)">
+        {{ item.number }}
+        <span>{{ item.orderQuantity }}</span>
+    </button>
+  </ion-list>
+  <div class="button-bottom-full" *ngIf="isDriver() && isAcceptLuggageMode">
+    <button ion-button full (click)="goToListHotelPage()">{{ 'BUTTON_VIEW_HOTEL_FOR_DELIVERY' | translate }}</button>
+  </div>
 </ion-content>

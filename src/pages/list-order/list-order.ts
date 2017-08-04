@@ -19,6 +19,8 @@ export class ListOrderPage extends BaseComponent {
     pageName: string = 'Orders';
     listOrder: Array<any> = [];
 	isDeliveryMode: boolean = false;
+	isTransferMode: boolean = false;
+	isAcceptLuggageMode: boolean = false;
 	deliveryItem: any;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private collectionModeService: CollectionModeService) {
@@ -27,6 +29,8 @@ export class ListOrderPage extends BaseComponent {
 		this.listOrder = navParams.data.listOrder;
 		this.isDeliveryMode = navParams.data.isDeliveryMode;
 		this.deliveryItem = navParams.data.deliveryItem;
+		this.isTransferMode = navParams.data.isTransferMode;
+		this.isAcceptLuggageMode = navParams.data.isAcceptLuggageMode;
 		this.subcribeDeliveryCompletedEvent();
 	}
 
@@ -52,27 +56,23 @@ export class ListOrderPage extends BaseComponent {
 	}
 
     goToCustomerLugguagePage(customer: any) {
-        customer.isAttendantSaveMode = true;
-        let params = {
-            customer: customer,
-            isTransferMode: this.navParams.data.isTransferMode
-        }
-		this.navCtrl.push(CustomerLuggagePage, params);
+		this.getOrderDetail(customer.orderId, (customerInfo) => {
+			let params = {
+				customer: customerInfo,
+				isTransferMode: this.isTransferMode,
+				isAcceptLuggageMode: this.isAcceptLuggageMode
+			}
+			this.navCtrl.push(CustomerLuggagePage, params);
+		});
 	}
 
 	goToDeliveryInfo(customer: any) {
-		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
-			res => {
-				let customerInfo = this.customerInfoTransform(res);
-				let params = {
-					customer: customerInfo
-				}
-				this.navCtrl.push(DeliveryInfoPage, params);
-			},
-			err => {
-				this.showError(err.message);
+		this.getOrderDetail(customer.orderId, (customerInfo) => {
+			let params = {
+				customer: customerInfo
 			}
-		);
+			this.navCtrl.push(DeliveryInfoPage, params);
+		});
 	}
 
 	removeDeliveryItem() {
@@ -95,5 +95,19 @@ export class ListOrderPage extends BaseComponent {
             }
         }
         return -1;
+	}
+
+	getOrderDetail(orderId: string, callback?: (customerInfo: any) => void) {
+		this.collectionModeService.getOrderDetail(orderId).subscribe(
+			res => {
+				let customerInfo = this.customerInfoTransform(res);
+				if (callback) {
+					callback(customerInfo);
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 }
