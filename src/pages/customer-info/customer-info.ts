@@ -14,6 +14,7 @@ export class CustomerInfoPage extends BaseComponent {
 	listRow: Array<any>;
 	hasLuggage: boolean = false;
 	isAttendantSaveMode: boolean = false;
+	isAcceptLuggageMode: boolean = false;
 	luggageCode: string;
 
 	@ViewChild(Navbar) navBar: Navbar;
@@ -77,6 +78,9 @@ export class CustomerInfoPage extends BaseComponent {
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
 		}
+		if (this.customer.isAcceptLuggageMode) {
+			this.isAcceptLuggageMode = true;
+		}
 
 	}
 
@@ -93,6 +97,9 @@ export class CustomerInfoPage extends BaseComponent {
 		};
 		if (firstLuggageCode) {
 			params.luggageCode = firstLuggageCode;
+		}
+		if (this.isAcceptLuggageMode) {
+			params.isAcceptLuggageMode = true;
 		}
 		this.navCtrl.push(CustomerLuggagePage, params);
 	}

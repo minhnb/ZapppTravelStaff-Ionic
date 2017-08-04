@@ -278,7 +278,7 @@ export class CustomerLuggagePage extends BaseComponent {
 		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
 		this.collectionModeService.updateLuggage(orderId, listLuggage, this.isUpdated).subscribe(
 			res => {
-				if (this.isAcceptLuggageMode) {
+				if (this.isAcceptLuggageMode && !this.isFromCustomerInfoPage) {
 					this.goBackToPreviousPage();
 					return;
 				}

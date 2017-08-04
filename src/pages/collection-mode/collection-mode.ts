@@ -45,11 +45,12 @@ export class CollectionModePage extends BaseComponent {
 		);
 	}
 
-	getLuggageCodeDetail(luggageCode: string) {
+	getLuggageCodeDetail(luggageCode: string, isAcceptLuggageMode: boolean = false) {
 		this.collectionModeService.getLuggageCodeDetail(luggageCode).subscribe(
 			res => {
 				let customerInfo = this.customerInfoTransform(res);
 				customerInfo.isAttendantSaveMode = true;
+				customerInfo.isAcceptLuggageMode = isAcceptLuggageMode;
 				customerInfo.luggageCode = luggageCode;
 				this.goToCustomerInfoPage(customerInfo);
 			},
@@ -76,8 +77,8 @@ export class CollectionModePage extends BaseComponent {
 
 	acceptLugguageFromZappper() {
 		this.scanQRCode(text => {
-			this.getLuggageCodeDetail(text);
-        });
+			this.getLuggageCodeDetail(text, true);
+        }, this.translate.instant('PROMPT_BARCODE_SCANNER_LUGGAGE'));
 	}
 	acceptLugguageFromOtherTruck() {
 		this.listOtherTruckNeedToGetOrder((listTruck) => {
