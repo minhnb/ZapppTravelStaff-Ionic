@@ -61,10 +61,12 @@ export class CollectionModeService {
 		return this.zapppHttp.get(this.orderUrl + '/is_luggage_valid/luggage_id/' + luggageCode);
 	}
 
-	completedPickup(orderId: string, proofImageUrl: string) {
+	completedPickup(orderId: string, proofImageUrl: string, latitude: number, longitude: number) {
 		let params = {
 			order_id: orderId,
-			pic_url: proofImageUrl
+			pic_url: proofImageUrl,
+			lat: latitude,
+			lng: longitude
 		};
 		return this.zapppHttp.post(this.orderUrl + '/pickup_completed', params);
 	}

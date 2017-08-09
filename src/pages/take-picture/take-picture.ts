@@ -153,30 +153,44 @@ export class TakePicturePage extends BaseComponent {
 		);
 	}
 
-	completedPickup(proofImageUrl: string) {
-		let orderId = this.customer.orderId;
-		this.collectionModeService.completedPickup(orderId, proofImageUrl).subscribe(
-			res => {
-				if (this.isFromCustomerInfoPage && !this.isZappper()) {
-					this.goBackToCollectionModePage();
-				} else {
-					this.goBackToUserStartPage();
-				}
-			},
-			err => {
-				this.showError(err.message);
-			}
-		);
-	}
-
-	deliveryLuggage(proofImageUrl: string) {
+	getCurrentLocation(callback?: (latitude: number, longitude: number) => void) {
 		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
 		this.spinnerDialog.show();
 		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 			this.spinnerDialog.hide();
+			if (callback) {
+				callback(resp.coords.latitude, resp.coords.longitude);
+			}
+		}).catch((error) => {
+			this.spinnerDialog.hide();
+			console.log('Error getting location', error);
+			this.showLocationServiceProblemConfirmation();
+		});
+	}
+
+	completedPickup(proofImageUrl: string) {
+		this.getCurrentLocation((latitude: number, longitude: number) => {
+			let orderId = this.customer.orderId;
+			this.collectionModeService.completedPickup(orderId, proofImageUrl, latitude, longitude).subscribe(
+				res => {
+					if (this.isFromCustomerInfoPage && !this.isZappper()) {
+						this.goBackToCollectionModePage();
+					} else {
+						this.goBackToUserStartPage();
+					}
+				},
+				err => {
+					this.showError(err.message);
+				}
+			);
+		});
+	}
+
+	deliveryLuggage(proofImageUrl: string) {
+		this.getCurrentLocation((latitude: number, longitude: number) => {
 			let orderId = this.customer.orderId;
 			let listLuggage = this.listLuggageReverseTransform(this.customer.listLuggage);
-			this.deliveryModeService.deliveryLuggage(orderId, listLuggage, resp.coords.latitude, resp.coords.longitude, proofImageUrl).subscribe(
+			this.deliveryModeService.deliveryLuggage(orderId, listLuggage, latitude, longitude, proofImageUrl).subscribe(
 				res => {
 					this.goBackToListOrderPage();
 				},
@@ -184,10 +198,6 @@ export class TakePicturePage extends BaseComponent {
 					this.showError(err.message);
 				}
 			);
-		}).catch((error) => {
-			this.spinnerDialog.hide();
-			console.log('Error getting location', error);
-			this.showLocationServiceProblemConfirmation();
 		});
 	}
 }
