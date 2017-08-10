@@ -16,7 +16,7 @@
         <button class="transparent-button text-button" [ngClass]="(isAttendantSaveMode && selectedIndex == i) || ((isDeliveryMode || isAcceptLuggageMode) && item.isScanned) ? 'mark' : ''">{{ item.luggageCode }}</button>
       </ion-col>
       <ion-col [attr.col-6]="isAllowedToRemoveLuggageCode() ? null : true" [attr.col-4]="isAllowedToRemoveLuggageCode() ? true : null">
-        <button class="transparent-button text-button" (click)="isDeliveryMode || isTransferMode && !isAcceptLuggageMode || scanBinStorageCode(i)">{{ item.storageBinCode }}</button>
+        <button class="transparent-button text-button" (click)="isDeliveryMode || isTransferMode && !isAcceptLuggageMode || scanBinStorageCode(i)">{{ item.storageBinName }}</button>
       </ion-col>
       <ion-col col-2 [hidden]="!isAllowedToRemoveLuggageCode()">
         <button class="transparent-button" (click)="removeItem(i)">

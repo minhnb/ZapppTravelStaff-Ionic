@@ -30,6 +30,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	isFromCustomerInfoPage: boolean = false;
 	isDeliveryMode: boolean = false;
 	isUpdated: boolean = false;
+	listBinOnTruck: Array<any>;
 
     @ViewChild(Navbar) navBar: Navbar;
 
@@ -37,6 +38,7 @@ export class CustomerLuggagePage extends BaseComponent {
 		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
         super(injector);
         this.initCustomerLuggage();
+		this.initListBinOnTruck();
 	}
 
 	ionViewDidLoad() {
@@ -51,7 +53,6 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
     initCustomerLuggage() {
-		console.log(JSON.stringify(this.navParams.data));
         this.customer = this.navParams.data.customer;
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
@@ -88,9 +89,26 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
     }
 
+	initListBinOnTruck() {
+		let localStorageBin = localStorage.getItem(AppConstant.LIST_BIN);
+		this.listBinOnTruck = JSON.parse(localStorageBin);
+	}
+
+	indexOfBinCode(code: string) {
+		let binId = this.getBinIdFromBinCode(code);
+		for (let i = 0; i < this.listBinOnTruck.length; i++) {
+			let item = this.listBinOnTruck[i];
+			if (item.id == binId) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	removeAllOldStorageBinCode() {
 		this.listLuggage.forEach(item => {
 			item.storageBinCode = '';
+			item.storageBinName = '';
 		});
 	}
 
@@ -155,9 +173,16 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     updateStorageBinCodeToItemByIndex(storageBinCode: string, index: number) {
+		let indexOfBinCode = this.indexOfBinCode(storageBinCode);
+		if (indexOfBinCode == -1) {
+			this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST'));
+			return;
+		}
+		let binItem = this.listBinOnTruck[indexOfBinCode];
         if (this.listLuggage.length && index >= 0) {
             let item = this.listLuggage[index];
-            item.storageBinCode = storageBinCode;
+            item.storageBinCode = binItem.id;
+            item.storageBinName = binItem.name;
         }
     }
 

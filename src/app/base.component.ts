@@ -229,14 +229,22 @@ export class BaseComponent {
         return false;
     }
 
-    getOrderIdFromOrderCode(code: string): string {
-		if (code.startsWith(AppConstant.CODE_PREFIX.ORDER)) {
-			let codeSplitedArray = code.split(AppConstant.CODE_PREFIX.ORDER);
+	getIdFromCodeWithPrefix(code: string, prefix: string): string {
+		if (code.startsWith(prefix)) {
+			let codeSplitedArray = code.split(prefix);
 			if (codeSplitedArray.length > 1 && codeSplitedArray[1].length) {
 				return codeSplitedArray[1];
 			}
         }
         return null;
+    }
+
+    getOrderIdFromOrderCode(code: string): string {
+		return this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.ORDER);
+    }
+
+    getBinIdFromBinCode(code: string): string {
+		return this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.BIN);
     }
 
 	getFullName(firstName: string, lastName: string): string {
@@ -250,7 +258,8 @@ export class BaseComponent {
 				return {
 					id: item.id,
 					luggageCode: item.luggage_id,
-					storageBinCode: item.bin
+					storageBinCode: item.bin_id,
+					storageBinName: item.bin
 				}
 			});
 		}
@@ -292,6 +301,19 @@ export class BaseComponent {
 			orderQuantity: truck.total ? truck.total : 0
 		}
 		return truckTransform;
+	}
+
+	binTransform(bin: any): any {
+		return {
+			id: bin.id,
+			name: bin.name
+		};
+	}
+
+	listBinTransform(listBin: Array<any>): Array<any> {
+		return listBin.map(item => {
+			return this.binTransform(item);
+		});
 	}
 
 	initGeolocationOption(): GeolocationOptions {

@@ -52,6 +52,8 @@ export class LoginPage extends BaseComponent {
 			localStorage.setItem(AppConstant.STATUS, status.toString());
 			if ((this.isDriver() || this.isAttedant()) && user.truck_info) {
 				localStorage.setItem(AppConstant.TRUCK, user.truck_info.id);
+				let listBin = this.listBinTransform(user.truck_info.bins);
+				localStorage.setItem(AppConstant.LIST_BIN, JSON.stringify(listBin));
 			}
 		}
 	}

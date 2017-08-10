@@ -10,6 +10,7 @@ export const AppConstant = {
     },
     STATUS: 'status',
     TRUCK: 'truck',
+    LIST_BIN: 'list-bin',
     CURRENT_JOB: 'current_job',
     LAST_VIEW_ASSIGNMENT: 'last_view_assignment',
     PATTERN: {

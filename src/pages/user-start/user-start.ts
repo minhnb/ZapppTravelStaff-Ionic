@@ -85,8 +85,10 @@ export class UserStartPage extends BaseComponent {
 		}
 	}
 
-	saveTruckInfoToLocalStorage(truckId: string) {
+	saveTruckInfoToLocalStorage(truckId: string, listBin: Array<any>) {
 		localStorage.setItem(AppConstant.TRUCK, truckId);
+		let listTransformedBin = this.listBinTransform(listBin);
+		localStorage.setItem(AppConstant.LIST_BIN, JSON.stringify(listTransformedBin));
 	}
 
 	clearStatusInfo() {
@@ -161,7 +163,7 @@ export class UserStartPage extends BaseComponent {
 	chooseTruck(truckId: string) {
 		this.staffService.chooseTruck(truckId).subscribe(
 			res => {
-				this.saveTruckInfoToLocalStorage(truckId);
+				this.saveTruckInfoToLocalStorage(truckId, res.bins);
 				this.loadListAssignment();
 			},
 			err => {
