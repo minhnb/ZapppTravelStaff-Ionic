@@ -23,7 +23,7 @@
         <div>{{ 'UNCOMPLETED_ORDER' | translate }}</div>
         <span>{{ listUncompleteOrder.length }}</span>
       </button>
-    <button ion-item no-lines (click)="goToFindTruckPage()">
+    <button ion-item no-lines (click)="goToListTruckWithDirectionPage()">
         <div>{{ 'FIND_TRUCK' | translate }}</div>
       </button>
   </div>
@@ -42,9 +42,9 @@
     </ion-label>
   </ion-item>
   <div class="button-bottom-full" [hidden]="!isActive || isZappper()">
-    <button ion-button full (click)="goToCollectionMode()" [disabled]="!truck">{{ 'BUTTON_COLLECTION_MODE' | translate }}</button>
-    <button ion-button full *ngIf="isAttedant()" (click)="attendantGoToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }}</button>
-    <button ion-button full *ngIf="isDriver()" (click)="driverGoToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }} ({{ countDeliveryItem }})</button>
+    <button ion-button full color="{{ isAssignedCollection ? 'secondary' : '' }}" (click)="goToCollectionMode()" [disabled]="!truck">{{ 'BUTTON_COLLECTION_MODE' | translate }}</button>
+    <button ion-button full *ngIf="isAttedant()" color="{{ isAssignedDelivery ? 'secondary' : '' }}" (click)="attendantGoToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }}</button>
+    <button ion-button full *ngIf="isDriver()" color="{{ isAssignedDelivery ? 'secondary' : '' }}" (click)="driverGoToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }} ({{ countDeliveryItem }})</button>
     <button ion-button full *ngIf="isDriver()" (click)="driverGoToTransferMode()" [disabled]="!truck">{{ 'BUTTON_TRANSFER_MODE' | translate }} ({{ countTransferItem }})</button>
   </div>
 

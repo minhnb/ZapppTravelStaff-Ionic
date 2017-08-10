@@ -56,5 +56,10 @@ export const AppConstant = {
         LUGGAGE: 'B-',
         BIN: 'L-',
         ORDER: 'O-'
+    },
+    ASSIGNMENT_MODE: {
+        COLLECTION: 1,
+        DELIVERY: 2,
+        UNASSIGNED: 0
     }
 };

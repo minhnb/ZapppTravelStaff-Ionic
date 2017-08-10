@@ -318,6 +318,16 @@ export class BaseComponent {
 		return true;
 	}
 
+	hasValidLocation(lat: any, long: any) {
+		if (lat == undefined || lat == null || long == undefined || long == null) {
+			return false;
+		}
+		if (Number(lat) == 0 && Number(long) == 0) {
+			return false;
+		}
+		return true;
+	}
+
 	listLocalEvent() {
 		return Object.keys(AppConstant.EVENT_TOPIC).map((item) => {
 			let topic = AppConstant.EVENT_TOPIC[item];

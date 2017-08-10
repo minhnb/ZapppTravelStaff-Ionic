@@ -11,6 +11,7 @@ import { ListRequestWithDirectionPage } from '../list-request-with-direction';
 import { UncompletedOrderPage } from '../uncompleted-order';
 import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
+import { ListTruckWithDirectionPage } from '../list-truck-with-direction';
 import { ListTruckPage } from '../list-truck';
 import { ListAssignmentPage } from '../list-assignment';
 
@@ -35,6 +36,9 @@ export class UserStartPage extends BaseComponent {
 	listAssignment: Array<any> = [];
 	countDeliveryItem: number = 0;
 	countTransferItem: number = 0;
+
+	isAssignedCollection: boolean = false;
+	isAssignedDelivery: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService, private collectionModeService: CollectionModeService) {
@@ -258,6 +262,10 @@ export class UserStartPage extends BaseComponent {
 		this.navCtrl.push(FindTruckPage);
 	}
 
+	goToListTruckWithDirectionPage() {
+		this.navCtrl.push(ListTruckWithDirectionPage);
+	}
+
 	requestTransform(request: any) {
 		let fullName = '';
 		if (request.user_info) {
@@ -398,6 +406,7 @@ export class UserStartPage extends BaseComponent {
 			res => {
 				this.listAssignment = res;
 				this.sortListAssignmentDescByCreatedAt();
+				this.detectCurrentAssigmentMode();
 				this.countNewAssignment();
 				this.countOrderByMode();
 				if (callback) {
@@ -431,6 +440,20 @@ export class UserStartPage extends BaseComponent {
 			let startOfToday = new Date();
 			startOfToday.setHours(0, 0, 0, 0);
 			return startOfToday.getTime() / 1000;
+		}
+	}
+
+	detectCurrentAssigmentMode() {
+		this.isAssignedCollection = false;
+		this.isAssignedDelivery = false;
+		if (this.listAssignment.length == 0) {
+			return;
+		}
+		let lastAssignmentItem = this.listAssignment[0];
+		if (lastAssignmentItem) {
+			let type = Number(lastAssignmentItem.type);
+			this.isAssignedCollection = type == AppConstant.ASSIGNMENT_MODE.COLLECTION;
+			this.isAssignedDelivery = type == AppConstant.ASSIGNMENT_MODE.DELIVERY;
 		}
 	}
 

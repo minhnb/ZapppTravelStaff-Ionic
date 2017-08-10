@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 
 @IonicPage()
 @Component({
@@ -22,9 +23,9 @@ export class ListAssignmentPage extends BaseComponent {
 
 	getModeTextKey(mode: number) {
 		switch (mode) {
-			case 1:
+			case AppConstant.ASSIGNMENT_MODE.COLLECTION:
 				return 'COLLECTION';
-			case 2:
+			case AppConstant.ASSIGNMENT_MODE.DELIVERY:
 				return 'DELIVERY';
 			default:
 				return 'UNASSIGNED';
@@ -38,7 +39,7 @@ export class ListAssignmentPage extends BaseComponent {
 			let modeTextKey = this.getModeTextKey(assignment.mode);
 			assignment.modeText = this.translate.instant(modeTextKey);
 			assignment.modeClass = modeTextKey.toLowerCase();
-			if (assignment.mode == 1) {
+			if (assignment.mode == AppConstant.ASSIGNMENT_MODE.COLLECTION) {
 				assignment.in = item.content;
 			}
 			assignment.createAt = this.timeStampToDateTime(item.created_at);
