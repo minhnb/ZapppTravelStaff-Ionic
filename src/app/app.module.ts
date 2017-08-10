@@ -26,6 +26,7 @@ import { UncompletedOrderPageModule } from '../pages/uncompleted-order';
 import { FindTruckPageModule } from '../pages/find-truck';
 import { DirectionTruckPageModule } from '../pages/direction-truck';
 import { ListAssignmentPageModule } from '../pages/list-assignment';
+import { ListTruckWithDirectionPageModule } from '../pages/list-truck-with-direction';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -85,7 +86,8 @@ import { DataShare } from './helper/data.share';
 		UncompletedOrderPageModule,
 		FindTruckPageModule,
 		DirectionTruckPageModule,
-		ListAssignmentPageModule
+		ListAssignmentPageModule,
+		ListTruckWithDirectionPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

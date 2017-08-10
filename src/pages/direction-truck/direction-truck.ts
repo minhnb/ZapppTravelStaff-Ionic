@@ -17,11 +17,13 @@ export class DirectionTruckPage extends DirectionPage {
 	destinationName: string;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, private callNumber: CallNumber) {
+		public geolocation: Geolocation, public callNumber: CallNumber) {
 		super(injector, navCtrl, navParams, googleMaps, geolocation);
-		this.truck = this.navParams.data.truck;
-		this.destinationLocation = new LatLng(Number(this.truck.lat), Number(this.truck.lng));
-		this.destinationName = this.truck.truck_number || '';
+		if (this.navParams.data.truck) {
+			this.truck = this.navParams.data.truck;
+			this.destinationLocation = new LatLng(Number(this.truck.lat), Number(this.truck.lng));
+			this.destinationName = this.truck.truck_number || '';
+		}
 	}
 
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {
@@ -30,16 +32,6 @@ export class DirectionTruckPage extends DirectionPage {
 		}
 		this.drawDirectionFromCurrentLocationToDestination(currentLocation, this.destinationName);
 		this.moveCamera(this.destinationLocation);
-	}
-
-	hasValidLocation(lat: any, long: any) {
-		if (lat == undefined || lat == null || long == undefined || long == null) {
-			return false;
-		}
-		if (Number(lat) == 0 && Number(long) == 0) {
-			return false;
-		}
-		return true;
 	}
 
 	hasDriverPhoneNumber(): boolean {
@@ -96,7 +88,6 @@ export class DirectionTruckPage extends DirectionPage {
 	}
 
 	drawTruckDirection(lat: number, long: number) {
-		this.removeAllMarkersAndPolyline();
 		this.destinationLocation = new LatLng(lat, long);
 		if (this.currentLocation) {
 			this.afterLoadMapAndCurrentLocation(this.currentLocation);
