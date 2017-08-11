@@ -5,7 +5,8 @@
           </button>
   </div>
   <div class="slider-content">
-    <ion-slides pager (ionSlideDidChange)="slideChanged($event)">
+    <div class="warning-no-data" [hidden]="listTruck.length > 0 || !updateListTruckTimer">{{ 'NO_TRUCK' | translate }}</div>
+    <ion-slides pager (ionSlideDidChange)="slideChanged($event)" [style.visibility]="listTruck.length == 0 ? 'hidden' : 'visible'">
       <ion-slide *ngFor="let item of listTruck">
         <div class="truck-detail">
           <ion-row>
@@ -16,7 +17,8 @@
             </ion-col>
             <ion-col col-5>
               <div class="estimated-time text" *ngIf="currentDirectionDistance && currentDirectionDuration">{{ currentDirectionDistance.text }} ({{ currentDirectionDuration.text }})</div>
-              <div class="arrival-time text" [hidden]="true">Arrival time: {{ item.arrivalTime }}</div>
+              <div class="arrival-time text" [hidden]="!arrivalTimeString">{{ 'STATION_ARRIVAL_TIME' | translate }}: {{ arrivalTimeString }}</div>
+              <div class="arrival-time text" [hidden]="!stayTimeString">{{ 'STATION_STAY_TIME' | translate }}: {{ stayTimeString }}</div>
             </ion-col>
           </ion-row>
 

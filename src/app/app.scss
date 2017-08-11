@@ -245,3 +245,15 @@ ion-app._gmaps_cdv_ .nav-decor {
 .capitalize {
   text-transform: capitalize;
 }
+
+.warning-no-data {
+  text-align: center;
+  transform: translate;
+  position: relative;
+  width: 100%;
+  top: 50%;
+  margin-top: -20px;
+  height: 40px;
+  padding: 10px;
+  font-size: large;
+}

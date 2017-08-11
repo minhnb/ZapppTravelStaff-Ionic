@@ -105,7 +105,9 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 	slideChanged(event) {
 		let slide = event;
 		this.slideIndex = slide.getActiveIndex();
-		this.removeAllMarkersAndPolyline();
+		if (this.slideIndex > this.listRequest.length - 1) {
+			return;
+		}
 		if (this.currentLocation) {
 			this.afterLoadMapAndCurrentLocation(this.currentLocation);
 		} else {
