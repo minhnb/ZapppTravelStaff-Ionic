@@ -1,9 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+
 import { CustomerInfoPage } from '../customer-info';
 import { ListTruckPage } from '../list-truck';
 import { ListOrderPage } from '../list-order';
+
 import { CollectionModeService } from '../../app/services/collection-mode';
 
 @IonicPage()
@@ -15,11 +17,15 @@ import { CollectionModeService } from '../../app/services/collection-mode';
 export class CollectionModePage extends BaseComponent {
 
 	currentTruckId: string;
+	countTransferItem: number = 0;
+	countAcceptItem: number = 0;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
 		private collectionModeService: CollectionModeService) {
 		super(injector);
 		this.currentTruckId = this.navParams.data.currentTruckId;
+		this.countTransferItem = this.navParams.data.countTransferItem;
+		this.countAcceptItem = this.navParams.data.countAcceptItem;
 	}
 
 	ionViewDidLoad() {

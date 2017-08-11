@@ -34,8 +34,10 @@ export class UserStartPage extends BaseComponent {
 	listUncompleteOrder: Array<any> = [];
 	newAssignmentCount: number = 0;
 	listAssignment: Array<any> = [];
+
 	countDeliveryItem: number = 0;
 	countTransferItem: number = 0;
+	countAcceptItem: number = 0;
 
 	isAssignedCollection: boolean = false;
 	isAssignedDelivery: boolean = false;
@@ -197,7 +199,12 @@ export class UserStartPage extends BaseComponent {
 				this.navCtrl.push(ListStationPage);
 				break;
 			case AppConstant.USER_ROLE.ATTENDANT:
-				this.navCtrl.push(CollectionModePage, { currentTruckId: this.truck });
+				let params = {
+					currentTruckId: this.truck,
+					countTransferItem: this.countTransferItem,
+					countAcceptItem: this.countAcceptItem,
+				}
+				this.navCtrl.push(CollectionModePage, params);
 				break;
 			default:
 		}
@@ -465,7 +472,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	countOrderByMode() {
-		if (!this.isDriver() || !this.truck || !this.isActive) {
+		if (this.isZappper() || !this.truck || !this.isActive) {
 			this.resetCountOrder();
 			return;
 		}
@@ -473,6 +480,7 @@ export class UserStartPage extends BaseComponent {
 			res => {
 				this.countDeliveryItem = res.no_of_delivery ? Number(res.no_of_delivery) : 0;
 				this.countTransferItem = res.no_of_transfer ? Number(res.no_of_transfer) : 0;
+				this.countAcceptItem = res.no_of_acceptance ? Number(res.no_of_acceptance) : 0;
 			},
 			err => {
 				this.showError(err.message);
