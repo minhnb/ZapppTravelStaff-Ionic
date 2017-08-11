@@ -175,7 +175,7 @@ export class CustomerLuggagePage extends BaseComponent {
     updateStorageBinCodeToItemByIndex(storageBinCode: string, index: number) {
 		let indexOfBinCode = this.indexOfBinCode(storageBinCode);
 		if (indexOfBinCode == -1) {
-			this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST'));
+			this.showError(this.translate.instant('ERROR_BIN_CODE_NOT_IN_LIST'));
 			return;
 		}
 		let binItem = this.listBinOnTruck[indexOfBinCode];
