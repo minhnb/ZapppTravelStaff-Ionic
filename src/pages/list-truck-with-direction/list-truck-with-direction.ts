@@ -2,15 +2,13 @@ import { Component, Injector, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { AppConstant } from '../../app/app.constant';
 
-import { GoogleMaps, LatLng, Marker } from '@ionic-native/google-maps';
+import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { CallNumber } from '@ionic-native/call-number';
 
 import { DirectionTruckPage } from '../direction-truck';
 
 import { StaffService } from '../../app/services/staff';
-
-import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -185,7 +183,7 @@ export class ListTruckWithDirectionPage extends DirectionTruckPage {
 		this.lastDirectionFunction = this.drawDirectionToCurrentStation;
 		this.arrivalTimeString = '';
 		let stayTime = Number(this.truck.current_station_info.stop_time) / 60;
-		let suffix: string = stayTime > 1 ? 'mins' : 'min';
+		let suffix = this.getMinSuffix(stayTime);
 		this.stayTimeString = stayTime.toFixed(0) + ' ' + suffix;
 	}
 
@@ -194,5 +192,35 @@ export class ListTruckWithDirectionPage extends DirectionTruckPage {
 		this.lastDirectionFunction = this.drawDirectionToNextStation;
 		this.stayTimeString = '';
 		this.arrivalTimeString = '';
+		this.calculateArrivalTime();
+	}
+
+	getMinSuffix(timeInMinute: number): string {
+		let result = timeInMinute > 1 ? 'mins' : 'min';
+		return result;
+	}
+
+	calculateArrivalTime() {
+		let currentStation = this.truck.current_station_info;
+		let nextStation = this.truck.next_station_info;
+		if (!currentStation || !nextStation) {
+			return;
+		}
+		let origin = new LatLng(Number(currentStation.lat), Number(currentStation.lng));
+		let destination = new LatLng(Number(nextStation.lat), Number(nextStation.lng));
+		this.getGoogleDirection(origin, destination, (response, status) => {
+			if (status === 'OK') {
+				let routes = response.routes;
+				if (response && routes && routes.length > 0 && routes[0].overview_polyline) {
+					let route = routes[0];
+					let legs = route.legs;
+					if (legs && legs.length > 0) {
+						let arrivalTime = (legs[0].duration.value + Number(currentStation.stop_time)) / 60;
+						let suffix: string = this.getMinSuffix(arrivalTime);
+						this.arrivalTimeString = arrivalTime.toFixed(0) + ' ' + suffix;
+					}
+				}
+			}
+		});
 	}
 }

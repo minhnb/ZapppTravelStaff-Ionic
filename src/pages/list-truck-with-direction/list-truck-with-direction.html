@@ -16,7 +16,7 @@
               <div class="driver-name text">{{ item.driverName }}</div>
             </ion-col>
             <ion-col col-5>
-              <div class="estimated-time text" *ngIf="currentDirectionDistance && currentDirectionDuration">{{ currentDirectionDistance.text }} ({{ currentDirectionDuration.text }})</div>
+              <div class="estimated-time text" [style.visibility]="currentDirectionDistance && currentDirectionDuration ? 'visible' : 'hidden'">{{ currentDirectionDistance ? currentDirectionDistance.text : '' }} ({{ currentDirectionDuration ? currentDirectionDuration.text : '' }})</div>
               <div class="arrival-time text" [hidden]="!arrivalTimeString">{{ 'STATION_ARRIVAL_TIME' | translate }}: {{ arrivalTimeString }}</div>
               <div class="arrival-time text" [hidden]="!stayTimeString">{{ 'STATION_STAY_TIME' | translate }}: {{ stayTimeString }}</div>
             </ion-col>

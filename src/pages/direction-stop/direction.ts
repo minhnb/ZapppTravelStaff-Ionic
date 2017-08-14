@@ -252,16 +252,22 @@ export class DirectionPage extends BaseComponent {
 			});
 	}
 
-	getDirection(origin: LatLng, destination: LatLng, callback?: (points: any) => void) {
-		this.currentDirectionDistance = null;
-		this.currentDirectionDuration = null;
+	getGoogleDirection(origin: LatLng, destination: LatLng, callback: (response: any, status: any) => void) {
 		this.directionsService.route({
 			origin: origin,
 			destination: destination,
 			travelMode: 'DRIVING'
 		}, (response, status) => {
+			console.log(JSON.stringify(response));
+			callback(response, status);
+		});
+	}
+
+	getDirection(origin: LatLng, destination: LatLng, callback?: (points: any) => void) {
+		this.currentDirectionDistance = null;
+		this.currentDirectionDuration = null;
+		this.getGoogleDirection(origin, destination, (response, status) => {
 			if (status === 'OK') {
-				console.log(JSON.stringify(response));
 				let routes = response.routes;
 				if (response && routes && routes.length > 0 && routes[0].overview_polyline) {
 					let route = routes[0];
