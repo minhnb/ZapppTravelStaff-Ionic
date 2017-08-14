@@ -8,7 +8,9 @@
     <ion-slides pager (ionSlideDidChange)="slideChanged($event)">
       <ion-slide *ngFor="let item of listRequest">
         <div class="user-request">
-          <div class="estimated-time">{{ item.distance }} ({{ item.estimatedTime }})</div>
+          <div class="estimated-time">
+            <span [style.visibility]="currentDirectionDistance && currentDirectionDuration ? 'visible' : 'hidden'">{{ currentDirectionDistance ? currentDirectionDistance.text : '' }} ({{ currentDirectionDuration ? currentDirectionDuration.text : '' }})</span>
+          </div>
           <div class="luggage-info">
             <ion-row>
               <ion-col col-7>{{ 'SUITCASE' | translate }}: {{ item.suitcase || 0 }}</ion-col>
