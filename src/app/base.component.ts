@@ -6,6 +6,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
 import { GeolocationOptions } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import * as moment from 'moment';
 
@@ -20,6 +21,7 @@ export class BaseComponent {
 	public translate: TranslateService;
 	public spinnerDialog: SpinnerDialog;
 	public events: Events;
+	public keyboard: Keyboard;
 
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
@@ -32,6 +34,7 @@ export class BaseComponent {
 		this.translate = injector.get(TranslateService);
 		this.spinnerDialog = injector.get(SpinnerDialog);
 		this.events = injector.get(Events);
+		this.keyboard = injector.get(Keyboard);
 	}
 
 	ionViewWillUnload() {
@@ -348,6 +351,10 @@ export class BaseComponent {
 			return false;
 		}
 		return true;
+	}
+
+	hideKeyboard() {
+		this.keyboard.close();
 	}
 
 	listLocalEvent() {

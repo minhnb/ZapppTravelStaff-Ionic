@@ -26,6 +26,7 @@ export class LoginPage extends BaseComponent {
 	}
 
 	login() {
+		this.hideKeyboard();
 		this.userService.userLogIn(this.username, this.password).subscribe(
 			res => {
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {

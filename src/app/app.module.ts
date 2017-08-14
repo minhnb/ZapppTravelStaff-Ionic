@@ -39,6 +39,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Camera } from '@ionic-native/camera';
 import { CallNumber } from '@ionic-native/call-number';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -106,6 +107,7 @@ import { DataShare } from './helper/data.share';
 		Diagnostic,
 		Camera,
 		CallNumber,
+		Keyboard,
 		ZapppHttp,
 		DataShare,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
