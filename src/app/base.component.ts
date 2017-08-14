@@ -35,6 +35,8 @@ export class BaseComponent {
 		this.spinnerDialog = injector.get(SpinnerDialog);
 		this.events = injector.get(Events);
 		this.keyboard = injector.get(Keyboard);
+
+		this.subcribeEventAppIsResuming();
 	}
 
 	ionViewWillUnload() {
@@ -381,5 +383,16 @@ export class BaseComponent {
 		allEvents.forEach(topic => {
 			this.events.unsubscribe(topic);
 		});
+	}
+
+	subcribeEventAppIsResuming() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
+			console.log('subcribeEventAppIsResuming');
+			this.handleEventAppIsResuming();
+		});
+	}
+
+	handleEventAppIsResuming() {
+
 	}
 }

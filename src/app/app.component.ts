@@ -59,6 +59,9 @@ export class MyApp extends BaseComponent {
 				this.rootPage = UserStartPage;
 			}
 		});
+		this.platform.resume.subscribe(() => {
+			this.announceAppIsResuming();
+		});
 	}
 
 	registerFCM() {
@@ -90,6 +93,10 @@ export class MyApp extends BaseComponent {
 
 			// fcm.unsubscribeFromTopic('marketing');
 		}
+	}
+
+	announceAppIsResuming() {
+		this.events.publish(AppConstant.EVENT_TOPIC.APP_RESUMING);
 	}
 
 	getServerName() {

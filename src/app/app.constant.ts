@@ -48,6 +48,7 @@ export const AppConstant = {
         USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
     },
     EVENT_TOPIC: {
+        APP_RESUMING: 'app:resuming',
         USER_ACTIVE: 'user:active',
         DIRECTION_STATION: 'direction:station',
         DELIVERY_COMPLETED: 'delivery:completed',

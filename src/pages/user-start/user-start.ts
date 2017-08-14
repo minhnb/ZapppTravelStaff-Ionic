@@ -64,6 +64,12 @@ export class UserStartPage extends BaseComponent {
 		this.loadStaffStatistic();
 	}
 
+	handleEventAppIsResuming() {
+		if (this.isActiveCurrentPage(this.navCtrl)) {
+			this.ionViewWillEnter();
+		}
+	}
+
 	loadPreviousState() {
 		this.loadLocalPreviousState();
 	}
