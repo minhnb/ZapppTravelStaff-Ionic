@@ -6,6 +6,8 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://zappp.com/*" />
+    <allow-navigation href="https://dev.api.zappp.com/*" />
+    <allow-navigation href="https://stage.api.zappp.com/*" />
     <allow-navigation href="http://10.198.6.94:8101" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

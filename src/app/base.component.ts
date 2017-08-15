@@ -316,6 +316,9 @@ export class BaseComponent {
 	}
 
 	listBinTransform(listBin: Array<any>): Array<any> {
+		if (!listBin) {
+			return [];
+		}
 		return listBin.map(item => {
 			return this.binTransform(item);
 		});

@@ -34,6 +34,7 @@ export class UserStartPage extends BaseComponent {
 	listUncompleteOrder: Array<any> = [];
 	newAssignmentCount: number = 0;
 	listAssignment: Array<any> = [];
+	lastLoadListZappperRequest: number = 0;
 
 	countDeliveryItem: number = 0;
 	countTransferItem: number = 0;
@@ -180,9 +181,21 @@ export class UserStartPage extends BaseComponent {
 		);
 	}
 
+	isNeedToLoadZappperRequest(): boolean {
+		let nowTimeStamp = (new Date()).getTime();
+		return (nowTimeStamp - this.lastLoadListZappperRequest) / 1000 > 3;
+	}
+
 	loadNewRequestsAndUncompletedOrders(callback?: () => void) {
+		if (!this.isNeedToLoadZappperRequest()) {
+			if (callback) {
+				callback();
+			}
+			return;
+		}
 		this.staffService.loadNewRequestsAndUncompletedOrders().subscribe(
 			res => {
+				this.lastLoadListZappperRequest = (new Date()).getTime();
 				this.listRequest = res.new_request_info.map(item => {
 					return this.requestTransform(item);
 				});
@@ -254,23 +267,27 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	goToListRequest() {
-		if (this.listRequest.length == 0) {
-			return;
-		}
-		let params = {
-			listRequest: this.listRequest
-		}
-		this.navCtrl.push(ListRequestWithDirectionPage, params);
+		this.loadNewRequestsAndUncompletedOrders(() => {
+			if (this.listRequest.length == 0) {
+				return;
+			}
+			let params = {
+				listRequest: this.listRequest
+			}
+			this.navCtrl.push(ListRequestWithDirectionPage, params);
+		});
 	}
 
 	goToListUncompletedOrder() {
-		if (this.listUncompleteOrder.length == 0) {
-			return;
-		}
-		let params = {
-			listUncompleteOrder: this.listUncompleteOrder
-		}
-		this.navCtrl.push(UncompletedOrderPage, params);
+		this.loadNewRequestsAndUncompletedOrders(() => {
+			if (this.listUncompleteOrder.length == 0) {
+				return;
+			}
+			let params = {
+				listUncompleteOrder: this.listUncompleteOrder
+			}
+			this.navCtrl.push(UncompletedOrderPage, params);
+		});
 	}
 
 	goToFindTruckPage() {
@@ -351,6 +368,12 @@ export class UserStartPage extends BaseComponent {
 			}
 			this.handleZappperNewRequest(data);
 		});
+		this.events.subscribe(AppConstant.BACKGROUND_NOTIFICATION_TYPE.PREFIX + AppConstant.BACKGROUND_NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleZappperNewBackgroundRequest(data);
+		});
 	}
 
 	handleZappperNewRequest(data: any) {
@@ -367,6 +390,17 @@ export class UserStartPage extends BaseComponent {
 				});
 		});
 	}
+
+	handleZappperNewBackgroundRequest(data: any) {
+		if (!this.isZappper()) {
+			return;
+		}
+		if (!this.isActiveCurrentPage(this.navCtrl)) {
+			return;
+		}
+		this.goToListRequest();
+	}
+
 
 	subscribeAssignTruckEvent() {
 		let listTruckAssignEvent = [

@@ -79,6 +79,7 @@ export class MyApp extends BaseComponent {
 				if (data.wasTapped) {
 					console.log("Received in background");
 					console.log(JSON.stringify(data));
+					this.handleZapppBackgroundNotification(data);
 				} else {
 					console.log("Received in foreground");
 					console.log(JSON.stringify(data));
@@ -96,6 +97,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	announceAppIsResuming() {
+		console.log('announceAppIsResuming');
 		this.events.publish(AppConstant.EVENT_TOPIC.APP_RESUMING);
 	}
 
@@ -218,5 +220,12 @@ export class MyApp extends BaseComponent {
 		if (!this.notificationTypeIsInList(topic)) {
 			this.showInfo(data.body, data.title);
 		}
+	}
+
+	handleZapppBackgroundNotification(data: any) {
+		let topic = AppConstant.BACKGROUND_NOTIFICATION_TYPE.PREFIX + data.type;
+		setTimeout(() => {
+			this.events.publish(topic, data);
+		}, 1000);
 	}
 }

@@ -47,6 +47,10 @@ export const AppConstant = {
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
         USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
     },
+    BACKGROUND_NOTIFICATION_TYPE: {
+        PREFIX: 'background-notification:',
+        REQUEST_ORDER: 'request_order'
+    },
     EVENT_TOPIC: {
         APP_RESUMING: 'app:resuming',
         USER_ACTIVE: 'user:active',
