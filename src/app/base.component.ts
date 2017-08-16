@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GeolocationOptions } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { Keyboard } from '@ionic-native/keyboard';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import * as moment from 'moment';
 
@@ -22,6 +23,7 @@ export class BaseComponent {
 	public spinnerDialog: SpinnerDialog;
 	public events: Events;
 	public keyboard: Keyboard;
+	public backgroundMode: BackgroundMode;
 
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
@@ -35,6 +37,7 @@ export class BaseComponent {
 		this.spinnerDialog = injector.get(SpinnerDialog);
 		this.events = injector.get(Events);
 		this.keyboard = injector.get(Keyboard);
+		this.backgroundMode = injector.get(BackgroundMode);
 
 		this.subcribeEventAppIsResuming();
 	}

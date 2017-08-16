@@ -58,6 +58,8 @@ export class MyApp extends BaseComponent {
 			if (this.isLoggedIn()) {
 				this.rootPage = UserStartPage;
 			}
+
+			this.backgroundMode.enable();
 		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();

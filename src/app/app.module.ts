@@ -40,6 +40,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { Camera } from '@ionic-native/camera';
 import { CallNumber } from '@ionic-native/call-number';
 import { Keyboard } from '@ionic-native/keyboard';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -108,6 +109,7 @@ import { DataShare } from './helper/data.share';
 		Camera,
 		CallNumber,
 		Keyboard,
+		BackgroundMode,
 		ZapppHttp,
 		DataShare,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
