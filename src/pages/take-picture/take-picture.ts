@@ -1,5 +1,5 @@
-import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, Injector, NgZone } from '@angular/core';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -24,8 +24,8 @@ export class TakePicturePage extends BaseComponent {
 	userAlreadyPaid: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera,
-		private geolocation: Geolocation, private staffService: StaffService,
-		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
+		private geolocation: Geolocation, public zone: NgZone, public platform: Platform,
+		private staffService: StaffService, private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
 		this.isDeliveryMode = this.navParams.data.isDeliveryMode;
@@ -52,7 +52,13 @@ export class TakePicturePage extends BaseComponent {
 		}
 
 		this.camera.getPicture(options).then((imageData) => {
-			this.imageUrl = imageData;
+			if (this.isPlatformiOS(this.platform)) {
+				this.zone.run(() => {
+					this.imageUrl = imageData;
+				});
+			} else {
+				this.imageUrl = imageData;
+			}
 		}, (err) => {
 			// this.showError(JSON.stringify(err));
 		});
