@@ -4,7 +4,6 @@ import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
@@ -25,7 +24,7 @@ export class TakePicturePage extends BaseComponent {
 	userAlreadyPaid: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera,
-		private geolocation: Geolocation, private sanitizer: DomSanitizer, private staffService: StaffService,
+		private geolocation: Geolocation, private staffService: StaffService,
 		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
@@ -45,7 +44,7 @@ export class TakePicturePage extends BaseComponent {
 	takePicture() {
 		let options: CameraOptions = {
 			quality: 50,
-			destinationType: this.camera.DestinationType.DATA_URL,
+			destinationType: this.camera.DestinationType.FILE_URI,
 			encodingType: this.camera.EncodingType.JPEG,
 			mediaType: this.camera.MediaType.PICTURE,
 			targetWidth: 800,
@@ -53,8 +52,7 @@ export class TakePicturePage extends BaseComponent {
 		}
 
 		this.camera.getPicture(options).then((imageData) => {
-			let imageUrl = 'data:image/jpeg;base64,' + imageData;
-			this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+			this.imageUrl = imageData;
 		}, (err) => {
 			// this.showError(JSON.stringify(err));
 		});
@@ -141,16 +139,18 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	uploadPhoto(callback?: (url: string) => void) {
-		this.staffService.uploadPhoto(this.imageUrl).subscribe(
-			res => {
-				if (callback) {
-					callback(res);
+		this.imageToBase64(this.imageUrl, base64Data => {
+			this.staffService.uploadPhoto(base64Data).subscribe(
+				res => {
+					if (callback) {
+						callback(res);
+					}
+				},
+				err => {
+					this.showError(err.message);
 				}
-			},
-			err => {
-				this.showError(err.message);
-			}
-		);
+			);
+		});
 	}
 
 	getCurrentLocation(callback?: (latitude: number, longitude: number) => void) {
