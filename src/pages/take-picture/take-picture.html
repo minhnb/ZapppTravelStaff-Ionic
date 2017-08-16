@@ -9,7 +9,7 @@
     <div *ngIf="userAlreadyPaid || isDeliveryMode">{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
     <div *ngIf="!userAlreadyPaid && !isDeliveryMode">{{ 'WAIT_FOR_USER_TO_COMPLETE_PAYMENT' | translate }}</div>
   </div>
-  <img class="middle-center" *ngIf="imageUrl" src="{{ imageUrl }}" />
+  <img class="middle-center" *ngIf="imageUrl" [src]="imageUrl" />
   <button ion-button class="above-button bottom-left" *ngIf="imageUrl" (click)="takePicture()">{{ 'BUTTON_RETAKE' | translate }}</button>
   <button ion-button class="above-button bottom-right" *ngIf="imageUrl && isDeliveryMode" (click)="savePictureForDeliveryMode()">{{ 'BUTTON_SAVE' | translate }}</button>
   <button ion-button class="above-button bottom-right" *ngIf="imageUrl && !isDeliveryMode" (click)="savePictureForCollectionMode()">{{ 'BUTTON_FINISH' | translate }}</button>

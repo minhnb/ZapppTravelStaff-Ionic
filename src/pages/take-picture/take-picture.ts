@@ -3,12 +3,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
 import { DeliveryModeService } from '../../app/services/delivery-mode';
-
-import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -18,14 +18,14 @@ import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 })
 export class TakePicturePage extends BaseComponent {
 
-	imageUrl: string = '';
+	imageUrl: any;
 	customer: any;
 	isDeliveryMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
 	userAlreadyPaid: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private camera: Camera,
-		private geolocation: Geolocation, private staffService: StaffService,
+		private geolocation: Geolocation, private sanitizer: DomSanitizer, private staffService: StaffService,
 		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
 		super(injector);
 		this.customer = this.navParams.data.customer;
@@ -53,8 +53,8 @@ export class TakePicturePage extends BaseComponent {
 		}
 
 		this.camera.getPicture(options).then((imageData) => {
-			this.imageUrl = 'data:image/jpeg;base64,' + imageData;
-			console.log(this.imageUrl.length);
+			let imageUrl = 'data:image/jpeg;base64,' + imageData;
+			this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
 		}, (err) => {
 			// this.showError(JSON.stringify(err));
 		});
