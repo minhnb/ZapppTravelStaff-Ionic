@@ -4,6 +4,7 @@ import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 
 import { TakePicturePage } from '../take-picture';
+import { ManualInputPage } from '../manual-input';
 
 import { CollectionModeService } from '../../app/services/collection-mode';
 import { DeliveryModeService } from '../../app/services/delivery-mode';
@@ -39,6 +40,7 @@ export class CustomerLuggagePage extends BaseComponent {
         super(injector);
         this.initCustomerLuggage();
 		this.initListBinOnTruck();
+		this.subcribeManualInputEvent();
 	}
 
 	ionViewDidLoad() {
@@ -139,11 +141,6 @@ export class CustomerLuggagePage extends BaseComponent {
             this.showError(this.translate.instant('ERROR_LUGGAGE_CODE_ALREADY_ADDED'));
             return;
         }
-
-		let newItem = {
-			luggageCode: luggageCode,
-			storageBinCode: ''
-		}
 
 		this.checkValidLuggage(luggageCode, () => {
 			let newItem = {
@@ -330,5 +327,25 @@ export class CustomerLuggagePage extends BaseComponent {
 				this.showError(err.message);
 			}
 		);
+	}
+
+	goToManualInputPage() {
+		let params: any = {
+			listLuggage: this.listLuggage
+		};
+		this.navCtrl.push(ManualInputPage, params);
+	}
+
+	subcribeManualInputEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.INPUT_MANUAL, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleManualInputEvent(data);
+		});
+	}
+
+	handleManualInputEvent(data: any) {
+		this.navCtrl.pop();
 	}
 }

@@ -56,7 +56,8 @@ export const AppConstant = {
         USER_ACTIVE: 'user:active',
         DIRECTION_STATION: 'direction:station',
         DELIVERY_COMPLETED: 'delivery:completed',
-        COLLECTION_NEXTSTATION: 'collection:nextStation'
+        COLLECTION_NEXTSTATION: 'collection:nextStation',
+        INPUT_MANUAL: 'input:manual'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',

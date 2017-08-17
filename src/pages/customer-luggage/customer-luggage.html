@@ -32,6 +32,9 @@
         <div class="content">{{ listLuggage.length }}</div>
       </div>
     </div>
+    <button class="transparent-button button-manual-input no-margin-bottom" [style.visibility]="isDeliveryMode || isAttendantSaveMode ? 'visible' : 'hidden'" (click)="goToManualInputPage()">
+          <img class="right-image" src="assets/images/keyboard.png" />
+      </button>
     <button class="transparent-button button-scanner" (click)="smartScanQRCode()">
           <ion-icon name="ios-qr-scanner-outline"></ion-icon>
       </button>

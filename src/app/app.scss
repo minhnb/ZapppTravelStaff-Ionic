@@ -61,6 +61,10 @@ ion-navbar {
 
     & > button {
       margin-bottom: 10px;
+
+      &.no-margin-bottom {
+        margin-bottom: 0;
+      }
     }
   }
 }
@@ -117,10 +121,18 @@ button.button-scanner {
   }
 }
 
+button.button-manual-input {
+  float: right;
+
+  img {
+    width: 40px;
+  }
+}
+
 .left-scanner-button {
   float: left;
   width: calc(100vw - 120px);
-  margin-top: 15px;
+  margin-top: 65px;
 }
 
 .info-row {
