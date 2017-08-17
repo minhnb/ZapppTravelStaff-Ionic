@@ -347,5 +347,6 @@ export class CustomerLuggagePage extends BaseComponent {
 
 	handleManualInputEvent(data: any) {
 		this.navCtrl.pop();
+		this.findLuggageCodeInList(data.input);
 	}
 }

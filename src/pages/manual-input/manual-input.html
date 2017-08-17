@@ -1,0 +1,19 @@
+<ion-content padding>
+  <button class="transparent-button dismiss-view-button" (click)="dismissView(event)" *ngIf="!isStartedDelivering">
+        <ion-icon name="close"></ion-icon>
+      </button>
+
+  <form>
+    <ion-item class="middle-input">
+      <ion-input type="text" placeholder="{{ 'ENTER_LUGGAGE_CODE' | translate }}" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" (keyup)="inputSearchOnKeyUp($event)" (keydown)="inputSearchOnKeyDown($event)"></ion-input>
+    </ion-item>
+    <div class="search-result" [hidden]="!showSearchResult">
+      <ul class="list-luggage-code" [hidden]="!listLuggageCode.length">
+        <li *ngFor="let item of listLuggageCode; let i = index" (click)="selectLuggageCode(item)">
+          <span>{{item}}</span>
+        </li>
+      </ul>
+      <div class="no-result" [hidden]="listLuggageCode.length">{{ 'NO_RESULT_FOUND' | translate}}</div>
+    </div>
+  </form>
+</ion-content>
