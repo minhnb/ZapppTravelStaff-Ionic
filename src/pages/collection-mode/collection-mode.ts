@@ -4,7 +4,7 @@ import { BaseComponent } from '../../app/base.component';
 
 import { CustomerInfoPage } from '../customer-info';
 import { ListTruckPage } from '../list-truck';
-import { ListOrderPage } from '../list-order';
+import { OrderSliderPage } from '../order-slider';
 
 import { CollectionModeService } from '../../app/services/collection-mode';
 
@@ -99,48 +99,12 @@ export class CollectionModePage extends BaseComponent {
 	}
 
 	viewOrder() {
-		let params = {
-            pageName: 'Orders',
-            listOrder: [
-                {
-                    name: 'Dolly Doe',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12789',
-                            storageBinCode: 'A12'
-                        }
-                    ]
-                },
-                {
-                    name: 'Jolly Doe',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12790',
-                            storageBinCode: 'A13'
-                        }
-                    ]
-                },
-                {
-                    name: 'Nanny San',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12791',
-                            storageBinCode: 'A14'
-                        }
-                    ]
-                },
-                {
-                    name: 'Fancy Lu',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12792',
-                            storageBinCode: 'A15'
-                        }
-                    ]
-                }
-            ]
-        }
-        this.navCtrl.push(ListOrderPage, params);
+		this.getListOrderOnCurrentTruck((listOrder) => {
+			let params = {
+				listOrder: listOrder
+			}
+			this.navCtrl.push(OrderSliderPage, params);
+		});
 	}
 
 	listOtherTruckNeedToTransfer(callback?: (listTruck: Array<any>) => void) {
@@ -184,5 +148,21 @@ export class CollectionModePage extends BaseComponent {
 			isAcceptLuggageMode: isAcceptLuggageMode
 		}
 		this.navCtrl.push(ListTruckPage, params);
+	}
+
+	getListOrderOnCurrentTruck(callback?: (listOrder: Array<any>) => void) {
+		this.collectionModeService.listOrderOnCurrentTruck().subscribe(
+			res => {
+				let listOrder = res.map(item => {
+					return this.customerInfoTransform(item);
+				});
+				if (callback) {
+					callback(listOrder);
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 }

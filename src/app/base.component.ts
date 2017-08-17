@@ -287,6 +287,18 @@ export class BaseComponent {
 	}
 
 	customerInfoTransform(requestInfo: any): any {
+		if (!requestInfo.hotel_info && requestInfo.hotelInfo) {
+			requestInfo.hotel_info = requestInfo.hotelInfo;
+		}
+		if (!requestInfo.order_luggage_bin && requestInfo.bagLocationStorageInfo) {
+			requestInfo.order_luggage_bin = requestInfo.bagLocationStorageInfo.map(item => {
+				return {
+					luggage_id: item.luggage_id,
+					bin: item.bin_name,
+					bin_id: item.truck_bin_id
+				}
+			});
+		}
 		let customerInfo = {
 			name: this.getFullName(requestInfo.user_request_info_first, requestInfo.user_request_info_last),
 			hotel: requestInfo.hotel_info ? requestInfo.hotel_info.name : '',
@@ -296,7 +308,9 @@ export class BaseComponent {
 			listLuggage: this.listLuggageTransform(requestInfo.order_luggage_bin),
 			isAttendantSaveMode: false,
 			orderId: requestInfo.id,
-			orderNo: requestInfo.id
+			orderNo: requestInfo.id,
+			alreadyCheckIn: Number(requestInfo.is_checked_in),
+			pickupTime: requestInfo.pickup_at
 		};
 		return customerInfo;
 	}

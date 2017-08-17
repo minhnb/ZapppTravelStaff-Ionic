@@ -29,6 +29,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	isTransferMode: boolean = false;
 	isAcceptLuggageMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
+	isFromViewOrderPage: boolean = false;
 	isDeliveryMode: boolean = false;
 	isUpdated: boolean = false;
 	listBinOnTruck: Array<any>;
@@ -64,6 +65,9 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
 		if (this.navParams.data.isFromCustomerInfoPage) {
 			this.isFromCustomerInfoPage = true;
+		}
+		if (this.navParams.data.isFromViewOrderPage) {
+			this.isFromViewOrderPage = true;
 		}
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
@@ -300,7 +304,7 @@ export class CustomerLuggagePage extends BaseComponent {
 		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
 		this.collectionModeService.updateLuggage(orderId, listLuggage, this.isUpdated).subscribe(
 			res => {
-				if (this.isAcceptLuggageMode && !this.isFromCustomerInfoPage) {
+				if ((this.isAcceptLuggageMode && !this.isFromCustomerInfoPage) || this.isFromViewOrderPage) {
 					this.goBackToPreviousPage();
 					return;
 				}

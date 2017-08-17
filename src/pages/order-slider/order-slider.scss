@@ -1,0 +1,21 @@
+page-order-slider {
+  ion-slide {
+    .slide-zoom {
+      height: 100%;
+      text-align: left;
+      font-size: 14px;
+    }
+  }
+
+  .button-search {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    padding: 7px 15px;
+
+    ion-icon {
+      color: white;
+    }
+  }
+}

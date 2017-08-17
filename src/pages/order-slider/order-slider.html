@@ -1,0 +1,47 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'ORDERS' | translate }}</ion-title>
+    <button class="transparent-button button-search" (click)="showSearchView()">
+          <ion-icon name="ios-search"></ion-icon>
+      </button>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-slides pager>
+    <ion-slide *ngFor="let item of listOrder">
+      <div class="list-order">
+        <div class="info-row">
+          <div class="label">{{ 'ORDER_ID' | translate }}</div>
+          <div class="content">{{ item.orderId }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'HOTEL' | translate }}</div>
+          <div class="content">{{ item.hotel }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'ADDRESS' | translate }}</div>
+          <div class="content">{{ item.address }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'RECEIVER' | translate }}</div>
+          <div class="content">{{ item.receiver }}<span *ngIf="item.alreadyCheckIn"> ({{ 'CHECK_IN_ALREADY' | translate }})</span></div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'ROOM' | translate }}</div>
+          <div class="content">{{ item.room }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'BAG' | translate }}</div>
+          <button class="no-padding-left" menuClose ion-item no-lines (click)="goToCustomerLugguagePage(item)">{{ item.listLuggage ? item.listLuggage.length : 0 }}</button>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'PICKUP_TIME' | translate }}</div>
+          <div class="content">{{ timeStampToDateTime(item.pickupTime) }}</div>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

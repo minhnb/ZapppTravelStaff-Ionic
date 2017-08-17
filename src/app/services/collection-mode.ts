@@ -114,4 +114,12 @@ export class CollectionModeService {
 		};
 		return this.zapppHttp.post(this.truckUrl + '/list_accept_relevant_orders', params);
 	}
+
+	listOrderOnCurrentTruck() {
+		let truckId = localStorage.getItem(AppConstant.TRUCK);
+		let params = {
+			truckid: truckId
+		}
+		return this.zapppHttp.get(this.orderUrl + '/orders_on_truck', params);
+	}
 }
