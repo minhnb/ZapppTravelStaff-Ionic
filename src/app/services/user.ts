@@ -60,6 +60,13 @@ export class UserService {
     }
 
 	getUserInfo(): Observable<any> {
-		return this.zapppHttp.get(AppConfig.API_URL + 'me');
+		return this.zapppHttp.get(this.userUrl + '/detail');
+	}
+
+	updateDeviceToken(deviceToken: string) {
+		let params = {
+			device_token: deviceToken
+		};
+		return this.zapppHttp.post(this.userUrl + '/refresh_device_token', params);
 	}
 }

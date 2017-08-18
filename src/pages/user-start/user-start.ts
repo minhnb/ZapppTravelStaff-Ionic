@@ -17,18 +17,20 @@ import { ListAssignmentPage } from '../list-assignment';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { UserService } from '../../app/services/user';
 
 @IonicPage()
 @Component({
 	selector: 'page-user-start',
 	templateUrl: 'user-start.html',
-	providers: [StaffService, CollectionModeService]
+	providers: [StaffService, CollectionModeService, UserService]
 })
 export class UserStartPage extends BaseComponent {
 
 	isActive: boolean;
     truck: any;
     listTruck: Array<any> = [];
+	isLoadedState: boolean = false;
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
@@ -44,17 +46,15 @@ export class UserStartPage extends BaseComponent {
 	isAssignedDelivery: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService, private collectionModeService: CollectionModeService) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
-		this.loadPreviousState();
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeAssignTruckEvent();
+		this.loadPreviousState();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		this.loadListTruckForActiveDirverAndAttendant();
-		this.loadCurrentJobForActiveZappper();
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
@@ -62,17 +62,24 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	ionViewWillEnter() {
-		this.loadStaffStatistic();
+		if (this.isLoadedState) {
+			this.loadStaffStatistic();
+		}
 	}
 
 	handleEventAppIsResuming() {
 		if (this.isActiveCurrentPage(this.navCtrl)) {
-			this.ionViewWillEnter();
+			this.loadStaffStatistic();
 		}
 	}
 
 	loadPreviousState() {
-		this.loadLocalPreviousState();
+		this.getUserInfo(() => {
+			this.loadLocalPreviousState();
+			this.loadListTruckForActiveDirverAndAttendant();
+			this.loadCurrentJobForActiveZappper();
+			this.loadStaffStatistic();
+		});
 	}
 
 	loadLocalPreviousState() {
@@ -84,6 +91,7 @@ export class UserStartPage extends BaseComponent {
 			}
 		}
 		this.announceActiveEvent();
+		this.isLoadedState = true;
 	}
 
 	saveStatusToLocalStorage(status: boolean) {
@@ -563,5 +571,19 @@ export class UserStartPage extends BaseComponent {
 				}
 			}
 		);
+	}
+
+	getUserInfo(callback?: () => void) {
+		this.userService.getUserInfo().subscribe(
+			res => {
+				this.saveLocalStaffState(res);
+				if (callback) {
+					callback();
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		)
 	}
 }

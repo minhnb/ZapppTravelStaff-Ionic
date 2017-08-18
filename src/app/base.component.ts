@@ -422,4 +422,21 @@ export class BaseComponent {
         }
         return s;
     }
+
+	saveLocalStaffState(user: any) {
+		if (!user) {
+			return;
+		}
+		if (Number(user.is_availability)) {
+			let status = true;
+			if ((this.isDriver() || this.isAttedant()) && user.truck_info) {
+				localStorage.setItem(AppConstant.TRUCK, user.truck_info.id);
+				let listBin = this.listBinTransform(user.truck_info.bins);
+				localStorage.setItem(AppConstant.LIST_BIN, JSON.stringify(listBin));
+			}
+		} else {
+			let status = false;
+		}
+		localStorage.setItem(AppConstant.STATUS, status.toString());
+	}
 }

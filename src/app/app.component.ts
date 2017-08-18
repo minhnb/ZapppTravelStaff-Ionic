@@ -72,9 +72,7 @@ export class MyApp extends BaseComponent {
 			// fcm.subscribeToTopic('marketing');
 
 			fcm.getToken().then(token => {
-				// alert('registerToken' + token);
-				console.log('registerToken' + token);
-				this.dataShare.setFCMToken(token);
+				this.updateDeviceToken(token);
 			});
 
 			fcm.onNotification().subscribe((data: any) => {
@@ -90,8 +88,7 @@ export class MyApp extends BaseComponent {
 			});
 
 			fcm.onTokenRefresh().subscribe(token => {
-				// alert('registerToken' + token);
-				console.log('registerToken' + token);
+				this.updateDeviceToken(token);
 			});
 
 			// fcm.unsubscribeFromTopic('marketing');
@@ -125,6 +122,22 @@ export class MyApp extends BaseComponent {
 		this.userService.logOut().subscribe(
 			res => {
 				this.nav.setRoot(LoginPage);
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	updateDeviceToken(deviceToken: string) {
+		console.log('registerToken' + deviceToken);
+		this.dataShare.setFCMToken(deviceToken);
+		if (!this.isLoggedIn()) {
+			return;
+		}
+		this.userService.updateDeviceToken(deviceToken).subscribe(
+			res => {
+
 			},
 			err => {
 				this.showError(err.message);
