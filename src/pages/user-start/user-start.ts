@@ -32,6 +32,7 @@ export class UserStartPage extends BaseComponent {
     truck: any;
     listTruck: Array<any> = [];
 	isLoadedState: boolean = false;
+	userId: string;
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
@@ -354,11 +355,15 @@ export class UserStartPage extends BaseComponent {
 		this.navCtrl.push(ListAssignmentPage, params);
 	}
 
-	loadCurrentJobForActiveZappper() {
-		if (!this.isZappper()) {
-			return;
+	isValidOrderForZappperToContinueCurrentJob(order: any) {
+		if (order.status != AppConstant.ORDER_STATUS.ACCEPT || order.zappper_id != this.userId) {
+			return false;
 		}
-		if (!this.isActive) {
+		return true;
+	}
+
+	loadCurrentJobForActiveZappper() {
+		if (!this.isActive || !this.isZappper()) {
 			return;
 		}
 		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
@@ -366,7 +371,16 @@ export class UserStartPage extends BaseComponent {
 			return;
 		}
 		let customer = JSON.parse(currentJob);
-		this.goToUserDirectionPage(customer);
+		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
+			res => {
+				if (this.isValidOrderForZappperToContinueCurrentJob(res)) {
+					this.goToUserDirectionPage(customer);
+				}
+			},
+			err => {
+
+			}
+		);
 	}
 
 	subscribeZappperNewRequestEvent() {
@@ -578,6 +592,7 @@ export class UserStartPage extends BaseComponent {
 			res => {
 				this.saveLocalStaffState(res);
 				this.isLoadedState = true;
+				this.userId = res.id;
 				if (callback) {
 					callback();
 				}

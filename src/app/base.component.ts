@@ -445,5 +445,6 @@ export class BaseComponent {
 			}
 		}
 		localStorage.setItem(AppConstant.STATUS, status.toString());
+		localStorage.setItem(AppConstant.USER_ID, user.id);
 	}
 }

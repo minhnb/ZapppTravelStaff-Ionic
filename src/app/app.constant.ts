@@ -8,6 +8,7 @@ export const AppConstant = {
         ATTENDANT: 'ATTENDANT',
         ZAPPPER: 'ZAPPPER'
     },
+    USER_ID: "user_id",
     STATUS: 'status',
     TRUCK: 'truck',
     LIST_BIN: 'list-bin',
@@ -70,5 +71,8 @@ export const AppConstant = {
         COLLECTION: 1,
         DELIVERY: 2,
         UNASSIGNED: 0
+    },
+    ORDER_STATUS: {
+        ACCEPT: "accept"
     }
 };
