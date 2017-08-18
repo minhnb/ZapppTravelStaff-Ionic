@@ -154,7 +154,9 @@ export class CollectionModePage extends BaseComponent {
 		this.collectionModeService.listOrderOnCurrentTruck().subscribe(
 			res => {
 				let listOrder = res.map(item => {
-					return this.customerInfoTransform(item);
+					let customer = this.customerInfoTransform(item);
+					customer.isAttendantSaveMode = true;
+					return customer;
 				});
 				if (callback) {
 					callback(listOrder);

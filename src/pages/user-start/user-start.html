@@ -9,7 +9,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding [style.visibility]="isLoadedState ? 'visible' : 'hidden'">
   <ion-item no-lines>
     <ion-label>{{ 'ACTIVE' | translate }}</ion-label>
     <ion-toggle color="secondary" [(ngModel)]="isActive" (ngModelChange)="onStatusChange($event)"></ion-toggle>
