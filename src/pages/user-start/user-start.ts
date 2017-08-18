@@ -406,7 +406,8 @@ export class UserStartPage extends BaseComponent {
 		let listTruckAssignEvent = [
 			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_DELIVERY,
 			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION,
-			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_UNASSIGNED
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_UNASSIGNED,
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_TRANSFER
 		];
 		for (let i = 0; i < listTruckAssignEvent.length; i++) {
 			let key = listTruckAssignEvent[i];
@@ -436,6 +437,8 @@ export class UserStartPage extends BaseComponent {
 				return this.translate.instant('NOTIFICATION_ASSIGN_DELIVERY');
 			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION:
 				return this.translate.instant('NOTIFICATION_ASSIGN_COLLECTION', { district: data.content });
+			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_TRANSFER:
+				return this.translate.instant('NOTIFICATION_ASSIGN_TRANSFER', { number: data.no_of_orders });
 			default:
 				return this.translate.instant('NOTIFICATION_ASSIGN_UNASSIGNED');
 		}

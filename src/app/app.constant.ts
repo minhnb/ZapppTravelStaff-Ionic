@@ -45,6 +45,7 @@ export const AppConstant = {
         ASSIGN_TRUCK_DELIVERY: 'assign_truck_delivery',
         ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
+        ASSIGN_TRUCK_TRANSFER: 'assign_truck_transfer',
         USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
     },
     BACKGROUND_NOTIFICATION_TYPE: {
