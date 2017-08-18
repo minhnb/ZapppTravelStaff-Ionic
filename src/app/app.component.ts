@@ -124,6 +124,8 @@ export class MyApp extends BaseComponent {
 				this.nav.setRoot(LoginPage);
 			},
 			err => {
+				this.userService.handleLogout(err);
+				this.nav.setRoot(LoginPage);
 				this.showError(err.message);
 			}
 		);

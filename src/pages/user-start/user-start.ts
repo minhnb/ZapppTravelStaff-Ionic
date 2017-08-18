@@ -14,6 +14,7 @@ import { FindTruckPage } from '../find-truck';
 import { ListTruckWithDirectionPage } from '../list-truck-with-direction';
 import { ListTruckPage } from '../list-truck';
 import { ListAssignmentPage } from '../list-assignment';
+import { LoginPage } from '../login/login';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
@@ -91,7 +92,6 @@ export class UserStartPage extends BaseComponent {
 			}
 		}
 		this.announceActiveEvent();
-		this.isLoadedState = true;
 	}
 
 	saveStatusToLocalStorage(status: boolean) {
@@ -577,12 +577,19 @@ export class UserStartPage extends BaseComponent {
 		this.userService.getUserInfo().subscribe(
 			res => {
 				this.saveLocalStaffState(res);
+				this.isLoadedState = true;
 				if (callback) {
 					callback();
 				}
 			},
 			err => {
-				this.showError(err.message);
+				this.isLoadedState = true;
+				if (err.code != -1) {
+					this.showError(err.message);
+					return;
+				}
+				this.userService.handleLogout(err);
+				this.navCtrl.setRoot(LoginPage);
 			}
 		)
 	}
