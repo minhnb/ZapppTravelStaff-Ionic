@@ -13,7 +13,7 @@
   <ion-list class="scrollable-list-luggage">
     <ion-row full class="list-item" *ngFor="let item of listLuggage; let i = index">
       <ion-col col-6>
-        <button class="transparent-button text-button" [ngClass]="(isAttendantSaveMode && selectedIndex == i) || ((isDeliveryMode || isAcceptLuggageMode) && item.isScanned) ? 'mark' : ''">{{ item.luggageCode }}</button>
+        <button class="transparent-button text-button" [ngClass]="(isAttendantSaveMode && selectedIndex == i) || ((isDeliveryMode || isAcceptLuggageMode) && item.isScanned) ? 'mark' : ''">{{ getDisplayLuggageCode(item.luggageCode) }}</button>
       </ion-col>
       <ion-col [attr.col-6]="isAllowedToRemoveLuggageCode() ? null : true" [attr.col-4]="isAllowedToRemoveLuggageCode() ? true : null">
         <button class="transparent-button text-button" (click)="isDeliveryMode || isTransferMode && !isAcceptLuggageMode || scanBinStorageCode(i)">{{ item.storageBinName }}</button>

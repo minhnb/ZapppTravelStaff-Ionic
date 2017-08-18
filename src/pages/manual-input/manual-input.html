@@ -10,7 +10,7 @@
     <div class="search-result" [hidden]="!showSearchResult">
       <ul class="list-luggage-code" [hidden]="!listLuggageCode.length">
         <li *ngFor="let item of listLuggageCode; let i = index" (click)="selectLuggageCode(item)">
-          <span>{{item}}</span>
+          <span>{{ getDisplayLuggageCode(item) }}</span>
         </li>
       </ul>
       <div class="no-result" [hidden]="listLuggageCode.length">{{ 'NO_RESULT_FOUND' | translate}}</div>

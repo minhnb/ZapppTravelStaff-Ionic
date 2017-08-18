@@ -19,7 +19,7 @@
   <ion-list class="scrollable-list-luggage">
     <ion-row full class="list-item" *ngFor="let item of listLuggage">
       <ion-col col-6 class="no-padding-left">
-        <button class="transparent-button text-button">{{ item.luggageCode }}</button>
+        <button class="transparent-button text-button">{{ getDisplayLuggageCode(item.luggageCode) }}</button>
       </ion-col>
       <ion-col col-6 class="no-padding-left">
         <button class="transparent-button text-button">{{ item.storageBinName }}</button>

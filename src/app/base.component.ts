@@ -255,6 +255,14 @@ export class BaseComponent {
 		return this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.BIN);
     }
 
+	getDisplayLuggageCode(code: string) {
+		let result = this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.LUGGAGE);
+		if (result.length > AppConstant.DISPLAY_LUGGAGE_CODE_LENGTH) {
+			return result.substring(0, AppConstant.DISPLAY_LUGGAGE_CODE_LENGTH);
+		}
+		return result;
+	}
+
 	getFullName(firstName: string, lastName: string): string {
 		let names = [firstName, lastName];
 		return names.filter(Boolean).join(' ');
@@ -427,15 +435,14 @@ export class BaseComponent {
 		if (!user) {
 			return;
 		}
+		let status = false;
 		if (Number(user.is_availability)) {
-			let status = true;
+			status = true;
 			if ((this.isDriver() || this.isAttedant()) && user.truck_info) {
 				localStorage.setItem(AppConstant.TRUCK, user.truck_info.id);
 				let listBin = this.listBinTransform(user.truck_info.bins);
 				localStorage.setItem(AppConstant.LIST_BIN, JSON.stringify(listBin));
 			}
-		} else {
-			let status = false;
 		}
 		localStorage.setItem(AppConstant.STATUS, status.toString());
 	}
