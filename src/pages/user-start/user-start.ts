@@ -57,16 +57,17 @@ export class UserStartPage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		if (!this.isMobileDevice(this.platform)) {
-			return;
-		}
-		this.checkDevicePermission();
 	}
 
 	ionViewWillEnter() {
 		if (this.isLoadedState) {
 			this.loadStaffStatistic();
+			return;
 		}
+		if (!this.isMobileDevice(this.platform)) {
+			return;
+		}
+		this.checkDevicePermission();
 	}
 
 	handleEventAppIsResuming() {
