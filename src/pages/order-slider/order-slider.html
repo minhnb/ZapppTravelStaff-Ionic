@@ -18,6 +18,10 @@
           <div class="content">{{ item.orderId }}</div>
         </div>
         <div class="info-row">
+          <div class="label">{{ 'SENDER' | translate }}</div>
+          <div class="content">{{ item.name }}</div>
+        </div>
+        <div class="info-row">
           <div class="label">{{ 'HOTEL' | translate }}</div>
           <div class="content">{{ item.hotel }}</div>
         </div>
@@ -45,3 +49,18 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
+<div class="search-view" [hidden]="!isShowingSearchView">
+  <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_ORDER_PLACEHOLDER' | translate }}"></ion-searchbar>
+  <button class="transparent-button back-button" (click)="hideSearchView()">
+            <ion-icon name="ios-arrow-back-outline"></ion-icon>
+        </button>
+  <div class="result-title">{{ 'RESULT' | translate }}</div>
+  <ion-list>
+    <ion-item class="order-info" *ngFor="let item of listOrder; let i = index;" [hidden]="item.isNotMatched" (click)="selectItem(i)">
+      <div class="id">{{ displayOrderId(item.orderId) }}</div>
+      <div>{{ 'SENDER' | translate }}: {{ item.name }}</div>
+      <div>{{ 'HOTEL' | translate }}: {{ item.hotel }}</div>
+      <span class="pickup-time">{{ timeStampToDateTime(item.pickupTime) }}</span>
+    </ion-item>
+  </ion-list>
+</div>

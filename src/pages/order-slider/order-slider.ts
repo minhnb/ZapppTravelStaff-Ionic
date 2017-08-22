@@ -1,5 +1,5 @@
-import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, Injector, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 
@@ -16,6 +16,9 @@ import { StaffService } from '../../app/services/staff';
 export class OrderSliderPage extends BaseComponent {
 
 	listOrder: Array<any> = [];
+	isShowingSearchView = false;
+
+	@ViewChild(Slides) slides: Slides;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
 		private staffService: StaffService) {
@@ -36,7 +39,52 @@ export class OrderSliderPage extends BaseComponent {
 		this.navCtrl.push(CustomerLuggagePage, params);
 	}
 
-	showSearchView() {
+	hideSearchView() {
+		this.isShowingSearchView = false;
+	}
 
+	showSearchView() {
+		this.isShowingSearchView = true;
+	}
+
+	getItems(event: any) {
+		let value = event.target.value;
+		let keyword = this.trimText(value);
+		this.listOrder.forEach(item => {
+			if (this.isMatchedItem(item, keyword)) {
+				item.isNotMatched = false;
+			} else {
+				item.isNotMatched = true;
+			}
+		});
+	}
+
+	isMatchedItem(item: any, keyword: string): boolean {
+		if (!keyword) {
+			return true;
+		}
+		if (this.isMatchedField(item.name, keyword) || this.isMatchedField(item.hotel, keyword) || this.isMatchedField(item.orderId, keyword)) {
+			return true;
+		}
+		return false;
+	}
+
+	isMatchedField(field: string, keyword: string): boolean {
+		if (!field) {
+			return false;
+		}
+		return field.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
+	}
+
+	displayOrderId(orderId: string) {
+		if (orderId.length > AppConstant.DISPLAY_ORDER_ID_LENGTH) {
+			return orderId.substring(0, AppConstant.DISPLAY_ORDER_ID_LENGTH);
+		}
+		return orderId;
+	}
+
+	selectItem(index: number) {
+		this.hideSearchView();
+		this.slides.slideTo(index);
 	}
 }

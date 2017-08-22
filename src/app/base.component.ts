@@ -295,6 +295,10 @@ export class BaseComponent {
 	}
 
 	customerInfoTransform(requestInfo: any): any {
+		if (!requestInfo.user_request_info_first && !requestInfo.user_request_info_last && requestInfo.userRequestInfo) {
+			requestInfo.user_request_info_first = requestInfo.userRequestInfo.first;
+			requestInfo.user_request_info_last = requestInfo.userRequestInfo.last;
+		}
 		if (!requestInfo.hotel_info && requestInfo.hotelInfo) {
 			requestInfo.hotel_info = requestInfo.hotelInfo;
 		}

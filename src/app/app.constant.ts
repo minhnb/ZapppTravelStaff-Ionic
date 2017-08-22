@@ -67,6 +67,7 @@ export const AppConstant = {
         ORDER: 'O-'
     },
     DISPLAY_LUGGAGE_CODE_LENGTH: 4,
+    DISPLAY_ORDER_ID_LENGTH: 8,
     ASSIGNMENT_MODE: {
         COLLECTION: 1,
         DELIVERY: 2,
