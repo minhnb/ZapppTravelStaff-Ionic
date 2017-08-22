@@ -25,6 +25,7 @@ export class BaseComponent {
 	public keyboard: Keyboard;
 	public backgroundMode: BackgroundMode;
 
+	defaultAvatar: string = AppConstant.DEFAULT_AVATAR;
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
 	isDestroyed: boolean = false;

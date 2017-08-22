@@ -36,8 +36,10 @@ export const AppConstant = {
         START: 'www/assets/images/marker-start.png',
         END: 'www/assets/images/marker-end.png',
         TRUCK: 'www/assets/images/marker-truck.png',
-        CURRENT_LOCATION: 'www/assets/images/marker-current-location.png'
+        CURRENT_LOCATION: 'www/assets/images/marker-current-location.png',
+        DEFAULT_AVATAR: 'www/assets/images/no-photo.png',
     },
+    DEFAULT_AVATAR: 'assets/images/no-photo.png',
     GET_LOCATION_TIMEOUT: 5000,
     WATCH_POSITION_INTERVAL: 30000,
     NOTIFICATION_TYPE: {

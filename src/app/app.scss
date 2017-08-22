@@ -269,3 +269,28 @@ ion-app._gmaps_cdv_ .nav-decor {
   padding: 10px;
   font-size: large;
 }
+
+.user_info {
+  padding: 10px 10px 10px 60px;
+  border-bottom: 1px solid #c8c7cc;
+
+  & > img.avatar {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 50%;
+  }
+
+  & > div {
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &.name {
+      font-weight: bold;
+    }
+  }
+}

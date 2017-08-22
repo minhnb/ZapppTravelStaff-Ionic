@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
+import { DataShare } from '../../app/helper/data.share';
 
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
@@ -49,7 +50,8 @@ export class UserStartPage extends BaseComponent {
 	isAssignedDelivery: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService,
+		private dataShare: DataShare) {
 		super(injector);
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeAssignTruckEvent();
@@ -617,11 +619,18 @@ export class UserStartPage extends BaseComponent {
 	getUserInfo(callback?: () => void) {
 		this.userService.getUserInfo().subscribe(
 			res => {
-				this.saveLocalStaffState(res);
-				this.isLoadedState = true;
-				this.userId = res.id;
-				if (callback) {
-					callback();
+				this.userService.saveUserRole(res.roles);
+				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
+					this.dataShare.setUserInfo(this.userInfoTransform(res));
+					this.saveLocalStaffState(res);
+					this.isLoadedState = true;
+					this.userId = res.id;
+					if (callback) {
+						callback();
+					}
+				} else {
+					this.showError(this.translate.instant('USER_NOT_STAFF'));
+					this.handleInvalidStaff(res);
 				}
 			},
 			err => {
@@ -630,9 +639,22 @@ export class UserStartPage extends BaseComponent {
 					this.showError(err.message);
 					return;
 				}
-				this.userService.handleLogout(err);
-				this.navCtrl.setRoot(LoginPage);
+				this.handleInvalidStaff(err);
 			}
 		)
+	}
+
+	userInfoTransform(userInfo: any) {
+		return {
+			name: this.getFullName(userInfo.first, userInfo.last),
+			email: userInfo.email,
+			avatar: userInfo.pic_url,
+			role: userInfo.roles
+		}
+	}
+
+	handleInvalidStaff(info: any) {
+		this.userService.handleLogout(info);
+		this.navCtrl.setRoot(LoginPage);
 	}
 }

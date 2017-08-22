@@ -19,7 +19,7 @@ import { StaffService } from '../../app/services/staff';
 export class ListRequestWithDirectionPage extends DirectionPage {
 
 	listRequest: Array<any> = [];
-	defaultAvatar: string = 'www/assets/images/no-photo.png';
+	defaultAvatar: string = AppConstant.MARKER_IMAGE.DEFAULT_AVATAR;
 	slideIndex: number = 0;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
