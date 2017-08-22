@@ -74,6 +74,11 @@ export const AppConstant = {
         UNASSIGNED: 0
     },
     ORDER_STATUS: {
-        ACCEPT: "accept"
+        ACCEPTED: "accept",
+		CANCELED: "cancel",
+		DROPPED_OFF: "dropoff",
+		EXPIRED: "expired",
+		NEW: "new",
+		PICKED_UP: "pickup"
     }
 };

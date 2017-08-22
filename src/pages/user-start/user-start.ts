@@ -15,6 +15,7 @@ import { ListTruckWithDirectionPage } from '../list-truck-with-direction';
 import { ListTruckPage } from '../list-truck';
 import { ListAssignmentPage } from '../list-assignment';
 import { LoginPage } from '../login/login';
+import { TakePicturePage } from '../take-picture';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
@@ -80,7 +81,7 @@ export class UserStartPage extends BaseComponent {
 		this.getUserInfo(() => {
 			this.loadLocalPreviousState();
 			this.loadListTruckForActiveDirverAndAttendant();
-			this.loadCurrentJobForActiveZappper();
+			this.loadCurrentJobForActiveStaff();
 			this.loadStaffStatistic();
 		});
 	}
@@ -348,6 +349,13 @@ export class UserStartPage extends BaseComponent {
 		this.navCtrl.push(DirectionUserPage, params);
 	}
 
+	goToTakePicturePage(customer: any) {
+		let params = {
+			customer: customer
+		}
+		this.navCtrl.push(TakePicturePage, params);
+	}
+
 	goToListAssignmentPage() {
 		this.saveLastViewListAssignment();
 		let params = {
@@ -357,14 +365,21 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	isValidOrderForZappperToContinueCurrentJob(order: any) {
-		if (order.status != AppConstant.ORDER_STATUS.ACCEPT || order.zappper_id != this.userId) {
+		if (order.status != AppConstant.ORDER_STATUS.ACCEPTED || order.zappper_id != this.userId) {
 			return false;
 		}
 		return true;
 	}
 
-	loadCurrentJobForActiveZappper() {
-		if (!this.isActive || !this.isZappper()) {
+	isValidOrderForAttendantToContinueCurrentJob(order: any) {
+		if (order.status != AppConstant.ORDER_STATUS.ACCEPTED && order.status != AppConstant.ORDER_STATUS.NEW) {
+			return false;
+		}
+		return true;
+	}
+
+	loadCurrentJobForActiveStaff() {
+		if (!this.isActive) {
 			return;
 		}
 		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
@@ -374,7 +389,18 @@ export class UserStartPage extends BaseComponent {
 		let customer = JSON.parse(currentJob);
 		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
 			res => {
-				if (this.isValidOrderForZappperToContinueCurrentJob(res)) {
+				if (this.isAttedant() && !this.isValidOrderForAttendantToContinueCurrentJob(res)) {
+					return;
+				}
+				if (this.isZappper() && !this.isValidOrderForZappperToContinueCurrentJob(res)) {
+					return;
+				}
+				let userRequest = this.customerInfoTransform(res);
+				if (userRequest.listLuggage && userRequest.listLuggage.length > 0) {
+					this.goToTakePicturePage(userRequest);
+					return;
+				}
+				if (this.isZappper()) {
 					this.goToUserDirectionPage(customer);
 				}
 			},

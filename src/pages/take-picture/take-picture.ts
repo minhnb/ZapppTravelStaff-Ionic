@@ -35,6 +35,7 @@ export class TakePicturePage extends BaseComponent {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad TakePicturePage');
+		this.saveAttendantLocalCurrentJob();
 	}
 
 	dismissView(event) {
@@ -97,15 +98,9 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	goBackToUserStartPage() {
-		this.clearZappperCurrentJob();
+		this.clearLocalCurrentJob();
         this.navCtrl.popToRoot();
     }
-
-	clearZappperCurrentJob() {
-		if (this.isZappper()) {
-			localStorage.removeItem(AppConstant.CURRENT_JOB);
-		}
-	}
 
 	imageToBase64(url, callback) {
 		var xhr = new XMLHttpRequest();
@@ -205,5 +200,11 @@ export class TakePicturePage extends BaseComponent {
 				}
 			);
 		});
+	}
+
+	saveAttendantLocalCurrentJob() {
+		if (this.isAttedant()) {
+			this.saveLocalCurrentJob(this.customer);
+		}
 	}
 }

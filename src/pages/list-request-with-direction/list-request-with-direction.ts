@@ -67,10 +67,6 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 		this.navCtrl.push(DirectionUserPage, params);
 	}
 
-	saveLocalCurrentJob(customer) {
-		localStorage.setItem(AppConstant.CURRENT_JOB, JSON.stringify(customer));
-	}
-
 	subscribeZappperNewRequestEvent() {
 		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
 			if (this.isDestroyed) {

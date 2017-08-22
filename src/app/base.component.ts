@@ -451,4 +451,12 @@ export class BaseComponent {
 		localStorage.setItem(AppConstant.STATUS, status.toString());
 		localStorage.setItem(AppConstant.USER_ID, user.id);
 	}
+
+	saveLocalCurrentJob(customer) {
+		localStorage.setItem(AppConstant.CURRENT_JOB, JSON.stringify(customer));
+	}
+
+	clearLocalCurrentJob() {
+		localStorage.removeItem(AppConstant.CURRENT_JOB);
+	}
 }
