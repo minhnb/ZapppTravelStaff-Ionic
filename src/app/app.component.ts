@@ -16,6 +16,7 @@ import { LoginPage } from '../pages/login/login';
 import { UserStartPage } from '../pages/user-start';
 
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
+import { BackgroundModeConfiguration } from '@ionic-native/background-mode';
 
 @Component({
 	templateUrl: 'app.html',
@@ -59,7 +60,7 @@ export class MyApp extends BaseComponent {
 				this.rootPage = UserStartPage;
 			}
 
-			this.backgroundMode.enable();
+			this.enableBackgroundMode();
 		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();
@@ -93,6 +94,14 @@ export class MyApp extends BaseComponent {
 
 			// fcm.unsubscribeFromTopic('marketing');
 		}
+	}
+
+	enableBackgroundMode() {
+		let backgroundModeConfiguration: BackgroundModeConfiguration = {
+			silent: true
+		}
+		this.backgroundMode.setDefaults(backgroundModeConfiguration);
+		this.backgroundMode.enable();
 	}
 
 	announceAppIsResuming() {
