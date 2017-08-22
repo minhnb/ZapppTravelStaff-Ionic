@@ -16,6 +16,7 @@ import { LoginPage } from '../pages/login/login';
 import { UserStartPage } from '../pages/user-start';
 
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
+import { BackgroundModeConfiguration } from '@ionic-native/background-mode';
 
 @Component({
 	templateUrl: 'app.html',
@@ -58,6 +59,11 @@ export class MyApp extends BaseComponent {
 			if (this.isLoggedIn()) {
 				this.rootPage = UserStartPage;
 			}
+
+			this.enableBackgroundMode();
+		});
+		this.platform.resume.subscribe(() => {
+			this.announceAppIsResuming();
 		});
 	}
 
@@ -67,15 +73,14 @@ export class MyApp extends BaseComponent {
 			// fcm.subscribeToTopic('marketing');
 
 			fcm.getToken().then(token => {
-				// alert('registerToken' + token);
-				console.log('registerToken' + token);
-				this.dataShare.setFCMToken(token);
+				this.updateDeviceToken(token);
 			});
 
 			fcm.onNotification().subscribe((data: any) => {
 				if (data.wasTapped) {
 					console.log("Received in background");
 					console.log(JSON.stringify(data));
+					this.handleZapppBackgroundNotification(data);
 				} else {
 					console.log("Received in foreground");
 					console.log(JSON.stringify(data));
@@ -84,12 +89,24 @@ export class MyApp extends BaseComponent {
 			});
 
 			fcm.onTokenRefresh().subscribe(token => {
-				// alert('registerToken' + token);
-				console.log('registerToken' + token);
+				this.updateDeviceToken(token);
 			});
 
 			// fcm.unsubscribeFromTopic('marketing');
 		}
+	}
+
+	enableBackgroundMode() {
+		let backgroundModeConfiguration: BackgroundModeConfiguration = {
+			silent: true
+		}
+		this.backgroundMode.setDefaults(backgroundModeConfiguration);
+		this.backgroundMode.enable();
+	}
+
+	announceAppIsResuming() {
+		console.log('announceAppIsResuming');
+		this.events.publish(AppConstant.EVENT_TOPIC.APP_RESUMING);
 	}
 
 	getServerName() {
@@ -117,6 +134,23 @@ export class MyApp extends BaseComponent {
 			},
 			err => {
 				this.userService.handleLogout(err);
+				this.nav.setRoot(LoginPage);
+				this.showError(err.message);
+			}
+		);
+	}
+
+	updateDeviceToken(deviceToken: string) {
+		console.log('registerToken' + deviceToken);
+		this.dataShare.setFCMToken(deviceToken);
+		if (!this.isLoggedIn()) {
+			return;
+		}
+		this.userService.updateDeviceToken(deviceToken).subscribe(
+			res => {
+
+			},
+			err => {
 				this.showError(err.message);
 			}
 		);
@@ -212,5 +246,12 @@ export class MyApp extends BaseComponent {
 		if (!this.notificationTypeIsInList(topic)) {
 			this.showInfo(data.body, data.title);
 		}
+	}
+
+	handleZapppBackgroundNotification(data: any) {
+		let topic = AppConstant.BACKGROUND_NOTIFICATION_TYPE.PREFIX + data.type;
+		setTimeout(() => {
+			this.events.publish(topic, data);
+		}, 1000);
 	}
 }

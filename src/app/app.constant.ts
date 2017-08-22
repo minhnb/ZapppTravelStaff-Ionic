@@ -8,8 +8,10 @@ export const AppConstant = {
         ATTENDANT: 'ATTENDANT',
         ZAPPPER: 'ZAPPPER'
     },
+    USER_ID: "user_id",
     STATUS: 'status',
     TRUCK: 'truck',
+    LIST_BIN: 'list-bin',
     CURRENT_JOB: 'current_job',
     LAST_VIEW_ASSIGNMENT: 'last_view_assignment',
     PATTERN: {
@@ -34,8 +36,10 @@ export const AppConstant = {
         START: 'www/assets/images/marker-start.png',
         END: 'www/assets/images/marker-end.png',
         TRUCK: 'www/assets/images/marker-truck.png',
-        CURRENT_LOCATION: 'www/assets/images/marker-current-location.png'
+        CURRENT_LOCATION: 'www/assets/images/marker-current-location.png',
+        DEFAULT_AVATAR: 'www/assets/images/no-photo.png',
     },
+    DEFAULT_AVATAR: 'assets/images/no-photo.png',
     GET_LOCATION_TIMEOUT: 5000,
     WATCH_POSITION_INTERVAL: 30000,
     NOTIFICATION_TYPE: {
@@ -44,17 +48,39 @@ export const AppConstant = {
         ASSIGN_TRUCK_DELIVERY: 'assign_truck_delivery',
         ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
+        ASSIGN_TRUCK_TRANSFER: 'assign_truck_transfer',
         USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
     },
+    BACKGROUND_NOTIFICATION_TYPE: {
+        PREFIX: 'background-notification:',
+        REQUEST_ORDER: 'request_order'
+    },
     EVENT_TOPIC: {
+        APP_RESUMING: 'app:resuming',
         USER_ACTIVE: 'user:active',
         DIRECTION_STATION: 'direction:station',
         DELIVERY_COMPLETED: 'delivery:completed',
-        COLLECTION_NEXTSTATION: 'collection:nextStation'
+        COLLECTION_NEXTSTATION: 'collection:nextStation',
+        INPUT_MANUAL: 'input:manual'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',
         BIN: 'L-',
         ORDER: 'O-'
+    },
+    DISPLAY_LUGGAGE_CODE_LENGTH: 4,
+    DISPLAY_ORDER_ID_LENGTH: 8,
+    ASSIGNMENT_MODE: {
+        COLLECTION: 1,
+        DELIVERY: 2,
+        UNASSIGNED: 0
+    },
+    ORDER_STATUS: {
+        ACCEPTED: "accept",
+		CANCELED: "cancel",
+		DROPPED_OFF: "dropoff",
+		EXPIRED: "expired",
+		NEW: "new",
+		PICKED_UP: "pickup"
     }
 };

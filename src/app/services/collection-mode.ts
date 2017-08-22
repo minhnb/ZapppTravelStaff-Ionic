@@ -61,10 +61,12 @@ export class CollectionModeService {
 		return this.zapppHttp.get(this.orderUrl + '/is_luggage_valid/luggage_id/' + luggageCode);
 	}
 
-	completedPickup(orderId: string, proofImageUrl: string) {
+	completedPickup(orderId: string, proofImageUrl: string, latitude: number, longitude: number) {
 		let params = {
 			order_id: orderId,
-			pic_url: proofImageUrl
+			pic_url: proofImageUrl,
+			lat: latitude,
+			lng: longitude
 		};
 		return this.zapppHttp.post(this.orderUrl + '/pickup_completed', params);
 	}
@@ -111,5 +113,13 @@ export class CollectionModeService {
 			hotel_id: hotelId
 		};
 		return this.zapppHttp.post(this.truckUrl + '/list_accept_relevant_orders', params);
+	}
+
+	listOrderOnCurrentTruck() {
+		let truckId = localStorage.getItem(AppConstant.TRUCK);
+		let params = {
+			truckid: truckId
+		}
+		return this.zapppHttp.get(this.orderUrl + '/orders_on_truck', params);
 	}
 }

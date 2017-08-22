@@ -26,10 +26,11 @@ export class LoginPage extends BaseComponent {
 	}
 
 	login() {
+		this.hideKeyboard();
 		this.userService.userLogIn(this.username, this.password).subscribe(
 			res => {
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
-					this.saveLocalState(res);
+					this.saveLocalStaffState(res.user);
 					this.navCtrl.setRoot(UserStartPage);
 				} else {
 					this.showError(this.translate.instant('USER_NOT_STAFF'));
@@ -40,19 +41,5 @@ export class LoginPage extends BaseComponent {
 				this.showError(err.message);
 			}
 		)
-	}
-
-	saveLocalState(res: any) {
-		if (!res.user) {
-			return;
-		}
-		let user = res.user;
-		if (user.is_availability == '1') {
-			let status = true;
-			localStorage.setItem(AppConstant.STATUS, status.toString());
-			if ((this.isDriver() || this.isAttedant()) && user.truck_info) {
-				localStorage.setItem(AppConstant.TRUCK, user.truck_info.id);
-			}
-		}
 	}
 }

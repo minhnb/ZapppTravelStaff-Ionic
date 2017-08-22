@@ -6,6 +6,8 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
 import { GeolocationOptions } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { Keyboard } from '@ionic-native/keyboard';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import * as moment from 'moment';
 
@@ -20,7 +22,10 @@ export class BaseComponent {
 	public translate: TranslateService;
 	public spinnerDialog: SpinnerDialog;
 	public events: Events;
+	public keyboard: Keyboard;
+	public backgroundMode: BackgroundMode;
 
+	defaultAvatar: string = AppConstant.DEFAULT_AVATAR;
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
 	isDestroyed: boolean = false;
@@ -32,6 +37,10 @@ export class BaseComponent {
 		this.translate = injector.get(TranslateService);
 		this.spinnerDialog = injector.get(SpinnerDialog);
 		this.events = injector.get(Events);
+		this.keyboard = injector.get(Keyboard);
+		this.backgroundMode = injector.get(BackgroundMode);
+
+		this.subcribeEventAppIsResuming();
 	}
 
 	ionViewWillUnload() {
@@ -229,15 +238,31 @@ export class BaseComponent {
         return false;
     }
 
-    getOrderIdFromOrderCode(code: string): string {
-		if (code.startsWith(AppConstant.CODE_PREFIX.ORDER)) {
-			let codeSplitedArray = code.split(AppConstant.CODE_PREFIX.ORDER);
+	getIdFromCodeWithPrefix(code: string, prefix: string): string {
+		if (code.startsWith(prefix)) {
+			let codeSplitedArray = code.split(prefix);
 			if (codeSplitedArray.length > 1 && codeSplitedArray[1].length) {
 				return codeSplitedArray[1];
 			}
         }
         return null;
     }
+
+    getOrderIdFromOrderCode(code: string): string {
+		return this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.ORDER);
+    }
+
+    getBinIdFromBinCode(code: string): string {
+		return this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.BIN);
+    }
+
+	getDisplayLuggageCode(code: string) {
+		let result = this.getIdFromCodeWithPrefix(code, AppConstant.CODE_PREFIX.LUGGAGE);
+		if (result.length > AppConstant.DISPLAY_LUGGAGE_CODE_LENGTH) {
+			return result.substring(0, AppConstant.DISPLAY_LUGGAGE_CODE_LENGTH);
+		}
+		return result;
+	}
 
 	getFullName(firstName: string, lastName: string): string {
 		let names = [firstName, lastName];
@@ -250,7 +275,8 @@ export class BaseComponent {
 				return {
 					id: item.id,
 					luggageCode: item.luggage_id,
-					storageBinCode: item.bin
+					storageBinCode: item.bin_id,
+					storageBinName: item.bin
 				}
 			});
 		}
@@ -270,6 +296,22 @@ export class BaseComponent {
 	}
 
 	customerInfoTransform(requestInfo: any): any {
+		if (!requestInfo.user_request_info_first && !requestInfo.user_request_info_last && requestInfo.userRequestInfo) {
+			requestInfo.user_request_info_first = requestInfo.userRequestInfo.first;
+			requestInfo.user_request_info_last = requestInfo.userRequestInfo.last;
+		}
+		if (!requestInfo.hotel_info && requestInfo.hotelInfo) {
+			requestInfo.hotel_info = requestInfo.hotelInfo;
+		}
+		if (!requestInfo.order_luggage_bin && requestInfo.bagLocationStorageInfo) {
+			requestInfo.order_luggage_bin = requestInfo.bagLocationStorageInfo.map(item => {
+				return {
+					luggage_id: item.luggage_id,
+					bin: item.bin_name,
+					bin_id: item.truck_bin_id
+				}
+			});
+		}
 		let customerInfo = {
 			name: this.getFullName(requestInfo.user_request_info_first, requestInfo.user_request_info_last),
 			hotel: requestInfo.hotel_info ? requestInfo.hotel_info.name : '',
@@ -279,7 +321,9 @@ export class BaseComponent {
 			listLuggage: this.listLuggageTransform(requestInfo.order_luggage_bin),
 			isAttendantSaveMode: false,
 			orderId: requestInfo.id,
-			orderNo: requestInfo.id
+			orderNo: requestInfo.id,
+			alreadyCheckIn: Number(requestInfo.is_checked_in),
+			pickupTime: requestInfo.pickup_at
 		};
 		return customerInfo;
 	}
@@ -292,6 +336,22 @@ export class BaseComponent {
 			orderQuantity: truck.total ? truck.total : 0
 		}
 		return truckTransform;
+	}
+
+	binTransform(bin: any): any {
+		return {
+			id: bin.id,
+			name: bin.name
+		};
+	}
+
+	listBinTransform(listBin: Array<any>): Array<any> {
+		if (!listBin) {
+			return [];
+		}
+		return listBin.map(item => {
+			return this.binTransform(item);
+		});
 	}
 
 	initGeolocationOption(): GeolocationOptions {
@@ -318,6 +378,20 @@ export class BaseComponent {
 		return true;
 	}
 
+	hasValidLocation(lat: any, long: any) {
+		if (lat == undefined || lat == null || long == undefined || long == null) {
+			return false;
+		}
+		if (Number(lat) == 0 && Number(long) == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	hideKeyboard() {
+		this.keyboard.close();
+	}
+
 	listLocalEvent() {
 		return Object.keys(AppConstant.EVENT_TOPIC).map((item) => {
 			let topic = AppConstant.EVENT_TOPIC[item];
@@ -342,5 +416,48 @@ export class BaseComponent {
 		allEvents.forEach(topic => {
 			this.events.unsubscribe(topic);
 		});
+	}
+
+	subcribeEventAppIsResuming() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
+			console.log('subcribeEventAppIsResuming');
+			this.handleEventAppIsResuming();
+		});
+	}
+
+	handleEventAppIsResuming() {
+
+	}
+
+	trimText(s: string): string {
+        if (s) {
+            return s.trim().replace(/\s+/g, ' ');
+        }
+        return s;
+    }
+
+	saveLocalStaffState(user: any) {
+		if (!user) {
+			return;
+		}
+		let status = false;
+		if (Number(user.is_availability)) {
+			status = true;
+			if ((this.isDriver() || this.isAttedant()) && user.truck_info) {
+				localStorage.setItem(AppConstant.TRUCK, user.truck_info.id);
+				let listBin = this.listBinTransform(user.truck_info.bins);
+				localStorage.setItem(AppConstant.LIST_BIN, JSON.stringify(listBin));
+			}
+		}
+		localStorage.setItem(AppConstant.STATUS, status.toString());
+		localStorage.setItem(AppConstant.USER_ID, user.id);
+	}
+
+	saveLocalCurrentJob(customer) {
+		localStorage.setItem(AppConstant.CURRENT_JOB, JSON.stringify(customer));
+	}
+
+	clearLocalCurrentJob() {
+		localStorage.removeItem(AppConstant.CURRENT_JOB);
 	}
 }

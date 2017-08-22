@@ -14,7 +14,6 @@ import { StaffService } from '../../app/services/staff';
 export class ListRequestPage extends BaseComponent {
 
 	listRequest: Array<any> = [];
-	defaultAvatar: string = 'assets/images/no-photo.png';
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
 		private staffService: StaffService) {

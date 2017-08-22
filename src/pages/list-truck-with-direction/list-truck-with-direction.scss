@@ -1,0 +1,80 @@
+page-list-truck-with-direction {
+  #map {
+    height: 65%;
+  }
+
+  .slider-content {
+    height: 35%;
+    border-top: solid 1px #bbbbbb;
+    // padding: 10px;
+  }
+
+  ion-slide {
+    .slide-zoom {
+      height: 100%;
+    }
+
+    .truck-detail {
+      color: #666666;
+      font-size: 14px;
+      height: calc(100% - 25px);
+      position: relative;
+      text-align: left;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      ion-row {
+        border-bottom: solid 1px #bbbbbb;
+        padding: 0 10px 10px;
+
+        button.call-driver {
+          position: static;
+          float: left;
+          margin-right: 7px;
+        }
+
+        div.text {
+          margin-top: 5px;
+          height: 20px;
+        }
+
+        .driver-name,
+        .truck-number {
+          font-weight: bold;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: calc(100% - 70px);
+          overflow: hidden;
+        }
+
+        .arrival-time,
+        .estimated-time {
+          width: 100%;
+          text-align: right;
+        }
+      }
+
+      button.direction-button {
+        &.left {
+          left: 15px;
+        }
+
+        &.right {
+          right: 15px;
+        }
+      }
+
+      .button-ios {
+        background-color: #00264D;
+
+        &:hover:not(.disable-hover) {
+          background-color: #005BB8;
+        }
+
+        &[disabled] {
+          background-color: #CCCCCC;
+        }
+      }
+    }
+  }
+}

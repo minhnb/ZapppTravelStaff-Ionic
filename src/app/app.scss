@@ -61,6 +61,10 @@ ion-navbar {
 
     & > button {
       margin-bottom: 10px;
+
+      &.no-margin-bottom {
+        margin-bottom: 0;
+      }
     }
   }
 }
@@ -117,10 +121,18 @@ button.button-scanner {
   }
 }
 
+button.button-manual-input {
+  float: right;
+
+  img {
+    width: 40px;
+  }
+}
+
 .left-scanner-button {
   float: left;
   width: calc(100vw - 120px);
-  margin-top: 15px;
+  margin-top: 65px;
 }
 
 .info-row {
@@ -186,6 +198,41 @@ button.right-number {
   }
 }
 
+button.direction-button {
+  position: absolute;
+  width: 25%;
+  bottom: 20px;
+  padding: 10px;
+  margin: 0;
+  font-size: 14px;
+  height: auto;
+
+  &.left {
+    left: 20px;
+  }
+
+  &.right {
+    right: 20px;
+  }
+
+  &.middle {
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
+
+button.call-driver {
+  position: absolute;
+  bottom: 80px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  left: 20px;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px;
+}
+
 .middle-notice {
   position: absolute;
   top: 50%;
@@ -209,4 +256,41 @@ ion-app._gmaps_cdv_ .nav-decor {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.warning-no-data {
+  text-align: center;
+  transform: translate;
+  position: relative;
+  width: 100%;
+  top: 50%;
+  margin-top: -20px;
+  height: 40px;
+  padding: 10px;
+  font-size: large;
+}
+
+.user_info {
+  padding: 10px 10px 10px 60px;
+  border-bottom: 1px solid #c8c7cc;
+
+  & > img.avatar {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 50%;
+  }
+
+  & > div {
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &.name {
+      font-weight: bold;
+    }
+  }
 }

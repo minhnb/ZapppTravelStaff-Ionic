@@ -20,6 +20,10 @@ export class StaffService {
 		return this.zapppHttp.get(this.truckUrl + '/available_truck');
 	}
 
+	getListOnlineTruck() {
+		return this.zapppHttp.get(this.truckUrl + '/online_trucks');
+	}
+
 	updateStatus(status: boolean) {
 		let params = {
 			status: status

@@ -88,16 +88,22 @@ export class StayTimeCountDownPage extends BaseComponent {
 
 	increaseOneMinute() {
 		this.duration += MINUTE_TO_SECOND;
-		if (this.isStarted) this.updateParkingTime();
+		if (this.isStarted) {
+			this.updateParkingTime();
+			if (!this.countDownTimer) {
+				this.startCountDown();
+			}
+		}
 	}
 
 	decreaseOneMinute() {
-		if (this.duration >= MINUTE_TO_SECOND) {
+		if (this.duration > MINUTE_TO_SECOND) {
 			this.duration -= MINUTE_TO_SECOND;
+			if (this.isStarted) this.updateParkingTime();
 		} else {
 			this.duration = 0;
+			this.clearCountDownTimer();
 		}
-		if (this.isStarted) this.updateParkingTime();
 	}
 
 	updateStation(nextStation?: any, callback?: () => void) {
@@ -139,10 +145,17 @@ export class StayTimeCountDownPage extends BaseComponent {
         this.countDownTimer = setInterval(() => {
             this.duration--;
             if (this.duration == 0) {
-                clearInterval(this.countDownTimer);
+                this.clearCountDownTimer();
             }
         }, 1000);
     }
+
+	clearCountDownTimer() {
+		if (this.countDownTimer) {
+			clearInterval(this.countDownTimer);
+			this.countDownTimer = null;
+		}
+	}
 
 	manualChangeParkingTime(event) {
 		let formatString = '00:00:00';

@@ -1,12 +1,18 @@
 <ion-menu type="overlay" [content]="content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Menu</ion-title>
+      <ion-title>{{ 'MENU' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
+      <div class="user_info" *ngIf="dataShare.userInfo">
+        <img class="avatar" [src]="dataShare.userInfo.avatar || defaultAvatar" />
+        <div class="name">{{ dataShare.userInfo.name }}</div>
+        <div>{{ dataShare.userInfo.email }}</div>
+        <div class="capitalize">{{ dataShare.userInfo.role.toLowerCase() }}</div>
+      </div>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>
@@ -15,6 +21,6 @@
   </ion-content>
 
 </ion-menu>
-<span class="version-info" [ngClass]="isPlatformiOS(platform) ? 'margin-top' : ''">Version 1.0 Build 2017.08.04.0 Server {{ serverName }}</span>
+<span class="version-info" [ngClass]="isPlatformiOS(platform) ? 'margin-top' : ''">Version 1.0 Build 2017.08.22.0 Server {{ serverName }}</span>
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" [style.height.px]="deviceHeight" #content swipeBackEnabled="false"></ion-nav>

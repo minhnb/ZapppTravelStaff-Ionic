@@ -22,6 +22,10 @@ export class UserService {
 		localStorage.setItem(AppConstant.ACCESS_TOKEN, data.access_token);
 		localStorage.setItem(AppConstant.REFRESH_TOKEN, data.refresh_token);
 		localStorage.setItem(AppConstant.EXPIRED_AT, data.expired_at);
+		this.saveUserRole(role);
+	}
+
+	saveUserRole(role) {
 		localStorage.setItem(AppConstant.ROLE, role);
 	}
 
@@ -60,6 +64,13 @@ export class UserService {
     }
 
 	getUserInfo(): Observable<any> {
-		return this.zapppHttp.get(AppConfig.API_URL + 'me');
+		return this.zapppHttp.get(this.userUrl + '/detail');
+	}
+
+	updateDeviceToken(deviceToken: string) {
+		let params = {
+			device_token: deviceToken
+		};
+		return this.zapppHttp.post(this.userUrl + '/refresh_device_token', params);
 	}
 }

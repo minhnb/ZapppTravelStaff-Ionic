@@ -28,6 +28,8 @@ export class DirectionPage extends BaseComponent {
 	isLoadedMap: boolean = false;
 	currentLocation: LatLng = null;
 	autoMoveCamera: boolean = true;
+	currentDirectionDistance: any;
+	currentDirectionDuration: any;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
@@ -100,6 +102,7 @@ export class DirectionPage extends BaseComponent {
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				console.log('Map is ready!');
+				this.enableMapClickable();
 				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
 					if (this.autoMoveCamera) {
@@ -249,18 +252,34 @@ export class DirectionPage extends BaseComponent {
 			});
 	}
 
-	getDirection(origin: LatLng, destination: LatLng, callback?: (points: any) => void) {
+	getGoogleDirection(origin: LatLng, destination: LatLng, callback: (response: any, status: any) => void) {
 		this.directionsService.route({
 			origin: origin,
 			destination: destination,
 			travelMode: 'DRIVING'
 		}, (response, status) => {
+			console.log(JSON.stringify(response));
+			callback(response, status);
+		});
+	}
+
+	getDirection(origin: LatLng, destination: LatLng, callback?: (points: any) => void) {
+		this.currentDirectionDistance = null;
+		this.currentDirectionDuration = null;
+		this.getGoogleDirection(origin, destination, (response, status) => {
 			if (status === 'OK') {
-				console.log(response);
-				if (response && response.routes && response.routes.length > 0 && response.routes[0].overview_polyline) {
-					let polyLineEncode = response.routes[0].overview_polyline;
+				let routes = response.routes;
+				if (response && routes && routes.length > 0 && routes[0].overview_polyline) {
+					let route = routes[0];
+					let polyLineEncode = route.overview_polyline;
 					let points = decodePolyline(polyLineEncode);
-					console.log(points);
+
+					let legs = route.legs;
+					if (legs && legs.length > 0) {
+						this.currentDirectionDistance = legs[0].distance;
+						this.currentDirectionDuration = legs[0].duration;
+					}
+
 					if (callback) {
 						callback(points);
 					}

@@ -19,10 +19,10 @@
   <ion-list class="scrollable-list-luggage">
     <ion-row full class="list-item" *ngFor="let item of listLuggage">
       <ion-col col-6 class="no-padding-left">
-        <button class="transparent-button text-button">{{ item.luggageCode }}</button>
+        <button class="transparent-button text-button">{{ getDisplayLuggageCode(item.luggageCode) }}</button>
       </ion-col>
       <ion-col col-6 class="no-padding-left">
-        <button class="transparent-button text-button">{{ item.storageBinCode }}</button>
+        <button class="transparent-button text-button">{{ item.storageBinName }}</button>
       </ion-col>
     </ion-row>
   </ion-list>
@@ -33,6 +33,9 @@
         <div class="content">{{ listLuggage.length }}</div>
       </div>
     </div>
+    <button class="transparent-button button-manual-input no-margin-bottom" (click)="goToManualInputPage()">
+          <img class="right-image" src="assets/images/keyboard.png" />
+      </button>
     <button class="transparent-button button-scanner" (click)="scanLuggageQRCode()">
           <ion-icon name="ios-qr-scanner-outline"></ion-icon>
       </button>

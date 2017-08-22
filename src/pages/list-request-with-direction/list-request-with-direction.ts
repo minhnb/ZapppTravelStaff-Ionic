@@ -19,7 +19,7 @@ import { StaffService } from '../../app/services/staff';
 export class ListRequestWithDirectionPage extends DirectionPage {
 
 	listRequest: Array<any> = [];
-	defaultAvatar: string = 'www/assets/images/no-photo.png';
+	defaultAvatar: string = AppConstant.MARKER_IMAGE.DEFAULT_AVATAR;
 	slideIndex: number = 0;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
@@ -67,10 +67,6 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 		this.navCtrl.push(DirectionUserPage, params);
 	}
 
-	saveLocalCurrentJob(customer) {
-		localStorage.setItem(AppConstant.CURRENT_JOB, JSON.stringify(customer));
-	}
-
 	subscribeZappperNewRequestEvent() {
 		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
 			if (this.isDestroyed) {
@@ -105,7 +101,9 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 	slideChanged(event) {
 		let slide = event;
 		this.slideIndex = slide.getActiveIndex();
-		this.removeAllMarkersAndPolyline();
+		if (this.slideIndex > this.listRequest.length - 1) {
+			return;
+		}
 		if (this.currentLocation) {
 			this.afterLoadMapAndCurrentLocation(this.currentLocation);
 		} else {

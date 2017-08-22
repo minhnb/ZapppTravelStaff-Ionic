@@ -14,6 +14,8 @@ export class CustomerInfoPage extends BaseComponent {
 	listRow: Array<any>;
 	hasLuggage: boolean = false;
 	isAttendantSaveMode: boolean = false;
+	isAcceptLuggageMode: boolean = false;
+	isUpdated: boolean = false;
 	luggageCode: string;
 
 	@ViewChild(Navbar) navBar: Navbar;
@@ -22,6 +24,7 @@ export class CustomerInfoPage extends BaseComponent {
 		super(injector);
 		this.customer = this.navParams.data;
 		this.luggageCode = this.customer.luggageCode;
+		this.initCustomerInfo();
 	}
 
 	ionViewDidLoad() {
@@ -31,7 +34,7 @@ export class CustomerInfoPage extends BaseComponent {
 
 	ionViewWillEnter() {
 		console.log('ionViewWillEnter');
-		this.initCustomerInfo();
+		this.detectCustomerHasLuggage();
 	}
 
 	customBackButtonClick() {
@@ -69,13 +72,23 @@ export class CustomerInfoPage extends BaseComponent {
 		];
 
 		if (this.customer.listLuggage && this.customer.listLuggage.length) {
-			this.hasLuggage = true;
-		} else {
-			this.hasLuggage = false;
+			this.isUpdated = true;
 		}
 
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
+		}
+		if (this.customer.isAcceptLuggageMode) {
+			this.isAcceptLuggageMode = true;
+		}
+
+	}
+
+	detectCustomerHasLuggage() {
+		if (this.customer.listLuggage && this.customer.listLuggage.length) {
+			this.hasLuggage = true;
+		} else {
+			this.hasLuggage = false;
 		}
 
 	}
@@ -89,10 +102,14 @@ export class CustomerInfoPage extends BaseComponent {
 	goToCustomerLugguagePage(firstLuggageCode?: string) {
 		let params: any = {
 			customer: this.customer,
-			isFromCustomerInfoPage: true
+			isFromCustomerInfoPage: true,
+			isUpdated: this.isUpdated
 		};
 		if (firstLuggageCode) {
 			params.luggageCode = firstLuggageCode;
+		}
+		if (this.isAcceptLuggageMode) {
+			params.isAcceptLuggageMode = true;
 		}
 		this.navCtrl.push(CustomerLuggagePage, params);
 	}

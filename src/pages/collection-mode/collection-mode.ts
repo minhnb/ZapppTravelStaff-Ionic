@@ -1,9 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+
 import { CustomerInfoPage } from '../customer-info';
 import { ListTruckPage } from '../list-truck';
-import { ListOrderPage } from '../list-order';
+import { OrderSliderPage } from '../order-slider';
+
 import { CollectionModeService } from '../../app/services/collection-mode';
 
 @IonicPage()
@@ -15,11 +17,15 @@ import { CollectionModeService } from '../../app/services/collection-mode';
 export class CollectionModePage extends BaseComponent {
 
 	currentTruckId: string;
+	countTransferItem: number = 0;
+	countAcceptItem: number = 0;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
 		private collectionModeService: CollectionModeService) {
 		super(injector);
 		this.currentTruckId = this.navParams.data.currentTruckId;
+		this.countTransferItem = this.navParams.data.countTransferItem;
+		this.countAcceptItem = this.navParams.data.countAcceptItem;
 	}
 
 	ionViewDidLoad() {
@@ -45,11 +51,12 @@ export class CollectionModePage extends BaseComponent {
 		);
 	}
 
-	getLuggageCodeDetail(luggageCode: string) {
+	getLuggageCodeDetail(luggageCode: string, isAcceptLuggageMode: boolean = false) {
 		this.collectionModeService.getLuggageCodeDetail(luggageCode).subscribe(
 			res => {
 				let customerInfo = this.customerInfoTransform(res);
 				customerInfo.isAttendantSaveMode = true;
+				customerInfo.isAcceptLuggageMode = isAcceptLuggageMode;
 				customerInfo.luggageCode = luggageCode;
 				this.goToCustomerInfoPage(customerInfo);
 			},
@@ -76,8 +83,8 @@ export class CollectionModePage extends BaseComponent {
 
 	acceptLugguageFromZappper() {
 		this.scanQRCode(text => {
-			this.getLuggageCodeDetail(text);
-        });
+			this.getLuggageCodeDetail(text, true);
+        }, this.translate.instant('PROMPT_BARCODE_SCANNER_LUGGAGE'));
 	}
 	acceptLugguageFromOtherTruck() {
 		this.listOtherTruckNeedToGetOrder((listTruck) => {
@@ -92,48 +99,12 @@ export class CollectionModePage extends BaseComponent {
 	}
 
 	viewOrder() {
-		let params = {
-            pageName: 'Orders',
-            listOrder: [
-                {
-                    name: 'Dolly Doe',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12789',
-                            storageBinCode: 'A12'
-                        }
-                    ]
-                },
-                {
-                    name: 'Jolly Doe',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12790',
-                            storageBinCode: 'A13'
-                        }
-                    ]
-                },
-                {
-                    name: 'Nanny San',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12791',
-                            storageBinCode: 'A14'
-                        }
-                    ]
-                },
-                {
-                    name: 'Fancy Lu',
-                    listLuggage: [
-                        {
-                            luggageCode: 'ZTL12792',
-                            storageBinCode: 'A15'
-                        }
-                    ]
-                }
-            ]
-        }
-        this.navCtrl.push(ListOrderPage, params);
+		this.getListOrderOnCurrentTruck((listOrder) => {
+			let params = {
+				listOrder: listOrder
+			}
+			this.navCtrl.push(OrderSliderPage, params);
+		});
 	}
 
 	listOtherTruckNeedToTransfer(callback?: (listTruck: Array<any>) => void) {
@@ -177,5 +148,23 @@ export class CollectionModePage extends BaseComponent {
 			isAcceptLuggageMode: isAcceptLuggageMode
 		}
 		this.navCtrl.push(ListTruckPage, params);
+	}
+
+	getListOrderOnCurrentTruck(callback?: (listOrder: Array<any>) => void) {
+		this.collectionModeService.listOrderOnCurrentTruck().subscribe(
+			res => {
+				let listOrder = res.map(item => {
+					let customer = this.customerInfoTransform(item);
+					customer.isAttendantSaveMode = true;
+					return customer;
+				});
+				if (callback) {
+					callback(listOrder);
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 }

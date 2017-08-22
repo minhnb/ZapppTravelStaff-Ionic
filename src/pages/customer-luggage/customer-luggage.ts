@@ -4,6 +4,7 @@ import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 
 import { TakePicturePage } from '../take-picture';
+import { ManualInputPage } from '../manual-input';
 
 import { CollectionModeService } from '../../app/services/collection-mode';
 import { DeliveryModeService } from '../../app/services/delivery-mode';
@@ -28,8 +29,10 @@ export class CustomerLuggagePage extends BaseComponent {
 	isTransferMode: boolean = false;
 	isAcceptLuggageMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
+	isFromViewOrderPage: boolean = false;
 	isDeliveryMode: boolean = false;
-	isUpdated: boolean = false;
+	isUpdated: boolean = true;
+	listBinOnTruck: Array<any>;
 
     @ViewChild(Navbar) navBar: Navbar;
 
@@ -37,6 +40,8 @@ export class CustomerLuggagePage extends BaseComponent {
 		private collectionModeService: CollectionModeService, private deliveryModeService: DeliveryModeService) {
         super(injector);
         this.initCustomerLuggage();
+		this.initListBinOnTruck();
+		this.subcribeManualInputEvent();
 	}
 
 	ionViewDidLoad() {
@@ -51,7 +56,6 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
     initCustomerLuggage() {
-		console.log(JSON.stringify(this.navParams.data));
         this.customer = this.navParams.data.customer;
 		if (this.customer.isAttendantSaveMode) {
 			this.isAttendantSaveMode = true;
@@ -61,6 +65,12 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
 		if (this.navParams.data.isFromCustomerInfoPage) {
 			this.isFromCustomerInfoPage = true;
+			if (!this.navParams.data.isUpdated) {
+				this.isUpdated = false;
+			}
+		}
+		if (this.navParams.data.isFromViewOrderPage) {
+			this.isFromViewOrderPage = true;
 		}
 		if (this.navParams.data.isDeliveryMode) {
 			this.isDeliveryMode = true;
@@ -71,9 +81,6 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
 		if (this.customer.listLuggage) {
 			this.listLuggage = this.customer.listLuggage;
-			if (this.listLuggage.length > 0) {
-				this.isUpdated = true;
-			}
 		}
         let luggageCode = this.navParams.data.luggageCode;
         if (luggageCode) {
@@ -88,9 +95,26 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
     }
 
+	initListBinOnTruck() {
+		let localStorageBin = localStorage.getItem(AppConstant.LIST_BIN);
+		this.listBinOnTruck = JSON.parse(localStorageBin);
+	}
+
+	indexOfBinCode(code: string) {
+		let binId = this.getBinIdFromBinCode(code);
+		for (let i = 0; i < this.listBinOnTruck.length; i++) {
+			let item = this.listBinOnTruck[i];
+			if (item.id == binId) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	removeAllOldStorageBinCode() {
 		this.listLuggage.forEach(item => {
 			item.storageBinCode = '';
+			item.storageBinName = '';
 		});
 	}
 
@@ -122,11 +146,6 @@ export class CustomerLuggagePage extends BaseComponent {
             return;
         }
 
-		let newItem = {
-			luggageCode: luggageCode,
-			storageBinCode: ''
-		}
-
 		this.checkValidLuggage(luggageCode, () => {
 			let newItem = {
 				luggageCode: luggageCode,
@@ -155,9 +174,16 @@ export class CustomerLuggagePage extends BaseComponent {
     }
 
     updateStorageBinCodeToItemByIndex(storageBinCode: string, index: number) {
+		let indexOfBinCode = this.indexOfBinCode(storageBinCode);
+		if (indexOfBinCode == -1) {
+			this.showError(this.translate.instant('ERROR_BIN_CODE_NOT_IN_LIST'));
+			return;
+		}
+		let binItem = this.listBinOnTruck[indexOfBinCode];
         if (this.listLuggage.length && index >= 0) {
             let item = this.listLuggage[index];
-            item.storageBinCode = storageBinCode;
+            item.storageBinCode = binItem.id;
+            item.storageBinName = binItem.name;
         }
     }
 
@@ -278,7 +304,7 @@ export class CustomerLuggagePage extends BaseComponent {
 		let listLuggage = this.listLuggageReverseTransform(this.listLuggage);
 		this.collectionModeService.updateLuggage(orderId, listLuggage, this.isUpdated).subscribe(
 			res => {
-				if (this.isAcceptLuggageMode) {
+				if ((this.isAcceptLuggageMode && !this.isFromCustomerInfoPage) || this.isFromViewOrderPage) {
 					this.goBackToPreviousPage();
 					return;
 				}
@@ -305,5 +331,26 @@ export class CustomerLuggagePage extends BaseComponent {
 				this.showError(err.message);
 			}
 		);
+	}
+
+	goToManualInputPage() {
+		let params: any = {
+			listLuggage: this.listLuggage
+		};
+		this.navCtrl.push(ManualInputPage, params);
+	}
+
+	subcribeManualInputEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.INPUT_MANUAL, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleManualInputEvent(data);
+		});
+	}
+
+	handleManualInputEvent(data: any) {
+		this.navCtrl.pop();
+		this.findLuggageCodeInList(data.input);
 	}
 }

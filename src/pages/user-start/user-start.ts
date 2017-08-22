@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
+import { DataShare } from '../../app/helper/data.share';
 
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
@@ -11,55 +12,80 @@ import { ListRequestWithDirectionPage } from '../list-request-with-direction';
 import { UncompletedOrderPage } from '../uncompleted-order';
 import { DirectionUserPage } from '../direction-user';
 import { FindTruckPage } from '../find-truck';
+import { ListTruckWithDirectionPage } from '../list-truck-with-direction';
 import { ListTruckPage } from '../list-truck';
 import { ListAssignmentPage } from '../list-assignment';
+import { LoginPage } from '../login/login';
+import { TakePicturePage } from '../take-picture';
 
 import { StaffService } from '../../app/services/staff';
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { UserService } from '../../app/services/user';
 
 @IonicPage()
 @Component({
 	selector: 'page-user-start',
 	templateUrl: 'user-start.html',
-	providers: [StaffService, CollectionModeService]
+	providers: [StaffService, CollectionModeService, UserService]
 })
 export class UserStartPage extends BaseComponent {
 
 	isActive: boolean;
     truck: any;
     listTruck: Array<any> = [];
+	isLoadedState: boolean = false;
+	userId: string;
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
 	newAssignmentCount: number = 0;
 	listAssignment: Array<any> = [];
+	lastLoadListZappperRequest: number = 0;
+
 	countDeliveryItem: number = 0;
 	countTransferItem: number = 0;
+	countAcceptItem: number = 0;
+
+	isAssignedCollection: boolean = false;
+	isAssignedDelivery: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService, private collectionModeService: CollectionModeService) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService,
+		private dataShare: DataShare) {
 		super(injector);
-		this.loadPreviousState();
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeAssignTruckEvent();
+		this.loadPreviousState();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserStartPage');
-		this.loadListTruckForActiveDirverAndAttendant();
-		this.loadCurrentJobForActiveZappper();
+	}
+
+	ionViewWillEnter() {
+		if (this.isLoadedState) {
+			this.loadStaffStatistic();
+			return;
+		}
 		if (!this.isMobileDevice(this.platform)) {
 			return;
 		}
 		this.checkDevicePermission();
 	}
 
-	ionViewWillEnter() {
-		this.loadStaffStatistic();
+	handleEventAppIsResuming() {
+		if (this.isActiveCurrentPage(this.navCtrl)) {
+			this.loadStaffStatistic();
+		}
 	}
 
 	loadPreviousState() {
-		this.loadLocalPreviousState();
+		this.getUserInfo(() => {
+			this.loadLocalPreviousState();
+			this.loadListTruckForActiveDirverAndAttendant();
+			this.loadCurrentJobForActiveStaff();
+			this.loadStaffStatistic();
+		});
 	}
 
 	loadLocalPreviousState() {
@@ -81,8 +107,10 @@ export class UserStartPage extends BaseComponent {
 		}
 	}
 
-	saveTruckInfoToLocalStorage(truckId: string) {
+	saveTruckInfoToLocalStorage(truckId: string, listBin: Array<any>) {
 		localStorage.setItem(AppConstant.TRUCK, truckId);
+		let listTransformedBin = this.listBinTransform(listBin);
+		localStorage.setItem(AppConstant.LIST_BIN, JSON.stringify(listTransformedBin));
 	}
 
 	clearStatusInfo() {
@@ -157,7 +185,7 @@ export class UserStartPage extends BaseComponent {
 	chooseTruck(truckId: string) {
 		this.staffService.chooseTruck(truckId).subscribe(
 			res => {
-				this.saveTruckInfoToLocalStorage(truckId);
+				this.saveTruckInfoToLocalStorage(truckId, res.bins);
 				this.loadListAssignment();
 			},
 			err => {
@@ -166,9 +194,21 @@ export class UserStartPage extends BaseComponent {
 		);
 	}
 
+	isNeedToLoadZappperRequest(): boolean {
+		let nowTimeStamp = (new Date()).getTime();
+		return (nowTimeStamp - this.lastLoadListZappperRequest) / 1000 > 3;
+	}
+
 	loadNewRequestsAndUncompletedOrders(callback?: () => void) {
+		if (!this.isNeedToLoadZappperRequest()) {
+			if (callback) {
+				callback();
+			}
+			return;
+		}
 		this.staffService.loadNewRequestsAndUncompletedOrders().subscribe(
 			res => {
+				this.lastLoadListZappperRequest = (new Date()).getTime();
 				this.listRequest = res.new_request_info.map(item => {
 					return this.requestTransform(item);
 				});
@@ -191,7 +231,12 @@ export class UserStartPage extends BaseComponent {
 				this.navCtrl.push(ListStationPage);
 				break;
 			case AppConstant.USER_ROLE.ATTENDANT:
-				this.navCtrl.push(CollectionModePage, { currentTruckId: this.truck });
+				let params = {
+					currentTruckId: this.truck,
+					countTransferItem: this.countTransferItem,
+					countAcceptItem: this.countAcceptItem,
+				}
+				this.navCtrl.push(CollectionModePage, params);
 				break;
 			default:
 		}
@@ -235,27 +280,35 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	goToListRequest() {
-		if (this.listRequest.length == 0) {
-			return;
-		}
-		let params = {
-			listRequest: this.listRequest
-		}
-		this.navCtrl.push(ListRequestWithDirectionPage, params);
+		this.loadNewRequestsAndUncompletedOrders(() => {
+			if (this.listRequest.length == 0) {
+				return;
+			}
+			let params = {
+				listRequest: this.listRequest
+			}
+			this.navCtrl.push(ListRequestWithDirectionPage, params);
+		});
 	}
 
 	goToListUncompletedOrder() {
-		if (this.listUncompleteOrder.length == 0) {
-			return;
-		}
-		let params = {
-			listUncompleteOrder: this.listUncompleteOrder
-		}
-		this.navCtrl.push(UncompletedOrderPage, params);
+		this.loadNewRequestsAndUncompletedOrders(() => {
+			if (this.listUncompleteOrder.length == 0) {
+				return;
+			}
+			let params = {
+				listUncompleteOrder: this.listUncompleteOrder
+			}
+			this.navCtrl.push(UncompletedOrderPage, params);
+		});
 	}
 
 	goToFindTruckPage() {
 		this.navCtrl.push(FindTruckPage);
+	}
+
+	goToListTruckWithDirectionPage() {
+		this.navCtrl.push(ListTruckWithDirectionPage);
 	}
 
 	requestTransform(request: any) {
@@ -298,6 +351,13 @@ export class UserStartPage extends BaseComponent {
 		this.navCtrl.push(DirectionUserPage, params);
 	}
 
+	goToTakePicturePage(customer: any) {
+		let params = {
+			customer: customer
+		}
+		this.navCtrl.push(TakePicturePage, params);
+	}
+
 	goToListAssignmentPage() {
 		this.saveLastViewListAssignment();
 		let params = {
@@ -306,10 +366,21 @@ export class UserStartPage extends BaseComponent {
 		this.navCtrl.push(ListAssignmentPage, params);
 	}
 
-	loadCurrentJobForActiveZappper() {
-		if (!this.isZappper()) {
-			return;
+	isValidOrderForZappperToContinueCurrentJob(order: any) {
+		if (order.status != AppConstant.ORDER_STATUS.ACCEPTED || order.zappper_id != this.userId) {
+			return false;
 		}
+		return true;
+	}
+
+	isValidOrderForAttendantToContinueCurrentJob(order: any) {
+		if (order.status != AppConstant.ORDER_STATUS.ACCEPTED && order.status != AppConstant.ORDER_STATUS.NEW) {
+			return false;
+		}
+		return true;
+	}
+
+	loadCurrentJobForActiveStaff() {
 		if (!this.isActive) {
 			return;
 		}
@@ -318,7 +389,27 @@ export class UserStartPage extends BaseComponent {
 			return;
 		}
 		let customer = JSON.parse(currentJob);
-		this.goToUserDirectionPage(customer);
+		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
+			res => {
+				if (this.isAttedant() && !this.isValidOrderForAttendantToContinueCurrentJob(res)) {
+					return;
+				}
+				if (this.isZappper() && !this.isValidOrderForZappperToContinueCurrentJob(res)) {
+					return;
+				}
+				let userRequest = this.customerInfoTransform(res);
+				if (userRequest.listLuggage && userRequest.listLuggage.length > 0) {
+					this.goToTakePicturePage(userRequest);
+					return;
+				}
+				if (this.isZappper()) {
+					this.goToUserDirectionPage(customer);
+				}
+			},
+			err => {
+
+			}
+		);
 	}
 
 	subscribeZappperNewRequestEvent() {
@@ -327,6 +418,12 @@ export class UserStartPage extends BaseComponent {
 				return;
 			}
 			this.handleZappperNewRequest(data);
+		});
+		this.events.subscribe(AppConstant.BACKGROUND_NOTIFICATION_TYPE.PREFIX + AppConstant.BACKGROUND_NOTIFICATION_TYPE.REQUEST_ORDER, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleZappperNewBackgroundRequest(data);
 		});
 	}
 
@@ -345,11 +442,23 @@ export class UserStartPage extends BaseComponent {
 		});
 	}
 
+	handleZappperNewBackgroundRequest(data: any) {
+		if (!this.isZappper()) {
+			return;
+		}
+		if (!this.isActiveCurrentPage(this.navCtrl)) {
+			return;
+		}
+		this.goToListRequest();
+	}
+
+
 	subscribeAssignTruckEvent() {
 		let listTruckAssignEvent = [
 			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_DELIVERY,
 			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION,
-			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_UNASSIGNED
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_UNASSIGNED,
+			AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_TRANSFER
 		];
 		for (let i = 0; i < listTruckAssignEvent.length; i++) {
 			let key = listTruckAssignEvent[i];
@@ -379,6 +488,8 @@ export class UserStartPage extends BaseComponent {
 				return this.translate.instant('NOTIFICATION_ASSIGN_DELIVERY');
 			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_COLLECTION:
 				return this.translate.instant('NOTIFICATION_ASSIGN_COLLECTION', { district: data.content });
+			case AppConstant.NOTIFICATION_TYPE.ASSIGN_TRUCK_TRANSFER:
+				return this.translate.instant('NOTIFICATION_ASSIGN_TRANSFER', { number: data.no_of_orders });
 			default:
 				return this.translate.instant('NOTIFICATION_ASSIGN_UNASSIGNED');
 		}
@@ -398,6 +509,7 @@ export class UserStartPage extends BaseComponent {
 			res => {
 				this.listAssignment = res;
 				this.sortListAssignmentDescByCreatedAt();
+				this.detectCurrentAssigmentMode();
 				this.countNewAssignment();
 				this.countOrderByMode();
 				if (callback) {
@@ -434,13 +546,27 @@ export class UserStartPage extends BaseComponent {
 		}
 	}
 
+	detectCurrentAssigmentMode() {
+		this.isAssignedCollection = false;
+		this.isAssignedDelivery = false;
+		if (this.listAssignment.length == 0) {
+			return;
+		}
+		let lastAssignmentItem = this.listAssignment[0];
+		if (lastAssignmentItem) {
+			let type = Number(lastAssignmentItem.type);
+			this.isAssignedCollection = type == AppConstant.ASSIGNMENT_MODE.COLLECTION;
+			this.isAssignedDelivery = type == AppConstant.ASSIGNMENT_MODE.DELIVERY;
+		}
+	}
+
 	resetCountOrder() {
 		this.countDeliveryItem = 0;
 		this.countTransferItem = 0;
 	}
 
 	countOrderByMode() {
-		if (!this.isDriver() || !this.truck || !this.isActive) {
+		if (this.isZappper() || !this.truck || !this.isActive) {
 			this.resetCountOrder();
 			return;
 		}
@@ -448,6 +574,7 @@ export class UserStartPage extends BaseComponent {
 			res => {
 				this.countDeliveryItem = res.no_of_delivery ? Number(res.no_of_delivery) : 0;
 				this.countTransferItem = res.no_of_transfer ? Number(res.no_of_transfer) : 0;
+				this.countAcceptItem = res.no_of_acceptance ? Number(res.no_of_acceptance) : 0;
 			},
 			err => {
 				this.showError(err.message);
@@ -487,5 +614,47 @@ export class UserStartPage extends BaseComponent {
 				}
 			}
 		);
+	}
+
+	getUserInfo(callback?: () => void) {
+		this.userService.getUserInfo().subscribe(
+			res => {
+				this.userService.saveUserRole(res.roles);
+				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
+					this.dataShare.setUserInfo(this.userInfoTransform(res));
+					this.saveLocalStaffState(res);
+					this.isLoadedState = true;
+					this.userId = res.id;
+					if (callback) {
+						callback();
+					}
+				} else {
+					this.showError(this.translate.instant('USER_NOT_STAFF'));
+					this.handleInvalidStaff(res);
+				}
+			},
+			err => {
+				this.isLoadedState = true;
+				if (err.code != -1) {
+					this.showError(err.message);
+					return;
+				}
+				this.handleInvalidStaff(err);
+			}
+		)
+	}
+
+	userInfoTransform(userInfo: any) {
+		return {
+			name: this.getFullName(userInfo.first, userInfo.last),
+			email: userInfo.email,
+			avatar: userInfo.pic_url,
+			role: userInfo.roles
+		}
+	}
+
+	handleInvalidStaff(info: any) {
+		this.userService.handleLogout(info);
+		this.navCtrl.setRoot(LoginPage);
 	}
 }

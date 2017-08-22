@@ -26,6 +26,9 @@ import { UncompletedOrderPageModule } from '../pages/uncompleted-order';
 import { FindTruckPageModule } from '../pages/find-truck';
 import { DirectionTruckPageModule } from '../pages/direction-truck';
 import { ListAssignmentPageModule } from '../pages/list-assignment';
+import { ListTruckWithDirectionPageModule } from '../pages/list-truck-with-direction';
+import { ManualInputPageModule } from '../pages/manual-input';
+import { OrderSliderPageModule } from '../pages/order-slider';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -38,6 +41,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Camera } from '@ionic-native/camera';
 import { CallNumber } from '@ionic-native/call-number';
+import { Keyboard } from '@ionic-native/keyboard';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -85,7 +90,10 @@ import { DataShare } from './helper/data.share';
 		UncompletedOrderPageModule,
 		FindTruckPageModule,
 		DirectionTruckPageModule,
-		ListAssignmentPageModule
+		ListAssignmentPageModule,
+		ListTruckWithDirectionPageModule,
+		ManualInputPageModule,
+		OrderSliderPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -104,6 +112,8 @@ import { DataShare } from './helper/data.share';
 		Diagnostic,
 		Camera,
 		CallNumber,
+		Keyboard,
+		BackgroundMode,
 		ZapppHttp,
 		DataShare,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }

@@ -1,0 +1,32 @@
+<ion-content>
+  <div #map id="map" data-tap-disabled="true">
+    <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
+            <ion-icon name="close"></ion-icon>
+          </button>
+  </div>
+  <div class="slider-content">
+    <div class="warning-no-data" [hidden]="listTruck.length > 0 || !updateListTruckTimer">{{ 'NO_TRUCK' | translate }}</div>
+    <ion-slides pager (ionSlideDidChange)="slideChanged($event)" [style.visibility]="listTruck.length == 0 ? 'hidden' : 'visible'">
+      <ion-slide *ngFor="let item of listTruck">
+        <div class="truck-detail">
+          <ion-row>
+            <ion-col col-7>
+              <button class="button-ios call-driver" (click)="callDriver()" [disabled]="!hasDriverPhoneNumber()">{{ 'BUTTON_CALL_DRIVER' | translate }}</button>
+              <div class="truck-number text">{{ item.truckNumber }}</div>
+              <div class="driver-name text">{{ item.driverName }}</div>
+            </ion-col>
+            <ion-col col-5>
+              <div class="estimated-time text" [style.visibility]="currentDirectionDistance && currentDirectionDuration ? 'visible' : 'hidden'">{{ currentDirectionDistance ? currentDirectionDistance.text : '' }} ({{ currentDirectionDuration ? currentDirectionDuration.text : '' }})</div>
+              <div class="arrival-time text" [hidden]="!arrivalTimeString">{{ 'STATION_ARRIVAL_TIME' | translate }}: {{ arrivalTimeString }}</div>
+              <div class="arrival-time text" [hidden]="!stayTimeString">{{ 'STATION_STAY_TIME' | translate }}: {{ stayTimeString }}</div>
+            </ion-col>
+          </ion-row>
+
+          <button class="button-ios direction-button left" (click)="drawDirectionToCurrentStation()" [disabled]="!hasCurrentStopLocation(item)">{{ 'BUTTON_CURRENT_STATION' | translate }}</button>
+          <button class="button-ios direction-button middle" (click)="drawDirectionToNextStation()" [disabled]="!hasNextStopLocation(item)">{{ 'BUTTON_NEXT_STATION' | translate }}</button>
+          <button class="button-ios direction-button right" (click)="drawDirectionToCurrentLocation()" [disabled]="!hasCurrentLocation(item)">{{ 'BUTTON_TRUCK_LOCATION' | translate }}</button>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+</ion-content>
