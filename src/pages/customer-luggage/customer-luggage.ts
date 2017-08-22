@@ -31,7 +31,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	isFromCustomerInfoPage: boolean = false;
 	isFromViewOrderPage: boolean = false;
 	isDeliveryMode: boolean = false;
-	isUpdated: boolean = false;
+	isUpdated: boolean = true;
 	listBinOnTruck: Array<any>;
 
     @ViewChild(Navbar) navBar: Navbar;
@@ -65,6 +65,9 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
 		if (this.navParams.data.isFromCustomerInfoPage) {
 			this.isFromCustomerInfoPage = true;
+			if (!this.navParams.data.isUpdated) {
+				this.isUpdated = false;
+			}
 		}
 		if (this.navParams.data.isFromViewOrderPage) {
 			this.isFromViewOrderPage = true;
@@ -78,9 +81,6 @@ export class CustomerLuggagePage extends BaseComponent {
 		}
 		if (this.customer.listLuggage) {
 			this.listLuggage = this.customer.listLuggage;
-			if (this.listLuggage.length > 0) {
-				this.isUpdated = true;
-			}
 		}
         let luggageCode = this.navParams.data.luggageCode;
         if (luggageCode) {
