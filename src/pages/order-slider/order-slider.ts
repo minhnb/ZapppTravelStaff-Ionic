@@ -1,5 +1,5 @@
 import { Component, Injector, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
 
@@ -20,7 +20,7 @@ export class OrderSliderPage extends BaseComponent {
 
 	@ViewChild(Slides) slides: Slides;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
 		private staffService: StaffService) {
         super(injector);
 		this.listOrder = navParams.data.listOrder;
@@ -45,6 +45,10 @@ export class OrderSliderPage extends BaseComponent {
 
 	showSearchView() {
 		this.isShowingSearchView = true;
+	}
+
+	clickInput(event) {
+		event.stopPropagation();
 	}
 
 	getItems(event: any) {

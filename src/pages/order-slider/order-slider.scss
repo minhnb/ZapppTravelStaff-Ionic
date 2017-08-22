@@ -4,14 +4,19 @@ page-order-slider {
       height: 100%;
       text-align: left;
       font-size: 14px;
+
+      .order-item {
+        height: calc(100% - 30px);
+        overflow-y: auto;
+      }
     }
   }
 
   .button-search {
     position: absolute;
-    top: 0;
+    bottom: 0;
     right: 0;
-    height: 100%;
+    height: 44px;
     padding: 7px 15px;
 
     ion-icon {
@@ -28,8 +33,13 @@ page-order-slider {
     height: 100%;
     background: white;
 
+    &.margin-top {
+      margin-top: 20px;
+    }
+
     ion-searchbar {
       background: #488aff;
+
     }
 
     .searchbar-input-container {
@@ -58,7 +68,8 @@ page-order-slider {
     }
 
     ion-list {
-      height: calc(100% - 84px);
+      max-height: calc(100% - 90px);
+      height: auto;
       overflow-y: auto;
 
       .order-info {

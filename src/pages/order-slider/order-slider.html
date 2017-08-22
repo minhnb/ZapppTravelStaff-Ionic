@@ -12,7 +12,7 @@
 <ion-content padding>
   <ion-slides pager>
     <ion-slide *ngFor="let item of listOrder">
-      <div class="list-order">
+      <div class="order-item">
         <div class="info-row">
           <div class="label">{{ 'ORDER_ID' | translate }}</div>
           <div class="content">{{ item.orderId }}</div>
@@ -49,8 +49,8 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
-<div class="search-view" [hidden]="!isShowingSearchView">
-  <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_ORDER_PLACEHOLDER' | translate }}"></ion-searchbar>
+<div class="search-view" [hidden]="!isShowingSearchView" [ngClass]="isPlatformiOS(platform) ? 'margin-top' : ''" (click)="hideKeyboard()">
+  <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_ORDER_PLACEHOLDER' | translate }}" (click)="clickInput($event)"></ion-searchbar>
   <button class="transparent-button back-button" (click)="hideSearchView()">
             <ion-icon name="ios-arrow-back-outline"></ion-icon>
         </button>

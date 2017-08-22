@@ -112,7 +112,7 @@
   "RECEIVER": "Guest",
   "RESULT": "Result",
   "ROOM": "Room",
-  "SEARCH_ORDER_PLACEHOLDER": "Search by sender's phone number or Order's ID",
+  "SEARCH_ORDER_PLACEHOLDER": "Order ID, Sender or Hotel",
   "SENDER": "Sender",
   "STATION": "Station",
   "STATION_ARRIVAL_TIME": "Arrival time",
