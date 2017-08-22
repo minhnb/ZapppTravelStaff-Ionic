@@ -29,7 +29,7 @@
     <div class="content" *ngIf="nextStation">{{ nextStation.name }}</div>
   </div>
   <div class="button-bottom-full">
-    <button ion-button full *ngIf="!isStarted" [disabled]="!nextStation" (click)="updateStation()">{{ 'BUTTON_START' | translate }}</button>
+    <button ion-button full *ngIf="!isStarted" [disabled]="!nextStation || !duration" (click)="updateStation()">{{ 'BUTTON_START' | translate }}</button>
     <button ion-button full *ngIf="isStarted" (click)="leaveCurrentStation()">{{ 'BUTTON_STOP_OR_LEAVE' | translate }}</button>
   </div>
 
