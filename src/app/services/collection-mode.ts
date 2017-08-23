@@ -122,4 +122,8 @@ export class CollectionModeService {
 		}
 		return this.zapppHttp.get(this.orderUrl + '/orders_on_truck', params);
 	}
+
+	getOrderPaymentStatus(orderId: string) {
+		return this.zapppHttp.get(this.orderUrl + '/status/order_id/' + orderId);
+	}
 }

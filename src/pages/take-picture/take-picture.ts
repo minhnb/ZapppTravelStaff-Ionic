@@ -98,9 +98,17 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	goBackToUserStartPage() {
-		this.clearLocalCurrentJob();
         this.navCtrl.popToRoot();
     }
+
+	goBackAfterPickup() {
+		this.clearLocalCurrentJob();
+		if (this.isFromCustomerInfoPage && !this.isZappper()) {
+			this.goBackToCollectionModePage();
+		} else {
+			this.goBackToUserStartPage();
+		}
+	}
 
 	imageToBase64(url, callback) {
 		var xhr = new XMLHttpRequest();
@@ -124,14 +132,14 @@ export class TakePicturePage extends BaseComponent {
 			if (this.isDestroyed) {
 				return;
 			}
+			if (!this.isActiveCurrentPage(this.navCtrl)) {
+				return;
+			}
 			this.handleEventUserCompletedPickupCharge(data);
 		});
 	}
 
-	handleEventUserCompletedPickupCharge(data: any) {
-		if (!this.isActiveCurrentPage(this.navCtrl)) {
-			return;
-		}
+	handleEventUserCompletedPickupCharge(data?: any) {
 		this.userAlreadyPaid = true;
 		this.showInfoWithOkAction(this.translate.instant('USER_HAS_PAID'), null,
 			() => {
@@ -174,11 +182,7 @@ export class TakePicturePage extends BaseComponent {
 			let orderId = this.customer.orderId;
 			this.collectionModeService.completedPickup(orderId, proofImageUrl, latitude, longitude).subscribe(
 				res => {
-					if (this.isFromCustomerInfoPage && !this.isZappper()) {
-						this.goBackToCollectionModePage();
-					} else {
-						this.goBackToUserStartPage();
-					}
+					this.goBackAfterPickup();
 				},
 				err => {
 					this.showError(err.message);
@@ -206,5 +210,50 @@ export class TakePicturePage extends BaseComponent {
 		if (this.isAttedant()) {
 			this.saveLocalCurrentJob(this.customer);
 		}
+	}
+
+	recheckOrderPaymentStatus() {
+		let orderId = this.customer.orderId;
+		this.checkOrderStatus(orderId, () => {
+			this.checkOrderPaymentStatus(orderId, () => {
+				this.handleEventUserCompletedPickupCharge();
+			});
+		});
+	}
+
+	checkOrderStatus(orderId: string, callback?: () => void) {
+		this.collectionModeService.getOrderDetail(orderId).subscribe(
+			res => {
+				if (res.status == AppConstant.ORDER_STATUS.CANCELED) {
+					this.showInfoWithOkAction(this.translate.instant('ERROR_ORDER_ORDER_CANCELLED'), this.translate.instant('INFO'), () => {
+						this.goBackAfterPickup();
+					});
+					return;
+				}
+				if (callback) {
+					callback();
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	checkOrderPaymentStatus(orderId: string, callback?: () => void) {
+		this.collectionModeService.getOrderPaymentStatus(orderId).subscribe(
+			res => {
+				if (!res || res.payment_status != AppConstant.PAYMENT_STATUS.SUCCESS) {
+					this.showInfo(this.translate.instant('ERROR_ORDER_ORDER_PAYMENT_STATUS_NOT_PAID'));
+					return;
+				}
+				if (callback) {
+					callback();
+				}
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
 	}
 }

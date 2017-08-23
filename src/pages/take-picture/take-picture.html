@@ -13,4 +13,7 @@
   <button ion-button class="above-button bottom-left" *ngIf="imageUrl" (click)="takePicture()">{{ 'BUTTON_RETAKE' | translate }}</button>
   <button ion-button class="above-button bottom-right" *ngIf="imageUrl && isDeliveryMode" (click)="savePictureForDeliveryMode()">{{ 'BUTTON_SAVE' | translate }}</button>
   <button ion-button class="above-button bottom-right" *ngIf="imageUrl && !isDeliveryMode" (click)="savePictureForCollectionMode()">{{ 'BUTTON_FINISH' | translate }}</button>
+  <div class="button-bottom-full" *ngIf="!imageUrl && !userAlreadyPaid && !isDeliveryMode">
+    <button ion-button full (click)="recheckOrderPaymentStatus()">{{ 'BUTTON_RECHECK_ORDER_PAYMENT_STATUS' | translate }}</button>
+  </div>
 </ion-content>
