@@ -420,7 +420,7 @@ export class BaseComponent {
 
 	subcribeEventAppIsResuming() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
-			console.log('subcribeEventAppIsResuming');
+			// console.log('subcribeEventAppIsResuming');
 			this.handleEventAppIsResuming();
 		});
 	}

@@ -82,5 +82,10 @@ export const AppConstant = {
 		EXPIRED: "expired",
 		NEW: "new",
 		PICKED_UP: "pickup"
+    },
+    PAYMENT_STATUS: {
+        INIT: "payment_init",
+		FAILED: "payment_failed",
+        SUCCESS: "payment_success"
     }
 };
