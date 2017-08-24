@@ -1,0 +1,54 @@
+page-manual-input {
+  ion-item.middle-input {
+    margin-top: calc(50vh - 50px);
+    border: solid 1px #cccccc;
+  }
+
+  .item-ios.item-block .item-inner {
+    border: none;
+  }
+
+  .search-result {
+    position: absolute;
+    width: calc(100% - 32px);
+    background: #ffffff;
+    z-index: 1;
+    border: solid 1px #dddddd;
+    border-top: none;
+    color: #666666;
+
+    ul.list-luggage-code {
+      margin: 0;
+      padding: 5px;
+
+      li {
+        list-style: none;
+        padding: 8px 15px;
+        border-bottom: 1px solid #dddddd;
+
+        span:first-child {
+          font-weight: bold;
+          margin-right: 20px;
+        }
+      }
+
+      li:hover {
+        background: #f0f0f0;
+      }
+
+      li.active,
+      li:active {
+        background: #2196FC;
+        color: #ffffff;
+      }
+
+      li:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .no-result {
+      padding: 10px;
+    }
+  }
+}

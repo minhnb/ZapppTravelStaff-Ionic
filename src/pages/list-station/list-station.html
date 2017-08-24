@@ -1,0 +1,16 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'CHOOSE_STATION' | translate }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <button class="no-padding-left" ion-item no-lines *ngFor="let item of listStation" (click)="isSelectNextStationMode ? chooseNextStation(item) : viewDirection(item)">
+            {{ item.name }}
+        </button>
+  </ion-list>
+</ion-content>

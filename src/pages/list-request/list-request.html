@@ -1,0 +1,26 @@
+<ion-content padding>
+  <ion-slides pager>
+    <ion-slide *ngFor="let item of listRequest">
+      <div class="user-request">
+        <div class="distance">{{ item.distance }}</div>
+        <div class="estimated-time">({{ item.estimatedTime }})</div>
+        <img class="avatar" src="{{ item.avatar || defaultAvatar }}" />
+        <div class="name">{{ item.name }}</div>
+        <div class="luggage-info">
+          <ion-row>
+            <ion-col col-7>{{ 'SUITCASE' | translate }}: {{ item.suitcase || 0 }}</ion-col>
+            <ion-col col-5>{{ 'BAG' | translate }}: {{ item.bag || 0 }}</ion-col>
+            <ion-col col-7>{{ 'BABY_CARRIAGE' | translate }}: {{ item.babyCarriage || 0 }}</ion-col>
+            <ion-col col-5>{{ 'OTHERS' | translate }}: {{ item.other || 0 }}</ion-col>
+          </ion-row>
+        </div>
+        <div class="button-bottom-full">
+          <button ion-button full (click)="takeRequest(item)">{{ 'BUTTON_TAKE' | translate }}</button>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
+      <ion-icon name="close"></ion-icon>
+    </button>
+</ion-content>

@@ -1,0 +1,20 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ pageName }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row full class="list-header info-row">
+    <ion-col col-6 class="label no-padding-left">{{ 'SENDER' | translate }}</ion-col>
+    <ion-col col-6 class="label no-padding-left text-align-right">{{ 'LUGGAGE_QUANTITY' | translate }}</ion-col>
+  </ion-row>
+  <ion-list>
+    <button class="no-padding-left right-number" ion-item no-lines [ngClass]="item.completed ? 'completed' : ''" *ngFor="let item of listOrder" (click)="isDeliveryMode ? goToDeliveryInfo(item) : goToCustomerLugguagePage(item)">
+        {{ item.name }}<span>{{ item.listLuggage ? item.listLuggage.length : item.numberOfLuggage }}</span>
+     </button>
+  </ion-list>
+</ion-content>

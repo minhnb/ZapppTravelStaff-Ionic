@@ -4,18 +4,18 @@
     <button ion-button menuToggle>
           <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Collection Mode</ion-title>
+    <ion-title>{{ 'COLLECTION_MODE' | translate }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <div class="button-bottom-full">
-      <button ion-button full (click)="scanUserQRCode()">Scan User's QR</button>
-      <button ion-button full>ACCEPT luggage from ZAPPPER</button>
-      <button ion-button full>ACCEPT luggage from other TRUCKS</button>
-      <button ion-button full>TRANSFER luggage to other TRUCKS</button>
-      <button ion-button full>View Order</button>
-    </div>
+  <div class="button-bottom-full">
+    <button ion-button full (click)="scanOrderQRCode()">{{ 'BUTTON_SCAN_ORDER_QR' | translate }}</button>
+    <button class="button-ios button-full-ios multi-row" (click)="acceptLugguageFromZappper()">{{ 'BUTTON_ACCEPT_LUGGAGE_FROM_ZAPPPER' | translate }}</button>
+    <button class="button-ios button-full-ios multi-row" [ngClass]="countAcceptItem ? 'button-ios-secondary' : ''" (click)="acceptLugguageFromOtherTruck()">{{ 'BUTTON_ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS' | translate }} ({{ countAcceptItem }})</button>
+    <button class="button-ios button-full-ios multi-row" [ngClass]="countTransferItem ? 'button-ios-secondary' : ''" (click)="transferToOtherTruck()">{{ 'BUTTON_TRANSFER_LUGGAGE_TO_OTHER_TRUCKS' | translate }} ({{ countTransferItem }})</button>
+    <button ion-button full (click)="viewOrder()">{{ 'BUTTON_VIEW_ORDER' | translate }}</button>
+  </div>
 </ion-content>

@@ -1,0 +1,23 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title *ngIf="!isTransferMode">{{ 'CHOOSE_HOTEL' | translate }}</ion-title>
+    <ion-title *ngIf="isTransferMode">{{ truck.number }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row full class="list-header info-row">
+    <ion-col col-6 class="label no-padding-left">{{ 'HOTEL' | translate }}</ion-col>
+    <ion-col col-6 class="label no-padding-left text-align-right">{{ (isTransferMode ? 'ORDER_QUANTITY' : 'LUGGAGE_QUANTITY') | translate }}</ion-col>
+  </ion-row>
+  <ion-list>
+    <button class="hotel-item right-number no-padding-left" ion-item no-lines *ngFor="let item of listHotel" (click)="isAttedant() ? viewListOrder(item) : viewDirection(item)">
+      <div class="name">{{ item.name }}</div>
+      <div class="address">{{ item.address }}</div>
+      <span>{{ item.quantity }}</span>
+    </button>
+  </ion-list>
+</ion-content>

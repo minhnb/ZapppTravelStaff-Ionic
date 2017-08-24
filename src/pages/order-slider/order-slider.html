@@ -1,0 +1,66 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'ORDERS' | translate }}</ion-title>
+    <button class="transparent-button button-search" (click)="showSearchView()">
+          <ion-icon name="ios-search"></ion-icon>
+      </button>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-slides pager>
+    <ion-slide *ngFor="let item of listOrder">
+      <div class="order-item">
+        <div class="info-row">
+          <div class="label">{{ 'ORDER_ID' | translate }}</div>
+          <div class="content">{{ item.orderId }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'SENDER' | translate }}</div>
+          <div class="content">{{ item.name }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'HOTEL' | translate }}</div>
+          <div class="content">{{ item.hotel }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'ADDRESS' | translate }}</div>
+          <div class="content">{{ item.address }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'RECEIVER' | translate }}</div>
+          <div class="content">{{ item.receiver }}<span *ngIf="item.alreadyCheckIn"> ({{ 'CHECK_IN_ALREADY' | translate }})</span></div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'ROOM' | translate }}</div>
+          <div class="content">{{ item.room }}</div>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'BAG' | translate }}</div>
+          <button class="no-padding-left" menuClose ion-item no-lines (click)="goToCustomerLugguagePage(item)">{{ item.listLuggage ? item.listLuggage.length : 0 }}</button>
+        </div>
+        <div class="info-row">
+          <div class="label">{{ 'PICKUP_TIME' | translate }}</div>
+          <div class="content">{{ timeStampToDateTime(item.pickupTime) }}</div>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+<div class="search-view" [hidden]="!isShowingSearchView" [ngClass]="isPlatformiOS(platform) ? 'margin-top' : ''" (click)="hideKeyboard()">
+  <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_ORDER_PLACEHOLDER' | translate }}" (click)="clickInput($event)"></ion-searchbar>
+  <button class="transparent-button back-button" (click)="hideSearchView()">
+            <ion-icon name="ios-arrow-back-outline"></ion-icon>
+        </button>
+  <div class="result-title">{{ 'RESULT' | translate }}</div>
+  <ion-list>
+    <ion-item class="order-info" *ngFor="let item of listOrder; let i = index;" [hidden]="item.isNotMatched" (click)="selectItem(i)">
+      <div class="id">{{ displayOrderId(item.orderId) }}</div>
+      <div>{{ 'SENDER' | translate }}: {{ item.name }}</div>
+      <div>{{ 'HOTEL' | translate }}: {{ item.hotel }}</div>
+      <span class="pickup-time">{{ timeStampToDateTime(item.pickupTime) }}</span>
+    </ion-item>
+  </ion-list>
+</div>

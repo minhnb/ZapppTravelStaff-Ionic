@@ -1,195 +1,86 @@
 import { Component, Injector } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, Polyline, PolylineOptions } from '@ionic-native/google-maps';
-import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
-import { BaseComponent } from '../../app/base.component';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
+import { Geolocation } from '@ionic-native/geolocation';
+import { DirectionPage } from './direction';
+import { AppConstant } from '../../app/app.constant';
 
-import { GoogleMapsLoader } from '../../app/helper/googleMaps.loader';
-import * as decodePolyline from 'decode-google-map-polyline';
+import { StayTimeCountDownPage } from '../stay-time-count-down';
+import { DeliveryModeService } from '../../app/services/delivery-mode';
 
 @IonicPage()
 @Component({
 	selector: 'page-direction-stop',
 	templateUrl: 'direction-stop.html',
+	providers: [DeliveryModeService]
 })
-export class DirectionStopPage extends BaseComponent {
-	directionsService: any;
-	map: GoogleMap;
-	destinationLocation: LatLng = null;
-	polyLines: Array<any> = [];
+export class DirectionStopPage extends DirectionPage {
 
-	markers: Array<any> = [];
+	isDeliveryMode: boolean = false;
+	station: any;
+	isStartedDelivering: boolean = false;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private googleMaps: GoogleMaps, private geolocation: Geolocation) {
-		super(injector);
-		this.hasGoogleMapNative = true;
-		if (this.navParams.data && this.navParams.data.long && this.navParams.data.lat) {
-			this.destinationLocation = new LatLng(this.navParams.data.lat, this.navParams.data.long);
+	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
+		public geolocation: Geolocation, private deliveryModeService: DeliveryModeService) {
+		super(injector, navCtrl, navParams, googleMaps, geolocation);
+		if (this.navParams.data.isDeliveryMode) {
+			this.isDeliveryMode = true;
 		}
+		this.station = this.navParams.data.station;
+
+		this.subcribeEventReloadDirectionStation();
 	}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad DirectionStopPage');
-		GoogleMapsLoader.load((google) => {
-			this.directionsService = new google.maps.DirectionsService;
-			this.loadMap();
-		});
+	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {
+		let stationName = this.station && this.station.name ? this.station.name : '';
+		this.drawDirectionFromCurrentLocationToDestination(currentLocation, stationName);
 	}
 
-	ngOnDestroy() {
-		this.destinationLocation = null;
-		this.polyLines.forEach((polyLine: Polyline) => {
-			polyLine.remove();
-		});
-		this.polyLines = [];
-
-		this.markers.forEach((marker: Marker) => {
-			marker.remove();
-		});
-		this.markers = [];
-	}
-
-	dismissView(event) {
-		this.navCtrl.pop();
-	}
-
-	disableMapClickable() {
-		this.map.setClickable(false);
-	}
-
-	enableMapClickable() {
-		this.map.setClickable(true);
-	}
-
-	loadMap() {
-		console.log('Loading map!');
-		let element: HTMLElement = document.getElementById('map');
-
-		this.map = this.googleMaps.create(element);
-
-		let geolocationOptions: GeolocationOptions = {
-			enableHighAccuracy: true,
-			timeout: 5000
+	goToStayTimeCountDownPage() {
+		let params = {
+			station: this.station
 		};
-		this.map.one(GoogleMapsEvent.MAP_READY).then(
-			() => {
-				console.log('Map is ready!');
-				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
-					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-					let position: CameraPosition = {
-						target: currentLocation,
-						zoom: 15,
-						tilt: 30
-					};
+		this.navCtrl.push(StayTimeCountDownPage, params);
+	}
 
-					this.map.moveCamera(position);
+	startDelivering() {
+		this.updateDeliveryStatus(true, () => {
+			this.isStartedDelivering = true;
+		});
+	}
 
-					this.addSimpleMarker(currentLocation, 'You are here', (marker: Marker) => {
-						marker.showInfoWindow();
-					});
+	finishDelivering() {
+		this.updateDeliveryStatus(false, () => {
+			this.navCtrl.pop();
+		});
+	}
 
-					if (this.destinationLocation) {
-						this.addSimpleMarker(this.destinationLocation, 'Destination', (marker: Marker) => {
-							marker.showInfoWindow();
-							this.showDirection(currentLocation, this.destinationLocation);
-						});
-					}
-
-				}).catch((error) => {
-					console.log('Error getting location', error);
-					this.showConfirm('Unable to determine your location. Please make sure location services are enabled. If they are enabled, try to restart them.', 'Error',
-						() => {
-							this.diagnostic.switchToLocationSettings();
-						});
-				});
-
-				let watch = this.geolocation.watchPosition();
-				watch.subscribe((data) => {
-					// alert(data.coords.latitude + ' - ' + data.coords.longitude);
-				});
+	updateDeliveryStatus(isDelivering: boolean, callback?: () => void) {
+		this.deliveryModeService.updateDeliveryStatus(this.station.id, isDelivering).subscribe(
+			res => {
+				if (callback) {
+					callback();
+				}
+			},
+			err => {
+				this.showError(err.message);
 			}
 		);
 	}
 
-	addSimpleMarker(point: LatLng, title?: string, callback?: (marker: Marker) => void) {
-		var markerParams: MarkerOptions = {
-			position: point,
-			title: title
-		};
-
-		this.map.addMarker(markerParams)
-			.then((marker: Marker) => {
-				this.markers.push(marker);
-				if (callback) {
-					callback(marker);
-				}
-			});
-	}
-
-	leaveCurentStop() {
-		this.showConfirm('Do you want to leave this stop?', 'Confirm leaving',
-			() => {
-				this.navCtrl.pop();
-			});
-	}
-
-	addMarker(point) {
-		var markerParams: MarkerOptions = {
-			position: point,
-			// title: '#' + this.markers.length,
-			icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-		};
-
-		this.map.addMarker(markerParams)
-			.then((marker: Marker) => {
-				if (this.markers.length > 1) {
-					var lastMarker = this.markers[this.markers.length - 1];
-					lastMarker.remove();
-				}
-				this.markers.push(marker);
-			});
-	}
-
-	addPolyline(points: Array<LatLng>) {
-		let polylineOptions: PolylineOptions = {
-			points: points,
-			color: '#4285F4',
-			width: 5,
-			geodesic: true
-		};
-		this.map.addPolyline(polylineOptions)
-			.then((polyLine: Polyline) => {
-				this.polyLines.push(polyLine);
-			});
-	}
-
-	getDirection(origin: LatLng, destination: LatLng, callback?: (points: any) => void) {
-		this.directionsService.route({
-			origin: origin,
-			destination: destination,
-			travelMode: 'DRIVING'
-		}, (response, status) => {
-			if (status === 'OK') {
-				console.log(response);
-				if (response && response.routes && response.routes.length > 0 && response.routes[0].overview_polyline) {
-					let polyLineEncode = response.routes[0].overview_polyline;
-					let points = decodePolyline(polyLineEncode);
-					console.log(points);
-					if (callback) {
-						callback(points);
-					}
-				}
-			} else {
-				alert('Directions request failed due to ' + status);
+	subcribeEventReloadDirectionStation() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.DIRECTION_STATION, (data) => {
+			if (this.isDestroyed) {
+				return;
 			}
+			this.handleEventReloadDirectionStation(data);
 		});
 	}
 
-	showDirection(origin: LatLng, destination: LatLng) {
-		this.getDirection(origin, destination, (points => {
-			points.push(destination);
-			this.addPolyline(points);
-		}));
+	handleEventReloadDirectionStation(data: any) {
+		this.station = data.station;
+		this.destinationLocation = new LatLng(Number(this.station.lat), Number(this.station.lng));
+		this.removeAllMarkersAndPolyline();
+		this.loadMap();
 	}
-
 }

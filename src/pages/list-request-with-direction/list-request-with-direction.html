@@ -1,0 +1,29 @@
+<ion-content>
+  <div #aboveMap id="aboveMap" data-tap-disabled="true">
+    <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
+            <ion-icon name="close"></ion-icon>
+          </button>
+  </div>
+  <div class="slider-content">
+    <ion-slides pager (ionSlideDidChange)="slideChanged($event)">
+      <ion-slide *ngFor="let item of listRequest">
+        <div class="user-request">
+          <div class="estimated-time">
+            <span [style.visibility]="currentDirectionDistance && currentDirectionDuration ? 'visible' : 'hidden'">{{ currentDirectionDistance ? currentDirectionDistance.text : '' }} ({{ currentDirectionDuration ? currentDirectionDuration.text : '' }})</span>
+          </div>
+          <div class="luggage-info">
+            <ion-row>
+              <ion-col col-7>{{ 'SUITCASE' | translate }}: {{ item.suitcase || 0 }}</ion-col>
+              <ion-col col-5>{{ 'BAG' | translate }}: {{ item.bag || 0 }}</ion-col>
+              <ion-col col-7>{{ 'BABY_CARRIAGE' | translate }}: {{ item.babyCarriage || 0 }}</ion-col>
+              <ion-col col-5>{{ 'OTHERS' | translate }}: {{ item.other || 0 }}</ion-col>
+            </ion-row>
+          </div>
+          <div class="button-bottom-full">
+            <button ion-button full (click)="takeRequest(item)">{{ 'BUTTON_TAKE' | translate }}</button>
+          </div>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+</ion-content>

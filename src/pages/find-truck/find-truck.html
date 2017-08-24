@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title class="capitalize">{{ 'FIND_TRUCK' | translate }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item class="no-padding-left district-header">
+    <ion-label>{{ 'DISTRICT' | translate }}</ion-label>
+    <ion-select [(ngModel)]="district" (ngModelChange)="onDistrictChange($event)">
+      <ion-option *ngFor="let item of listDistrict" value="{{ item.id }}">{{ item.name }}</ion-option>
+    </ion-select>
+  </ion-item>
+  <div class="truck-list" *ngFor="let item of listTruck">
+    <label>{{ 'TRUCK' | translate }} {{ item.truck.truckNumber }}</label>
+    <button ion-button [disabled]="!item.contactNumber" (click)="callDriver(item.contactNumber)">{{ 'BUTTON_CALL' | translate }}</button>
+    <div *ngIf="item.currentStation" (click)="goToDirectionTruckPage(item.currentStation, item.truck)">
+      <div class="time-left">{{ item.currentStation.estimatedTime }}</div>
+      <div class="address red">{{ item.currentStation.address }}</div>
+    </div>
+    <div *ngIf="item.nextStation" (click)="goToDirectionTruckPage(item.nextStation, item.truck)">
+      <div class="time-left">{{ item.nextStation.estimatedTime }}</div>
+      <div class="address green">{{ item.nextStation.address }}</div>
+    </div>
+  </div>
+</ion-content>

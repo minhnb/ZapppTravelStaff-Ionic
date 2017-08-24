@@ -1,0 +1,31 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-slides pager>
+    <ion-slide *ngFor="let item of listOrder">
+      <div class="info-row">
+        <div class="label">{{ 'SENDER' | translate }}</div>
+        <div class="content">{{ item.name }}</div>
+      </div>
+      <div class="info-row">
+        <div class="label">{{ 'HOTEL' | translate }}</div>
+        <div class="content">{{ item.hotel ? item.hotel.name : '' }}</div>
+        <div class="content">{{ item.hotel ? item.hotel.address : '' }}</div>
+      </div>
+      <div class="info-row">
+        <div class="label">{{ 'ACCEPTED' | translate }}</div>
+        <div class="content">{{ item.accepted }}</div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <div class="button-bottom-full">
+    <button ion-button full (click)="goToListTruckWithDirectionPage()">{{ 'BUTTON_FIND_TRUCK' | translate }}</button>
+  </div>
+</ion-content>

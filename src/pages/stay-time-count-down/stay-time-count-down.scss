@@ -1,0 +1,63 @@
+page-stay-time-count-down {
+  .bottom-content,
+  .middle-content,
+  .top-content {
+    text-align: center;
+  }
+
+  .top-content {
+    margin-top: 30px;
+    text-align: center;
+
+    &.next-station-info {
+      margin-top: 100px;
+
+      .content {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .info-row.top-content {
+    .content {
+      margin-top: 15px;
+      font-size: larger;
+    }
+  }
+
+  .middle-content {
+    margin-top: 70px;
+
+    .count-down {
+      padding: 10px;
+      background: #666666;
+      margin-top: 15px;
+      color: white;
+      font-weight: bold;
+      font-size: 2em;
+      width: 60%;
+      display: inline-block;
+
+      input {
+        margin: 0;
+        text-align: center;
+      }
+    }
+
+    .transparent-button {
+      padding: 5px 15px;
+
+      ion-icon {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .bottom-content {
+    margin-top: 70px;
+
+    button {
+      text-align: right;
+    }
+  }
+}

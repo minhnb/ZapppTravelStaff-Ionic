@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ customer.name }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row full class="list-header info-row">
+    <ion-col col-6 class="label">{{ 'LUGGAGE_CODE' | translate }}</ion-col>
+    <ion-col col-6 class="label">{{ (isAcceptLuggageMode && !isFromCustomerInfoPage ? 'NEW_STORAGE_BIN' : 'STORAGE_BIN') | translate }}</ion-col>
+  </ion-row>
+  <ion-list class="scrollable-list-luggage">
+    <ion-row full class="list-item" *ngFor="let item of listLuggage; let i = index">
+      <ion-col col-6>
+        <button class="transparent-button text-button" [ngClass]="(isAttendantSaveMode && selectedIndex == i) || ((isDeliveryMode || isAcceptLuggageMode) && item.isScanned) ? 'mark' : ''">{{ getDisplayLuggageCode(item.luggageCode) }}</button>
+      </ion-col>
+      <ion-col [attr.col-6]="isAllowedToRemoveLuggageCode() ? null : true" [attr.col-4]="isAllowedToRemoveLuggageCode() ? true : null">
+        <button class="transparent-button text-button" (click)="isDeliveryMode || isTransferMode && !isAcceptLuggageMode || scanBinStorageCode(i)">{{ item.storageBinName }}</button>
+      </ion-col>
+      <ion-col col-2 [hidden]="!isAllowedToRemoveLuggageCode()">
+        <button class="transparent-button" (click)="removeItem(i)">
+              <ion-icon name="ios-remove-circle-outline"></ion-icon>
+          </button>
+      </ion-col>
+    </ion-row>
+  </ion-list>
+  <div class="button-bottom-full" [hidden]="isTransferMode && !isAcceptLuggageMode">
+    <div class="left-scanner-button">
+      <div class="info-row">
+        <div class="label">{{ 'TOTAL_LUGGAGE' | translate }}</div>
+        <div class="content">{{ listLuggage.length }}</div>
+      </div>
+    </div>
+    <button class="transparent-button button-manual-input no-margin-bottom" [style.visibility]="isDeliveryMode || isAttendantSaveMode ? 'visible' : 'hidden'" (click)="goToManualInputPage()">
+          <img class="right-image" src="assets/images/keyboard.png" />
+      </button>
+    <button class="transparent-button button-scanner" (click)="smartScanQRCode()">
+          <ion-icon name="ios-qr-scanner-outline"></ion-icon>
+      </button>
+    <button ion-button full [disabled]="!listLuggage.length || (!wereAllItemsScanned() && isAcceptLuggageMode)" *ngIf="!isDeliveryMode" (click)="finishScanningForCollectionMode()">{{ (isUpdated ? 'BUTTON_FINISH' : 'BUTTON_DONE') | translate }}</button>
+    <button ion-button full [disabled]="!listLuggage.length || !wereAllItemsScanned()" *ngIf="isDeliveryMode" (click)="finishScanningForDeliveryMode()">{{ 'BUTTON_FINISH' | translate }}</button>
+  </div>
+</ion-content>

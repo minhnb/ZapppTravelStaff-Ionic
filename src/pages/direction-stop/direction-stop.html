@@ -1,9 +1,12 @@
 <ion-content>
   <div #map id="map" data-tap-disabled="true" style="height:100%;">
-      <button class="transparent-button dismiss-view-button" (click)="dismissView(event)">
+    <button class="transparent-button dismiss-view-button" (click)="dismissView(event)" *ngIf="!isStartedDelivering">
         <ion-icon name="close"></ion-icon>
       </button>
-      <button ion-button class="above-button bottom-left" (click)="leaveCurentStop()">Leave</button>
-      <button ion-button class="above-button bottom-right">Stop</button>
+    <div class="button-bottom-full">
+      <button ion-button full *ngIf="!isDeliveryMode" (click)="goToStayTimeCountDownPage()">{{ 'BUTTON_ARRIVE' | translate }}</button>
+      <button ion-button full *ngIf="isDeliveryMode && !isStartedDelivering" (click)="startDelivering()">{{ 'BUTTON_START' | translate }}</button>
+      <button ion-button full *ngIf="isDeliveryMode && isStartedDelivering" (click)="finishDelivering()">{{ 'BUTTON_FINISH' | translate }}</button>
+    </div>
   </div>
 </ion-content>

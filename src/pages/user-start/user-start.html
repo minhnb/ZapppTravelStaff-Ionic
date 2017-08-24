@@ -3,29 +3,49 @@
     <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Staff App</ion-title>
+    <ion-title>{{ 'APP_NAME' | translate }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <ion-item>
-    <ion-label>Status</ion-label>
-    <ion-select [(ngModel)]="status" (ngModelChange)="onStatusChange($event)">
-      <ion-option value="online">Online</ion-option>
-      <ion-option value="offline">Offline</ion-option>
+  <ion-item no-lines [style.visibility]="isLoadedState ? 'visible' : 'hidden'">
+    <ion-label>{{ 'ACTIVE' | translate }}</ion-label>
+    <ion-toggle color="secondary" [(ngModel)]="isActive" (ngModelChange)="onStatusChange($event)"></ion-toggle>
+  </ion-item>
+  <div [hidden]="!isActive || !isZappper()">
+    <button class="right-number" ion-item no-lines (click)="goToListRequest()">
+        <div>{{ 'NEW_REQUEST' | translate }}</div>
+        <span>{{ listRequest.length }}</span>
+      </button>
+    <button class="right-number" ion-item no-lines (click)="goToListUncompletedOrder()">
+        <div>{{ 'UNCOMPLETED_ORDER' | translate }}</div>
+        <span>{{ listUncompleteOrder.length }}</span>
+      </button>
+    <button ion-item no-lines (click)="goToListTruckWithDirectionPage()">
+        <div>{{ 'FIND_TRUCK' | translate }}</div>
+      </button>
+  </div>
+  <div full padding [hidden]="isActive  || isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS' | translate }}</div>
+  <div full padding [hidden]="isActive  || !isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS_ZAPPPER' | translate }}</div>
+  <ion-item no-lines [hidden]="!isActive || isZappper()">
+    <ion-label>{{ 'CHOOSE_TRUCK' | translate }}</ion-label>
+    <ion-select [disabled]="truck" [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
+      <ion-option *ngFor="let item of listTruck" value="{{ item.id }}">{{ item.truck_number }}</ion-option>
     </ion-select>
   </ion-item>
-  <ion-item>
-    <ion-label>Choose a truck</ion-label>
-    <ion-select [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">
-      <ion-option *ngFor="let item of listTruck" value="{{ item.value }}">{{ item.text }}</ion-option>
-    </ion-select>
+  <ion-item no-lines [hidden]="!isActive || isZappper()" (click)="goToListAssignmentPage()">
+    <ion-label>
+      {{ 'VIEW_ASSIGNMENT' | translate }} ({{ newAssignmentCount }})
+      <img class="right-image" src="assets/images/bell.png" />
+    </ion-label>
   </ion-item>
-  <div class="button-bottom-full">
-    <button ion-button full (click)="goToCollectionModePage()">Collection</button>
-    <button ion-button full (click)="goToDeliveryModePage()">Delivery</button>
+  <div class="button-bottom-full" [hidden]="!isActive || isZappper()">
+    <button ion-button full color="{{ isAssignedCollection ? 'secondary' : '' }}" (click)="goToCollectionMode()" [disabled]="!truck">{{ 'BUTTON_COLLECTION_MODE' | translate }}</button>
+    <button ion-button full *ngIf="isAttedant()" color="{{ isAssignedDelivery ? 'secondary' : '' }}" (click)="attendantGoToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }}</button>
+    <button ion-button full *ngIf="isDriver()" color="{{ isAssignedDelivery ? 'secondary' : '' }}" (click)="driverGoToDeliveryMode()" [disabled]="!truck">{{ 'BUTTON_DELIVERY_MODE' | translate }} ({{ countDeliveryItem }})</button>
+    <button ion-button full *ngIf="isDriver()" (click)="driverGoToTransferMode()" [disabled]="!truck">{{ 'BUTTON_TRANSFER_MODE' | translate }} ({{ countTransferItem }})</button>
   </div>
 
 </ion-content>
