@@ -10,7 +10,6 @@ import { AppConfig } from './app.config';
 
 import { UserService } from './services/user';
 import { StaffService } from './services/staff';
-import { DataShare } from './helper/data.share';
 
 import { LoginPage } from '../pages/login/login';
 import { UserStartPage } from '../pages/user-start';
@@ -33,8 +32,7 @@ export class MyApp extends BaseComponent {
 	serverName: string;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation,
-		private dataShare: DataShare) {
+		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation) {
 		super(injector);
 
 		this.pages = [
@@ -63,6 +61,7 @@ export class MyApp extends BaseComponent {
 			}
 
 			this.enableBackgroundMode();
+			this.registerBackButtonAction();
 		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();
@@ -96,6 +95,18 @@ export class MyApp extends BaseComponent {
 
 			// fcm.unsubscribeFromTopic('marketing');
 		}
+	}
+
+	registerBackButtonAction() {
+		this.platform.registerBackButtonAction(() => {
+			if (this.dataShare.backButtonAction) {
+				this.dataShare.backButtonAction();
+				return;
+			}
+			if (this.nav.canGoBack()) {
+				this.nav.pop();
+			}
+		});
 	}
 
 	enableBackgroundMode() {

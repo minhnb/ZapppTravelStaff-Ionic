@@ -2,7 +2,6 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
-import { DataShare } from '../../app/helper/data.share';
 
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
@@ -50,8 +49,7 @@ export class UserStartPage extends BaseComponent {
 	isAssignedDelivery: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService,
-		private dataShare: DataShare) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeAssignTruckEvent();

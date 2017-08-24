@@ -38,6 +38,11 @@ export class TakePicturePage extends BaseComponent {
 		this.saveAttendantLocalCurrentJob();
 	}
 
+	ionViewWillEnter() {
+		console.log('ionViewWillEnter TakePicturePage');
+		this.dataShare.disableBackButtonAction();
+	}
+
 	dismissView(event) {
 		this.navCtrl.pop();
 	}

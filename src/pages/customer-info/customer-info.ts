@@ -34,16 +34,27 @@ export class CustomerInfoPage extends BaseComponent {
 
 	ionViewWillEnter() {
 		console.log('ionViewWillEnter');
+		this.registerBackButtonAction();
 		this.detectCustomerHasLuggage();
+	}
+
+	registerBackButtonAction() {
+		this.dataShare.setBackButtonAction(() => {
+			this.backButtonAction();
+		});
+	}
+
+	backButtonAction() {
+		this.confirmBeforeLeaveView().then(() => {
+			this.navCtrl.pop();
+		}).catch(() => {
+
+		});
 	}
 
 	customBackButtonClick() {
 		this.navBar.backButtonClick = (e: UIEvent) => {
-			this.confirmBeforeLeaveView().then(() => {
-				this.navCtrl.pop();
-			}).catch(() => {
-
-			});
+			this.backButtonAction();
 		};
 	}
 
