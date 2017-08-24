@@ -43,6 +43,8 @@ export class MyApp extends BaseComponent {
 		];
 		this.initWatchPosition();
 		this.subcribeUserActiveEvent();
+		this.subcribeRefreshTokenInvalidEvent();
+		this.subcribeUserInvalidEvent();
 		this.getServerName();
 
 		this.initializeApp();
@@ -127,14 +129,13 @@ export class MyApp extends BaseComponent {
 	}
 
 	logOut() {
-		this.unsubcribeWatchPosition();
 		this.userService.logOut().subscribe(
 			res => {
-				this.nav.setRoot(LoginPage);
+				this.goBackToLoginPage();
 			},
 			err => {
 				this.userService.handleLogout(err);
-				this.nav.setRoot(LoginPage);
+				this.goBackToLoginPage();
 				this.showError(err.message);
 			}
 		);
@@ -235,17 +236,46 @@ export class MyApp extends BaseComponent {
 		});
 	}
 
+	subcribeRefreshTokenInvalidEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID, (data: any) => {
+			console.log(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID);
+			this.goBackToLoginPage();
+		});
+	}
+
+	subcribeUserInvalidEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.USER_INVALID, (data: any) => {
+			console.log(AppConstant.EVENT_TOPIC.USER_INVALID);
+			this.goBackToLoginPage();
+		});
+	}
+
+	goBackToLoginPage() {
+		this.unsubcribeWatchPosition();
+		this.nav.setRoot(LoginPage);
+	}
+
 	notificationTypeIsInList(topic: string) {
 		let listServerNotificationEvent = this.listServerNotificationEvent();
 		return listServerNotificationEvent.indexOf(topic) > -1;
 	}
 
 	handleZapppNotification(data: any) {
+		if (data.type == AppConstant.NOTIFICATION_TYPE.LOGGED_IN_FROM_ANOTHER_DEVICE) {
+			this.handleNotificationUserLoginFromAnotherDevice(data);
+			return;
+		}
 		let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + data.type;
 		this.events.publish(topic, data);
 		if (!this.notificationTypeIsInList(topic)) {
 			this.showInfo(data.body, data.title);
 		}
+	}
+
+	handleNotificationUserLoginFromAnotherDevice(data: any) {
+		this.showInfo(this.translate.instant('ERROR_LOGGED_IN_FROM_ANOTHER_DEVICE'));
+		this.userService.handleLogout(data);
+		this.goBackToLoginPage();
 	}
 
 	handleZapppBackgroundNotification(data: any) {

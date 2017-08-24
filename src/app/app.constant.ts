@@ -49,7 +49,8 @@ export const AppConstant = {
         ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
         ASSIGN_TRUCK_TRANSFER: 'assign_truck_transfer',
-        USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge'
+        USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge',
+        LOGGED_IN_FROM_ANOTHER_DEVICE: 'your_account_logged_in_from_another_device'
     },
     BACKGROUND_NOTIFICATION_TYPE: {
         PREFIX: 'background-notification:',
@@ -61,7 +62,9 @@ export const AppConstant = {
         DIRECTION_STATION: 'direction:station',
         DELIVERY_COMPLETED: 'delivery:completed',
         COLLECTION_NEXTSTATION: 'collection:nextStation',
-        INPUT_MANUAL: 'input:manual'
+        INPUT_MANUAL: 'input:manual',
+        REFRESH_TOKEN_INVALID: 'reftreshToken: invalid',
+        USER_INVALID: 'user: invalid'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',
@@ -87,5 +90,6 @@ export const AppConstant = {
         INIT: "payment_init",
 		FAILED: "payment_failed",
         SUCCESS: "payment_success"
-    }
+    },
+    PRODUCTION_ENVIRONMENT: "production"
 };

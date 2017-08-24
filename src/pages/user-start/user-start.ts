@@ -655,6 +655,6 @@ export class UserStartPage extends BaseComponent {
 
 	handleInvalidStaff(info: any) {
 		this.userService.handleLogout(info);
-		this.navCtrl.setRoot(LoginPage);
+		this.events.publish(AppConstant.EVENT_TOPIC.USER_INVALID);
 	}
 }

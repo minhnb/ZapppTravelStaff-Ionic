@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions, RequestMethod, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -11,11 +12,16 @@ import { AppConfig } from '../app.config';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { TranslateService } from '@ngx-translate/core';
 
+import { LoginPage } from '../../pages/login/login';
+
 var ENV: string = 'dev';
 
 @Injectable()
 export class ZapppHttp {
-    constructor(private http: Http, private _spinner: SpinnerDialog, private translate: TranslateService) { }
+
+    refreshTokenUrl: string = AppConfig.API_URL + '/user/refresh_token';
+
+    constructor(private http: Http, private _spinner: SpinnerDialog, private translate: TranslateService, private events: Events) { }
 
     private getRequestOptionsByToken(method: string | RequestMethod, accessToken: string): RequestOptions {
         let headerParams = {};
@@ -34,29 +40,28 @@ export class ZapppHttp {
         return options;
     }
 
-    private getRequestOptions(method: string | RequestMethod): RequestOptions {
+    get(url: string, params?: Object, showSpinner: Boolean = true, needAccessToken: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Get, url, null, params, showSpinner, needAccessToken);
+    }
+
+    post(url: string, data: Object, params?: Object, showSpinner: Boolean = true, needAccessToken: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Post, url, data, params, showSpinner, needAccessToken);
+    }
+
+    put(url: string, data: Object, params?: Object, showSpinner: Boolean = true, needAccessToken: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Put, url, data, params, showSpinner, needAccessToken);
+    }
+
+    delete(url: string, data: Object, params?: Object, showSpinner: Boolean = true, needAccessToken: Boolean = true): Observable<any> {
+        return this.request(RequestMethod.Delete, url, data, params, showSpinner, needAccessToken);
+    }
+
+    request(method: RequestMethod, url: string, data?: Object, params?: Object, showSpinner: Boolean = true, needAccessToken: Boolean = true): Observable<any> {
         let accessToken = localStorage.getItem(AppConstant.ACCESS_TOKEN);
-        return this.getRequestOptionsByToken(method, accessToken);
-    }
-
-    get(url: string, params?: Object, showSpinner: Boolean = true): Observable<any> {
-        return this.request(RequestMethod.Get, url, null, params, showSpinner);
-    }
-
-    post(url: string, data: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
-        return this.request(RequestMethod.Post, url, data, params, showSpinner);
-    }
-
-    put(url: string, data: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
-        return this.request(RequestMethod.Put, url, data, params, showSpinner);
-    }
-
-    delete(url: string, data: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
-        return this.request(RequestMethod.Delete, url, data, params, showSpinner);
-    }
-
-    request(method: RequestMethod, url: string, data?: Object, params?: Object, showSpinner: Boolean = true): Observable<any> {
-        let options = this.getRequestOptions(method);
+        if (needAccessToken && !accessToken) {
+            return;
+        }
+        let options = this.getRequestOptionsByToken(method, accessToken);
         if (method != RequestMethod.Get) {
             options.body = JSON.stringify(data);
         }
@@ -70,12 +75,18 @@ export class ZapppHttp {
         if (showSpinner) {
             this._spinner.show();
         }
+        if (ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+            console.log(method);
+            console.log(url);
+            console.log(JSON.stringify(params));
+            console.log(JSON.stringify(data));
+        }
         let self = this;
         let observer: Observable<any> = Observable.create(observer => {
             let requestSub = this.http.request(url, options)
 				.map(this.extractData.bind(this))
 				.catch((err: any) => {
-                    return self.handleError(err, url, options);
+                    return self.handleError(err, url, options, needAccessToken);
                 });
             requestSub.subscribe(
                 (res: any) => {
@@ -99,17 +110,23 @@ export class ZapppHttp {
     extractData(res: Response): any {
         this._spinner.hide();
         let response = res.json() || {};
-        if (ENV != 'production') {
-            console.log(response);
+        if (ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+            console.log(JSON.stringify(response));
         }
 		return response;
     }
 
-    handleError(error: Response | any, url: string, options: RequestOptions): any {
+    handleError(error: Response | any, url: string, options: RequestOptions, needAccessToken: Boolean): any {
         this._spinner.hide();
+        if (ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+            console.log(JSON.stringify(error));
+        }
         if (error.status == 404) {
             error.message = this.translate.instant('ERROR_ZAPPP_HTTP_NOT_FOUND');
             return Observable.throw(error);
+        }
+        if (error.status == 401 && needAccessToken) {
+            return this.refreshToken(url, options);
         }
         let errMsg;
         try {
@@ -121,17 +138,11 @@ export class ZapppHttp {
             }
             return Observable.throw(errMsg);
         }
-        if (errMsg.status == 401) {
-            return this.refreshToken(url, options);
-        }
         return Observable.throw(errMsg);
     }
 
     jsonError(error: Response | any): any {
         let errMsg: any;
-        if (ENV != 'production') {
-            console.log(error);
-        }
 		if (error instanceof Response) {
             if (error.status == 0) {
                 let message = this.translate.instant('ERROR_ZAPPP_HTTP_CONNECTION_ERROR');
@@ -157,22 +168,26 @@ export class ZapppHttp {
         let method = RequestMethod.Post;
         let refreshTokenOptions = this.getRequestOptionsByToken(method, refreshToken);
         refreshTokenOptions.method = method;
-        let refreshTokenUrl = AppConfig.API_URL + 'auth/refresh';
+        let refreshTokenUrl = this.refreshTokenUrl;
         refreshTokenOptions.body = JSON.stringify({});
         this._spinner.show();
         return this.http.request(refreshTokenUrl, refreshTokenOptions)
             .toPromise()
             .then((res: Response) => {
                 let response = res.json() || {};
-				this.updateLocalStorage(response);
+				this.updateLocalStorage(response.data);
                 return this.resendRequest(url, options);
             })
             .catch(this.handleErrorRefreshToken.bind(this));
     }
 
     resendRequest(url: string, options: RequestOptions) {
-        let newOptions = this.getRequestOptions(options.method);
+        let accessToken = localStorage.getItem(AppConstant.ACCESS_TOKEN);
+        let newOptions = this.getRequestOptionsByToken(options.method, accessToken);
         newOptions.search = options.search;
+        if (options.method != RequestMethod.Get) {
+			newOptions.body = options.body;
+        }
 
         return this.http.request(url, newOptions)
             .toPromise()
@@ -180,9 +195,9 @@ export class ZapppHttp {
 			.catch(this.handleErrorAfterResendRequest.bind(this));
     }
 
-    updateLocalStorage(response: any) {
-        localStorage.setItem(AppConstant.ACCESS_TOKEN, response.access_token);
-		localStorage.setItem(AppConstant.EXPIRED_AT, response.expired_at);
+    updateLocalStorage(data: any) {
+        localStorage.setItem(AppConstant.ACCESS_TOKEN, data.access_token);
+		localStorage.setItem(AppConstant.EXPIRED_AT, data.expired_at);
     }
 
     handleErrorAfterResendRequest(error: Response | any) {
@@ -194,8 +209,17 @@ export class ZapppHttp {
     handleErrorRefreshToken(error: Response | any) {
         this._spinner.hide();
         let errMsg = this.jsonError(error);
-        localStorage.clear();
-        // this.router.navigate(['/login']);
+        this.clearLocalStorage();
+        this.announceRefreshTokenInvalid();
         return Promise.reject(errMsg);
     }
+
+    announceRefreshTokenInvalid() {
+        console.log('announceRefreshTokenInvalid');
+        this.events.publish(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID);
+    }
+
+    clearLocalStorage() {
+		localStorage.clear();
+	}
 }
