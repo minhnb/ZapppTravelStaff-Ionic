@@ -2,7 +2,6 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
-import { CallNumber } from '@ionic-native/call-number';
 
 import { DirectionPage } from '../direction-stop';
 
@@ -17,7 +16,7 @@ export class DirectionTruckPage extends DirectionPage {
 	destinationName: string;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, public callNumber: CallNumber) {
+		public geolocation: Geolocation) {
 		super(injector, navCtrl, navParams, googleMaps, geolocation);
 		if (this.navParams.data.truck) {
 			this.truck = this.navParams.data.truck;
@@ -63,11 +62,7 @@ export class DirectionTruckPage extends DirectionPage {
 	}
 
 	callDriver() {
-		this.callNumber.callNumber(this.truck.driver_phone, true)
-			.then(() => {
-
-			})
-			.catch(() => console.log('Error launching dialer'));
+		this.callPhoneNumber(this.truck.driver_phone);
 	}
 
 	drawDirectionToCurrentLocation() {

@@ -9,6 +9,7 @@ import { GeolocationOptions } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { Keyboard } from '@ionic-native/keyboard';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { CallNumber } from '@ionic-native/call-number';
 
 import * as moment from 'moment';
 
@@ -26,6 +27,7 @@ export class BaseComponent {
 	public keyboard: Keyboard;
 	public backgroundMode: BackgroundMode;
 	public dataShare: DataShare;
+	public callNumber: CallNumber;
 
 	defaultAvatar: string = AppConstant.DEFAULT_AVATAR;
 	hasGoogleMapNative: boolean = false;
@@ -42,6 +44,7 @@ export class BaseComponent {
 		this.keyboard = injector.get(Keyboard);
 		this.backgroundMode = injector.get(BackgroundMode);
 		this.dataShare = injector.get(DataShare);
+		this.callNumber = injector.get(CallNumber);
 
 		this.subcribeEventAppIsResuming();
 		this.dataShare.removeBackButtonAction();
@@ -463,5 +466,22 @@ export class BaseComponent {
 
 	clearLocalCurrentJob() {
 		localStorage.removeItem(AppConstant.CURRENT_JOB);
+	}
+
+	convertToValidPhoneNumber(phoneNumber: string): string {
+		let plus = '+';
+		if (phoneNumber.startsWith(plus)) {
+			return phoneNumber;
+		}
+		return plus + phoneNumber;
+	}
+
+	callPhoneNumber(phoneNumber: string) {
+		let validPhoneNumber = this.convertToValidPhoneNumber(phoneNumber);
+		this.callNumber.callNumber(validPhoneNumber, true)
+			.then(() => {
+
+			})
+			.catch(() => console.log('Error launching dialer'));
 	}
 }
