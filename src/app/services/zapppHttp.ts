@@ -175,7 +175,11 @@ export class ZapppHttp {
             .toPromise()
             .then((res: Response) => {
                 let response = res.json() || {};
-				this.updateLocalStorage(response.data);
+                if (response.data) {
+                    this.updateLocalStorage(response.data);
+                } else {
+                    return this.handleErrorRefreshToken(res);
+                }
                 return this.resendRequest(url, options);
             })
             .catch(this.handleErrorRefreshToken.bind(this));
