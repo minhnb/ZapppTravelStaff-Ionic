@@ -2,7 +2,6 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
-import { CallNumber } from '@ionic-native/call-number';
 
 import { DirectionPage } from '../direction-stop';
 import { CustomerLuggagePage } from '../customer-luggage';
@@ -21,9 +20,14 @@ export class DirectionUserPage extends DirectionPage {
 	customer: any;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, private callNumber: CallNumber, private collectionModeService: CollectionModeService) {
+		public geolocation: Geolocation, private collectionModeService: CollectionModeService) {
 		super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.customer = this.navParams.data.customer;
+	}
+
+	ionViewWillEnter() {
+		super.ionViewWillEnter();
+		this.dataShare.disableBackButtonAction();
 	}
 
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {
@@ -32,11 +36,7 @@ export class DirectionUserPage extends DirectionPage {
 	}
 
 	callCustomer() {
-		this.callNumber.callNumber(this.customer.phoneNumber, true)
-			.then(() => {
-
-			})
-			.catch(() => console.log('Error launching dialer'));
+		this.callPhoneNumber(this.customer.phoneNumber);
 	}
 
 	scanLuggageQRCode() {

@@ -34,7 +34,7 @@ export class LoginPage extends BaseComponent {
 					this.navCtrl.setRoot(UserStartPage);
 				} else {
 					this.showError(this.translate.instant('USER_NOT_STAFF'));
-					localStorage.clear();
+					this.userService.handleLogout(res);
 				}
 			},
 			err => {

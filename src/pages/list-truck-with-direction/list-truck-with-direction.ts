@@ -4,7 +4,6 @@ import { AppConstant } from '../../app/app.constant';
 
 import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
-import { CallNumber } from '@ionic-native/call-number';
 
 import { DirectionTruckPage } from '../direction-truck';
 
@@ -31,8 +30,8 @@ export class ListTruckWithDirectionPage extends DirectionTruckPage {
 	@ViewChild(Slides) slides: Slides;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, public callNumber: CallNumber, private staffService: StaffService) {
-        super(injector, navCtrl, navParams, googleMaps, geolocation, callNumber);
+		public geolocation: Geolocation, private staffService: StaffService) {
+        super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.autoMoveCamera = false;
 	}
 

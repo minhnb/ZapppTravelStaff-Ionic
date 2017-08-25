@@ -29,28 +29,24 @@ export class UserService {
 		localStorage.setItem(AppConstant.ROLE, role);
 	}
 
-	clearLocalStorage() {
-		localStorage.clear();
-	}
-
 	handleLoginSuccess(data: any): any {
 		this.saveUserAccessTokenToLocalStorage(data, data.user.roles);
 		return data;
 	}
 
 	public handleLogout(data: any): any {
-		this.clearLocalStorage();
+		this.zapppHttp.clearLocalStorage();
 		return data;
 	}
 
-	pureLogIn(loginName: string, password: string, deviceToken: string, countryCode?: string): Observable<any> {
+	pureLogIn(loginName: string, password: string, deviceToken: string, countryCode?: string, showSpinner: Boolean = true): Observable<any> {
 		let user = {
 			email: loginName,
 			password: password,
 			device_token: deviceToken,
 			country: countryCode
 		};
-		return this.zapppHttp.post(this.userUrl + '/login', user);
+		return this.zapppHttp.post(this.userUrl + '/login', user, null, showSpinner, false);
 	}
 
 	userLogIn(loginName: string, password: string, countryCode?: string): Observable<any> {

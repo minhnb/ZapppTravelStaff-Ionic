@@ -1,6 +1,7 @@
 import { Component, Injector, ElementRef } from '@angular/core';
 import { Platform, AlertController, NavController, Events } from 'ionic-angular';
 import { AppConstant } from './app.constant';
+import { DataShare } from './helper/data.share';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +9,7 @@ import { GeolocationOptions } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { Keyboard } from '@ionic-native/keyboard';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { CallNumber } from '@ionic-native/call-number';
 
 import * as moment from 'moment';
 
@@ -24,6 +26,8 @@ export class BaseComponent {
 	public events: Events;
 	public keyboard: Keyboard;
 	public backgroundMode: BackgroundMode;
+	public dataShare: DataShare;
+	public callNumber: CallNumber;
 
 	defaultAvatar: string = AppConstant.DEFAULT_AVATAR;
 	hasGoogleMapNative: boolean = false;
@@ -39,8 +43,11 @@ export class BaseComponent {
 		this.events = injector.get(Events);
 		this.keyboard = injector.get(Keyboard);
 		this.backgroundMode = injector.get(BackgroundMode);
+		this.dataShare = injector.get(DataShare);
+		this.callNumber = injector.get(CallNumber);
 
 		this.subcribeEventAppIsResuming();
+		this.dataShare.removeBackButtonAction();
 	}
 
 	ionViewWillUnload() {
@@ -459,5 +466,22 @@ export class BaseComponent {
 
 	clearLocalCurrentJob() {
 		localStorage.removeItem(AppConstant.CURRENT_JOB);
+	}
+
+	convertToValidPhoneNumber(phoneNumber: string): string {
+		let plus = '+';
+		if (phoneNumber.startsWith(plus)) {
+			return phoneNumber;
+		}
+		return plus + phoneNumber;
+	}
+
+	callPhoneNumber(phoneNumber: string) {
+		let validPhoneNumber = this.convertToValidPhoneNumber(phoneNumber);
+		this.callNumber.callNumber(validPhoneNumber, true)
+			.then(() => {
+
+			})
+			.catch(() => console.log('Error launching dialer'));
 	}
 }
