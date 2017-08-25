@@ -215,7 +215,6 @@ export class ZapppHttp {
     }
 
     announceRefreshTokenInvalid() {
-        console.log('announceRefreshTokenInvalid');
         this.events.publish(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID);
     }
 

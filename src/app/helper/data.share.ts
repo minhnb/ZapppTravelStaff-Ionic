@@ -6,6 +6,7 @@ export class DataShare {
     fcmToken: string;
     userInfo: any;
     backButtonAction: () => void;
+    isUpdatedCurrentLocation: Boolean = false;
 
     public setFCMToken(fcmToken: string) {
 		this.fcmToken = fcmToken;
@@ -27,5 +28,9 @@ export class DataShare {
         this.backButtonAction = () => {
 
         };
+    }
+
+    public setIsUpdatedCurrentLocation(isUpdatedCurrentLocation: Boolean) {
+        this.isUpdatedCurrentLocation = isUpdatedCurrentLocation;
     }
 }

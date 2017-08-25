@@ -185,7 +185,7 @@ export class MyApp extends BaseComponent {
 	zappperUpdateCurrentLocation(lat: number, long: number) {
 		this.staffService.zappperUpdateCurrentLocation(lat, long, false).subscribe(
 			res => {
-
+				this.handleFirstUpdateCurrentLocation();
 			},
 			err => {
 
@@ -234,10 +234,22 @@ export class MyApp extends BaseComponent {
 
 	unsubcribeWatchPosition() {
 		this.lastWatchPosition = 0;
+		this.dataShare.setIsUpdatedCurrentLocation(false);
 		if (this.watchPositionSubscription) {
 			this.watchPositionSubscription.unsubscribe();
 			this.watchPositionSubscription = null;
 		}
+	}
+
+	handleFirstUpdateCurrentLocation() {
+		if (!this.dataShare.isUpdatedCurrentLocation) {
+			this.dataShare.setIsUpdatedCurrentLocation(true);
+			this.announceFirstUpdateCurrentLocationEvent();
+		}
+	}
+
+	announceFirstUpdateCurrentLocationEvent() {
+		this.events.publish(AppConstant.EVENT_TOPIC.CURRENT_LOCATION_FIRST_UPDATE);
 	}
 
 	subcribeUserActiveEvent() {
@@ -252,14 +264,12 @@ export class MyApp extends BaseComponent {
 
 	subcribeRefreshTokenInvalidEvent() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID, (data: any) => {
-			console.log(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID);
 			this.goBackToLoginPage();
 		});
 	}
 
 	subcribeUserInvalidEvent() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.USER_INVALID, (data: any) => {
-			console.log(AppConstant.EVENT_TOPIC.USER_INVALID);
 			this.goBackToLoginPage();
 		});
 	}

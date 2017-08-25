@@ -63,8 +63,9 @@ export const AppConstant = {
         DELIVERY_COMPLETED: 'delivery:completed',
         COLLECTION_NEXTSTATION: 'collection:nextStation',
         INPUT_MANUAL: 'input:manual',
-        REFRESH_TOKEN_INVALID: 'reftreshToken: invalid',
-        USER_INVALID: 'user: invalid'
+        REFRESH_TOKEN_INVALID: 'reftreshToken:invalid',
+        USER_INVALID: 'user:invalid',
+        CURRENT_LOCATION_FIRST_UPDATE: 'currentLocation:firstUpdate'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',

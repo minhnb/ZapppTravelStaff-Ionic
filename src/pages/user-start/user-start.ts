@@ -53,6 +53,7 @@ export class UserStartPage extends BaseComponent {
 		super(injector);
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeAssignTruckEvent();
+		this.subscribeEventFirstUpdateCurrentLocation();
 		this.loadPreviousState();
 	}
 
@@ -128,7 +129,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	loadJobForActiveZappper() {
-		if (this.isActive && this.isZappper()) {
+		if (this.isActive && this.isZappper() && this.dataShare.isUpdatedCurrentLocation) {
 			this.loadNewRequestsAndUncompletedOrders();
 		}
 	}
@@ -422,6 +423,12 @@ export class UserStartPage extends BaseComponent {
 				return;
 			}
 			this.handleZappperNewBackgroundRequest(data);
+		});
+	}
+
+	subscribeEventFirstUpdateCurrentLocation() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.CURRENT_LOCATION_FIRST_UPDATE, (data: any) => {
+			this.loadJobForActiveZappper();
 		});
 	}
 
