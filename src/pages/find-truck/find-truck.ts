@@ -1,7 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
-import { CallNumber } from '@ionic-native/call-number';
 
 import { StaffService } from '../../app/services/staff';
 import { DirectionTruckPage } from '../direction-truck';
@@ -18,8 +17,7 @@ export class FindTruckPage extends BaseComponent {
 	listDistrict: Array<any> = [];
 	district: any;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private callNumber: CallNumber,
-		private staffService: StaffService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private staffService: StaffService) {
         super(injector);
 
         this.listTruck = [
@@ -92,9 +90,7 @@ export class FindTruckPage extends BaseComponent {
 	}
 
 	callDriver(phoneNumber: string) {
-		this.callNumber.callNumber(phoneNumber, true)
-			.then(() => console.log('Launched dialer!'))
-			.catch(() => console.log('Error launching dialer'));
+		this.callPhoneNumber(phoneNumber);
 	}
 
 	goToDirectionTruckPage(station: any, truck: any) {

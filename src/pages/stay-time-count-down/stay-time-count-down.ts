@@ -42,6 +42,28 @@ export class StayTimeCountDownPage extends BaseComponent {
 		this.customBackButtonClick();
 	}
 
+	ionViewWillEnter() {
+		console.log('ionViewWillEnter TakePicturePage');
+		this.registerBackButtonAction();
+	}
+
+	registerBackButtonAction() {
+		this.dataShare.setBackButtonAction(() => {
+			if (this.isStarted) {
+				return;
+			}
+			this.backButtonAction();
+		});
+	}
+
+	backButtonAction() {
+		if (!this.isShowingNextStationInfo) {
+			this.navCtrl.pop();
+		} else {
+			this.navCtrl.popToRoot();
+		}
+	}
+
 	subcribeChooseNextStationEvent() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.COLLECTION_NEXTSTATION, (data) => {
 			if (this.isDestroyed) {
@@ -66,11 +88,7 @@ export class StayTimeCountDownPage extends BaseComponent {
 
 	customBackButtonClick() {
 		this.navBar.backButtonClick = (e: UIEvent) => {
-			if (!this.isShowingNextStationInfo) {
-				this.navCtrl.pop();
-			} else {
-				this.navCtrl.popToRoot();
-			}
+			this.backButtonAction();
 		};
 	}
 

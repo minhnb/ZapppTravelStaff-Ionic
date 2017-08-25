@@ -73,6 +73,7 @@
   "ERROR_INVALID_CODE_FOR_ORDER_OR_LUGGAGE": "That did not work. Scan a bag or an order.",
   "ERROR_INVALID_LUGGAGE_CODE": "That did not work. Scan a bag.",
   "ERROR_INVALID_ORDER_CODE": "That did not work. Scan an order.",
+  "ERROR_LOGGED_IN_FROM_ANOTHER_DEVICE": "Your account has been logged in from another device",
   "ERROR_LUGGAGE_CODE_ALREADY_ADDED": "This bag was already seen before",
   "ERROR_LUGGAGE_CODE_IS_NOT_IN_LIST": "Wrong bag. It doesn't belong to this order.",
   "ERROR_ORDER_ID_NOT_MATCH": "Wrong order. Scan the order you accepted.",

@@ -10,7 +10,6 @@ import { AppConfig } from './app.config';
 
 import { UserService } from './services/user';
 import { StaffService } from './services/staff';
-import { DataShare } from './helper/data.share';
 
 import { LoginPage } from '../pages/login/login';
 import { UserStartPage } from '../pages/user-start';
@@ -33,8 +32,7 @@ export class MyApp extends BaseComponent {
 	serverName: string;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation,
-		private dataShare: DataShare) {
+		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation) {
 		super(injector);
 
 		this.pages = [
@@ -43,6 +41,8 @@ export class MyApp extends BaseComponent {
 		];
 		this.initWatchPosition();
 		this.subcribeUserActiveEvent();
+		this.subcribeRefreshTokenInvalidEvent();
+		this.subcribeUserInvalidEvent();
 		this.getServerName();
 
 		this.initializeApp();
@@ -61,6 +61,7 @@ export class MyApp extends BaseComponent {
 			}
 
 			this.enableBackgroundMode();
+			this.registerBackButtonAction();
 		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();
@@ -96,6 +97,18 @@ export class MyApp extends BaseComponent {
 		}
 	}
 
+	registerBackButtonAction() {
+		this.platform.registerBackButtonAction(() => {
+			if (this.dataShare.backButtonAction) {
+				this.dataShare.backButtonAction();
+				return;
+			}
+			if (this.nav.canGoBack()) {
+				this.nav.pop();
+			}
+		});
+	}
+
 	enableBackgroundMode() {
 		let backgroundModeConfiguration: BackgroundModeConfiguration = {
 			silent: true
@@ -124,14 +137,13 @@ export class MyApp extends BaseComponent {
 	}
 
 	logOut() {
-		this.unsubcribeWatchPosition();
 		this.userService.logOut().subscribe(
 			res => {
-				this.nav.setRoot(LoginPage);
+				this.goBackToLoginPage();
 			},
 			err => {
 				this.userService.handleLogout(err);
-				this.nav.setRoot(LoginPage);
+				this.goBackToLoginPage();
 				this.showError(err.message);
 			}
 		);
@@ -139,6 +151,9 @@ export class MyApp extends BaseComponent {
 
 	updateDeviceToken(deviceToken: string) {
 		console.log('registerToken' + deviceToken);
+		if (!deviceToken) {
+			return;
+		}
 		this.dataShare.setFCMToken(deviceToken);
 		if (!this.isLoggedIn()) {
 			return;
@@ -148,7 +163,7 @@ export class MyApp extends BaseComponent {
 
 			},
 			err => {
-				this.showError(err.message);
+				// this.showError(err.message);
 			}
 		);
 	}
@@ -167,7 +182,7 @@ export class MyApp extends BaseComponent {
 	zappperUpdateCurrentLocation(lat: number, long: number) {
 		this.staffService.zappperUpdateCurrentLocation(lat, long, false).subscribe(
 			res => {
-
+				this.handleFirstUpdateCurrentLocation();
 			},
 			err => {
 
@@ -216,10 +231,22 @@ export class MyApp extends BaseComponent {
 
 	unsubcribeWatchPosition() {
 		this.lastWatchPosition = 0;
+		this.dataShare.setIsUpdatedCurrentLocation(false);
 		if (this.watchPositionSubscription) {
 			this.watchPositionSubscription.unsubscribe();
 			this.watchPositionSubscription = null;
 		}
+	}
+
+	handleFirstUpdateCurrentLocation() {
+		if (!this.dataShare.isUpdatedCurrentLocation) {
+			this.dataShare.setIsUpdatedCurrentLocation(true);
+			this.announceFirstUpdateCurrentLocationEvent();
+		}
+	}
+
+	announceFirstUpdateCurrentLocationEvent() {
+		this.events.publish(AppConstant.EVENT_TOPIC.CURRENT_LOCATION_FIRST_UPDATE);
 	}
 
 	subcribeUserActiveEvent() {
@@ -232,17 +259,44 @@ export class MyApp extends BaseComponent {
 		});
 	}
 
+	subcribeRefreshTokenInvalidEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.REFRESH_TOKEN_INVALID, (data: any) => {
+			this.goBackToLoginPage();
+		});
+	}
+
+	subcribeUserInvalidEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.USER_INVALID, (data: any) => {
+			this.goBackToLoginPage();
+		});
+	}
+
+	goBackToLoginPage() {
+		this.unsubcribeWatchPosition();
+		this.nav.setRoot(LoginPage);
+	}
+
 	notificationTypeIsInList(topic: string) {
 		let listServerNotificationEvent = this.listServerNotificationEvent();
 		return listServerNotificationEvent.indexOf(topic) > -1;
 	}
 
 	handleZapppNotification(data: any) {
+		if (data.type == AppConstant.NOTIFICATION_TYPE.LOGGED_IN_FROM_ANOTHER_DEVICE) {
+			this.handleNotificationUserLoginFromAnotherDevice(data);
+			return;
+		}
 		let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + data.type;
 		this.events.publish(topic, data);
 		if (!this.notificationTypeIsInList(topic)) {
 			this.showInfo(data.body, data.title);
 		}
+	}
+
+	handleNotificationUserLoginFromAnotherDevice(data: any) {
+		this.showInfo(this.translate.instant('ERROR_LOGGED_IN_FROM_ANOTHER_DEVICE'));
+		this.userService.handleLogout(data);
+		this.goBackToLoginPage();
 	}
 
 	handleZapppBackgroundNotification(data: any) {

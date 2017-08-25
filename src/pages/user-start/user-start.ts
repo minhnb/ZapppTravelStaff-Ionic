@@ -2,7 +2,6 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
-import { DataShare } from '../../app/helper/data.share';
 
 import { CollectionModePage } from '../collection-mode';
 import { ListHotelPage } from '../list-hotel';
@@ -50,11 +49,11 @@ export class UserStartPage extends BaseComponent {
 	isAssignedDelivery: boolean = false;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService,
-		private dataShare: DataShare) {
+		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeAssignTruckEvent();
+		this.subscribeEventFirstUpdateCurrentLocation();
 		this.loadPreviousState();
 	}
 
@@ -130,7 +129,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	loadJobForActiveZappper() {
-		if (this.isActive && this.isZappper()) {
+		if (this.isActive && this.isZappper() && this.dataShare.isUpdatedCurrentLocation) {
 			this.loadNewRequestsAndUncompletedOrders();
 		}
 	}
@@ -427,6 +426,12 @@ export class UserStartPage extends BaseComponent {
 		});
 	}
 
+	subscribeEventFirstUpdateCurrentLocation() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.CURRENT_LOCATION_FIRST_UPDATE, (data: any) => {
+			this.loadJobForActiveZappper();
+		});
+	}
+
 	handleZappperNewRequest(data: any) {
 		if (!this.isZappper()) {
 			return;
@@ -655,6 +660,6 @@ export class UserStartPage extends BaseComponent {
 
 	handleInvalidStaff(info: any) {
 		this.userService.handleLogout(info);
-		this.navCtrl.setRoot(LoginPage);
+		this.events.publish(AppConstant.EVENT_TOPIC.USER_INVALID);
 	}
 }
