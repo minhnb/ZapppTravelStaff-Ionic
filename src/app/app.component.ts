@@ -154,6 +154,9 @@ export class MyApp extends BaseComponent {
 
 	updateDeviceToken(deviceToken: string) {
 		console.log('registerToken' + deviceToken);
+		if (!deviceToken) {
+			return;
+		}
 		this.dataShare.setFCMToken(deviceToken);
 		if (!this.isLoggedIn()) {
 			return;
@@ -163,7 +166,7 @@ export class MyApp extends BaseComponent {
 
 			},
 			err => {
-				this.showError(err.message);
+				// this.showError(err.message);
 			}
 		);
 	}
