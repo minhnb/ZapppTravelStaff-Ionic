@@ -111,6 +111,11 @@ button.above-button {
     right: 20px;
     bottom: 20px;
   }
+
+  &.top-left {
+    top: 20px;
+    left:: 20px;
+  }
 }
 
 button.button-scanner {
