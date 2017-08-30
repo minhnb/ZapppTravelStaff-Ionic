@@ -80,12 +80,12 @@ export class MyApp extends BaseComponent {
 
 			fcm.onNotification().subscribe((data: any) => {
 				if (data.wasTapped) {
-					console.log("Received in background");
-					console.log(JSON.stringify(data));
+					this.log("Received in background");
+					this.log(data);
 					this.handleZapppBackgroundNotification(data);
 				} else {
-					console.log("Received in foreground");
-					console.log(JSON.stringify(data));
+					this.log("Received in foreground");
+					this.log(data);
 					this.handleZapppNotification(data);
 				};
 			});
@@ -121,17 +121,20 @@ export class MyApp extends BaseComponent {
 	startGoogleAnalytic() {
 		this.googleAnalytics.startTrackerWithId(AppConfig.GOOGLE_ANALYTICS_TRACKING_ID)
 			.then(() => {
-				console.log('Google analytics is ready now');
+				this.log('Google analytics is ready now');
 				this.dataShare.isStartedGoogleAnalytics = true;
 				if (this.dataShare.firstViewTrackByGoogleAnalytics && this.dataShare.firstViewTrackByGoogleAnalytics != this.constructor.name) {
 					this.googleAnalytics.trackView(this.dataShare.firstViewTrackByGoogleAnalytics);
 				}
 			})
-			.catch(e => console.log('Error starting GoogleAnalytics', e));
+			.catch(e => {
+				this.log('Error starting GoogleAnalytics');
+				this.log(e);
+			});
 	}
 
 	announceAppIsResuming() {
-		console.log('announceAppIsResuming');
+		this.log('announceAppIsResuming');
 		this.events.publish(AppConstant.EVENT_TOPIC.APP_RESUMING);
 	}
 
@@ -166,7 +169,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	updateDeviceToken(deviceToken: string) {
-		console.log('registerToken' + deviceToken);
+		this.log('registerToken ' + deviceToken);
 		if (!deviceToken) {
 			return;
 		}

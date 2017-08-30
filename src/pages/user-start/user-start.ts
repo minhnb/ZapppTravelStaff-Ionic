@@ -58,7 +58,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad UserStartPage');
+		this.log('ionViewDidLoad UserStartPage');
 	}
 
 	ionViewWillEnter() {

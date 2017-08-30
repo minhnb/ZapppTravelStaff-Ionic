@@ -30,7 +30,7 @@ export class CollectionModePage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CollectionModePage');
+		this.log('ionViewDidLoad CollectionModePage');
 	}
 
 	goToCustomerInfoPage(customerInfo: any) {

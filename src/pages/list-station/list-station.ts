@@ -26,11 +26,11 @@ export class ListStationPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListStationPage');
+		this.log('ionViewDidLoad ListStationPage');
 	}
 
 	ionViewWillEnter() {
-		console.log('ionViewWillEnter ListStationPage');
+		this.log('ionViewWillEnter ListStationPage');
 		this.loadListStation();
 	}
 

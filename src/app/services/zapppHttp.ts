@@ -14,8 +14,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { LoginPage } from '../../pages/login/login';
 
-var ENV: string = 'dev';
-
 @Injectable()
 export class ZapppHttp {
 
@@ -75,7 +73,7 @@ export class ZapppHttp {
         if (showSpinner) {
             this._spinner.show();
         }
-        if (ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+        if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
             console.log(method);
             console.log(url);
             console.log(JSON.stringify(params));
@@ -110,7 +108,7 @@ export class ZapppHttp {
     extractData(res: Response): any {
         this._spinner.hide();
         let response = res.json() || {};
-        if (ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+        if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
             console.log(JSON.stringify(response));
         }
 		return response;
@@ -118,7 +116,7 @@ export class ZapppHttp {
 
     handleError(error: Response | any, url: string, options: RequestOptions, needAccessToken: Boolean): any {
         this._spinner.hide();
-        if (ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+        if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
             console.log(JSON.stringify(error));
         }
         if (error.status == 404) {

@@ -1,6 +1,7 @@
 import { Component, Injector, ElementRef } from '@angular/core';
 import { Platform, AlertController, NavController, Events } from 'ionic-angular';
 import { AppConstant } from './app.constant';
+import { AppConfig } from './app.config';
 import { DataShare } from './helper/data.share';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -431,7 +432,6 @@ export class BaseComponent {
 
 	subcribeEventAppIsResuming() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
-			// console.log('subcribeEventAppIsResuming');
 			this.handleEventAppIsResuming();
 		});
 	}
@@ -486,7 +486,7 @@ export class BaseComponent {
 			.then(() => {
 
 			})
-			.catch(() => console.log('Error launching dialer'));
+			.catch(() => this.log('Error launching dialer'));
 	}
 
 	googleAnalyticsTrackCurrentView() {
@@ -496,5 +496,11 @@ export class BaseComponent {
 		} else {
 			this.dataShare.firstViewTrackByGoogleAnalytics = currentView;
 		}
+	}
+
+	log(content: string) {
+		if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+            console.log(JSON.stringify(content));
+        }
 	}
 }

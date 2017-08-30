@@ -27,7 +27,7 @@ export class DeliveryInfoPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad DeliveryInfoPage');
+		this.log('ionViewDidLoad DeliveryInfoPage');
         this.initCustomerInfo();
 		this.getCurrentPageIndex();
 	}
@@ -84,7 +84,7 @@ export class DeliveryInfoPage extends BaseComponent {
 			if (this.isDestroyed || !this.isGoingToManualInputPage) {
 				return;
 			}
-			console.log(data);
+			this.log(data);
 			this.handleManualInputEvent(data);
 		});
 	}

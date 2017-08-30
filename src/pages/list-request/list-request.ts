@@ -23,7 +23,7 @@ export class ListRequestPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListRequestPage');
+		this.log('ionViewDidLoad ListRequestPage');
 	}
 
     dismissView(event) {

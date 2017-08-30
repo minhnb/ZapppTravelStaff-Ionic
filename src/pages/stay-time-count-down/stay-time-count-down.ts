@@ -38,12 +38,12 @@ export class StayTimeCountDownPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad StayTimeCountDownPage');
+		this.log('ionViewDidLoad StayTimeCountDownPage');
 		this.customBackButtonClick();
 	}
 
 	ionViewWillEnter() {
-		console.log('ionViewWillEnter TakePicturePage');
+		this.log('ionViewWillEnter TakePicturePage');
 		this.registerBackButtonAction();
 	}
 

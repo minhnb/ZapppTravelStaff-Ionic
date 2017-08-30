@@ -27,8 +27,8 @@
         <div>{{ 'FIND_TRUCK' | translate }}</div>
       </button>
   </div>
-  <div full padding [hidden]="isActive  || isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS' | translate }}</div>
-  <div full padding [hidden]="isActive  || !isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS_ZAPPPER' | translate }}</div>
+  <div full padding [hidden]="isActive || !isLoadedState || isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS' | translate }}</div>
+  <div full padding [hidden]="isActive || !isLoadedState || !isZappper()" class="middle-notice">{{ 'HINT_TURN_ON_STATUS_ZAPPPER' | translate }}</div>
   <ion-item no-lines [hidden]="!isActive || isZappper()">
     <ion-label>{{ 'CHOOSE_TRUCK' | translate }}</ion-label>
     <ion-select [disabled]="truck" [(ngModel)]="truck" (ngModelChange)="onTruckChange($event)">

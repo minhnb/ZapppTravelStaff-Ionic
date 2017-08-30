@@ -27,7 +27,7 @@ export class OrderSliderPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListRequestPage');
+		this.log('ionViewDidLoad ListRequestPage');
 	}
 
 	goToCustomerLugguagePage(customer) {

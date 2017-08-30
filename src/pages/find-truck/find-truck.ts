@@ -61,7 +61,7 @@ export class FindTruckPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad FindTruckPage');
+		this.log('ionViewDidLoad FindTruckPage');
 		this.loadDistrict();
 	}
 
@@ -86,7 +86,7 @@ export class FindTruckPage extends BaseComponent {
 	}
 
 	onDistrictChange(event) {
-		// console.log(event);
+		// this.log(event);
 	}
 
 	callDriver(phoneNumber: string) {
