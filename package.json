@@ -67,7 +67,8 @@
         "phonegap-plugin-barcodescanner": "^6.0.6",
         "rxjs": "5.1.1",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.10"
+        "zone.js": "0.8.10",
+        "cordova-plugin-google-analytics": "^1.8.3"
     },
     "devDependencies": {
         "@ionic/app-scripts": "1.3.12",
@@ -86,8 +87,8 @@
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
             "cordova-plugin-googlemaps": {
-                "API_KEY_FOR_ANDROID": "AIzaSyDkf4O5N67eYGUdT7Cip9uTc8LWohQ_2Lk",
-                "API_KEY_FOR_IOS": "AIzaSyAhDw5MOfNVEpcLWULEFQO6sNMIF7t9ztQ",
+                "API_KEY_FOR_ANDROID": "AIzaSyCD51ltCycXFAHOeypskYjb90aHv4ZkY_U",
+                "API_KEY_FOR_IOS": "AIzaSyCd7pPrjd1RTdB8REqo-aN5aOMzWPPHby0",
                 "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
                 "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map"
             },
@@ -99,7 +100,8 @@
             "cordova.plugins.diagnostic": {},
             "cordova-plugin-camera": {},
             "mx.ferreyra.callnumber": {},
-            "cordova-plugin-background-mode": {}
+            "cordova-plugin-background-mode": {},
+            "cordova-plugin-google-analytics": {}
         },
         "platforms": [
             "android",
