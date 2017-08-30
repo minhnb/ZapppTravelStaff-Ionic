@@ -62,6 +62,7 @@ export class MyApp extends BaseComponent {
 
 			this.enableBackgroundMode();
 			this.registerBackButtonAction();
+			this.startGoogleAnalytic();
 		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();
@@ -115,6 +116,18 @@ export class MyApp extends BaseComponent {
 		}
 		this.backgroundMode.setDefaults(backgroundModeConfiguration);
 		this.backgroundMode.enable();
+	}
+
+	startGoogleAnalytic() {
+		this.googleAnalytics.startTrackerWithId(AppConfig.GOOGLE_ANALYTICS_TRACKING_ID)
+			.then(() => {
+				console.log('Google analytics is ready now');
+				this.dataShare.isStartedGoogleAnalytics = true;
+				if (this.dataShare.firstViewTrackByGoogleAnalytics && this.dataShare.firstViewTrackByGoogleAnalytics != this.constructor.name) {
+					this.googleAnalytics.trackView(this.dataShare.firstViewTrackByGoogleAnalytics);
+				}
+			})
+			.catch(e => console.log('Error starting GoogleAnalytics', e));
 	}
 
 	announceAppIsResuming() {

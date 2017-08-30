@@ -10,6 +10,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { Keyboard } from '@ionic-native/keyboard';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { CallNumber } from '@ionic-native/call-number';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import * as moment from 'moment';
 
@@ -28,6 +29,7 @@ export class BaseComponent {
 	public backgroundMode: BackgroundMode;
 	public dataShare: DataShare;
 	public callNumber: CallNumber;
+	public googleAnalytics: GoogleAnalytics;
 
 	defaultAvatar: string = AppConstant.DEFAULT_AVATAR;
 	hasGoogleMapNative: boolean = false;
@@ -45,9 +47,11 @@ export class BaseComponent {
 		this.backgroundMode = injector.get(BackgroundMode);
 		this.dataShare = injector.get(DataShare);
 		this.callNumber = injector.get(CallNumber);
+		this.googleAnalytics = injector.get(GoogleAnalytics);
 
 		this.subcribeEventAppIsResuming();
 		this.dataShare.removeBackButtonAction();
+		this.googleAnalyticsTrackCurrentView();
 	}
 
 	ionViewWillUnload() {
@@ -483,5 +487,14 @@ export class BaseComponent {
 
 			})
 			.catch(() => console.log('Error launching dialer'));
+	}
+
+	googleAnalyticsTrackCurrentView() {
+		let currentView = this.constructor.name;
+		if (this.dataShare.isStartedGoogleAnalytics) {
+			this.googleAnalytics.trackView(currentView);
+		} else {
+			this.dataShare.firstViewTrackByGoogleAnalytics = currentView;
+		}
 	}
 }

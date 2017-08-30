@@ -43,6 +43,7 @@ import { Camera } from '@ionic-native/camera';
 import { CallNumber } from '@ionic-native/call-number';
 import { Keyboard } from '@ionic-native/keyboard';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -114,6 +115,7 @@ import { DataShare } from './helper/data.share';
 		CallNumber,
 		Keyboard,
 		BackgroundMode,
+		GoogleAnalytics,
 		ZapppHttp,
 		DataShare,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }

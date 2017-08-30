@@ -43,7 +43,7 @@ configurations.all {
 ```
 
 *********************************************************************************************
-[ANDROID] HOW TO RESOLVE GOOGLE SERVICE CONFLICT WHEN USING GOOGLE MAPS AND GOOGLE FIREBASE CLOUD MESSAGE
+[ANDROID] HOW TO RESOLVE GOOGLE SERVICE CONFLICT WHEN USING GOOGLE MAPS AND GOOGLE FIREBASE CLOUD MESSAGE AND GOOGLE ANALYTICS
 
 Step 1: Remember: Do it before add platform android. If you already added platform android, you should remove it.
 ```bash
@@ -56,10 +56,14 @@ classpath 'com.google.gms:google-services:3.0.0'
 apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
 ```
 
-Then change the plugin.xml of the FCM plugin to use a different version, in my situation 9.8.0.
+Then change the plugin.xml of the FCM plugin and google analytics plugin (look at folder plugins) to use a different version, in my situation 9.8.0.
 ```bash
 <framework src="com.google.firebase:firebase-core:9.8.0" />
 <framework src="com.google.firebase:firebase-messaging:9.8.0" />
+```
+
+```bash
+<framework src="com.google.android.gms:play-services-analytics:9.8.0" />
 ```
 
 Step 2: Add platform android
@@ -79,7 +83,11 @@ apply plugin: 'com.google.gms.google-services'
 ```
 
 And these changes should fix the problems with the version conflicts.
-
+Please check cordova.system.library of file
+```bash
+platforms/android/project.properties
+```
+to make sure versions are 9.8.0
 *********************************************************************************************
 [iOS] RESOLVE FCM - INVALID GOOGLE_APP_ID PROBLEM
 
