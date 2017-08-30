@@ -18,6 +18,8 @@ import { CollectionModeService } from '../../app/services/collection-mode';
 export class DirectionUserPage extends DirectionPage {
 
 	customer: any;
+	isShowingCancelOrderView: boolean = false;
+	cancellationReason: string;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
 		public geolocation: Geolocation, private collectionModeService: CollectionModeService) {
@@ -73,6 +75,28 @@ export class DirectionUserPage extends DirectionPage {
 					return;
 				}
 				this.navCtrl.push(CustomerInfoPage, customerInfo);
+			},
+			err => {
+				this.showError(err.message);
+			}
+		);
+	}
+
+	showCancelOrderView() {
+		this.isShowingCancelOrderView = true;
+	}
+
+	hideCancelOrderView() {
+		this.isShowingCancelOrderView = false;
+	}
+
+	cancelOrder() {
+		this.hideKeyboard();
+		let reason = this.trimText(this.cancellationReason);
+		this.collectionModeService.cancelOrder(this.customer.orderId, reason).subscribe(
+			res => {
+				this.clearLocalCurrentJob();
+				this.navCtrl.popToRoot();
 			},
 			err => {
 				this.showError(err.message);

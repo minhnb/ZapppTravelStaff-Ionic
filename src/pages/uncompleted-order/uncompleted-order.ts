@@ -20,7 +20,7 @@ export class UncompletedOrderPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad UncompletedOrderPage');
+		this.log('ionViewDidLoad UncompletedOrderPage');
 	}
 
 	goToFindTruckPage() {

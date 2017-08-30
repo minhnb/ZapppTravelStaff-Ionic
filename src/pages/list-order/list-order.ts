@@ -35,7 +35,7 @@ export class ListOrderPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListOrderPage');
+		this.log('ionViewDidLoad ListOrderPage');
 	}
 
 	subcribeDeliveryCompletedEvent() {

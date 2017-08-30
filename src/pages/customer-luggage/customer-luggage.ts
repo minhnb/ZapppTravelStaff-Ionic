@@ -45,7 +45,7 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CustomerLuggagePage');
+		this.log('ionViewDidLoad CustomerLuggagePage');
         this.customBackButtonClick();
 	}
 

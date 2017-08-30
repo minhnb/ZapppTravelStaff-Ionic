@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
+import { AppConstant } from '../../app/app.constant';
 
 import { CustomerInfoPage } from '../customer-info';
 import { ListTruckPage } from '../list-truck';
@@ -29,16 +30,34 @@ export class CollectionModePage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CollectionModePage');
+		this.log('ionViewDidLoad CollectionModePage');
 	}
 
 	goToCustomerInfoPage(customerInfo: any) {
 		this.navCtrl.push(CustomerInfoPage, customerInfo);
 	}
 
+	isZappperRequest(order: any) {
+		if (order.status != AppConstant.ORDER_STATUS.NEW && order.status != AppConstant.ORDER_STATUS.ACCEPTED) {
+			return false;
+		}
+		if (order.zappper_info) {
+			return true;
+		}
+		let totalLuggage = Number(order.suit_case) + Number(order.bag) + Number(order.baby_carriage) + Number(order.others);
+		if (totalLuggage > 0) {
+			return true;
+		}
+		return false;
+	}
+
 	getOrderDetail(orderId: string) {
 		this.collectionModeService.getOrderDetail(orderId).subscribe(
 			res => {
+				if (this.isZappperRequest(res)) {
+					this.showError(this.translate.instant('ERROR_ATTENDANT_PICKUP_ZAPPPER_REQUEST'));
+					return;
+				}
 				let customerInfo = this.customerInfoTransform(res);
 				if (customerInfo.listLuggage && customerInfo.listLuggage.length > 0) {
 					customerInfo.isAttendantSaveMode = true;

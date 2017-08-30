@@ -21,7 +21,7 @@ export class ManualInputPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ManualInputPage');
+		this.log('ionViewDidLoad ManualInputPage');
 	}
 
     dismissView(event) {

@@ -31,7 +31,7 @@ export class ListHotelPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListHotelPage');
+		this.log('ionViewDidLoad ListHotelPage');
 	}
 
 	ionViewWillEnter() {

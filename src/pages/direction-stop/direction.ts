@@ -40,7 +40,7 @@ export class DirectionPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad DirectionStopPage');
+		this.log('ionViewDidLoad DirectionStopPage');
 		if (this.isLoadedMap) {
 			return;
 		}
@@ -91,7 +91,7 @@ export class DirectionPage extends BaseComponent {
 	}
 
 	loadMap() {
-		console.log('Loading map!');
+		this.log('Loading map!');
 		let element: HTMLElement = document.getElementById(this.mapId);
 
 		this.map = this.googleMaps.create(element);
@@ -101,7 +101,7 @@ export class DirectionPage extends BaseComponent {
 		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
-				console.log('Map is ready!');
+				this.log('Map is ready!');
 				this.enableMapClickable();
 				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
 					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
@@ -113,7 +113,8 @@ export class DirectionPage extends BaseComponent {
 						this.initWatchPosition(watchTimeout, watchOption);
 					}
 				}).catch((error) => {
-					console.log('Error getting location', error);
+					this.log('Error getting location');
+					this.log(error);
 					this.showLocationServiceProblemConfirmation();
 				});
 			}
@@ -258,7 +259,7 @@ export class DirectionPage extends BaseComponent {
 			destination: destination,
 			travelMode: 'DRIVING'
 		}, (response, status) => {
-			console.log(JSON.stringify(response));
+			this.log(response);
 			callback(response, status);
 		});
 	}

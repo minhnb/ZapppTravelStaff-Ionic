@@ -126,4 +126,12 @@ export class CollectionModeService {
 	getOrderPaymentStatus(orderId: string) {
 		return this.zapppHttp.get(this.orderUrl + '/status/order_id/' + orderId);
 	}
+
+	cancelOrder(orderId: string, reason: string) {
+		let params = {
+			id: orderId,
+			reason: reason
+		};
+		return this.zapppHttp.post(this.orderUrl + '/zappper_cancel_order', params);
+	}
 }

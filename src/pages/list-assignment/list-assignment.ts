@@ -18,7 +18,7 @@ export class ListAssignmentPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListAssignmentPage');
+		this.log('ionViewDidLoad ListAssignmentPage');
 	}
 
 	getModeTextKey(mode: number) {
