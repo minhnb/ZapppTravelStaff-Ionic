@@ -28,12 +28,12 @@ export class CustomerInfoPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CustomerInfoPage');
+		this.log('ionViewDidLoad CustomerInfoPage');
 		this.customBackButtonClick();
 	}
 
 	ionViewWillEnter() {
-		console.log('ionViewWillEnter');
+		this.log('ionViewWillEnter');
 		this.registerBackButtonAction();
 		this.detectCustomerHasLuggage();
 	}

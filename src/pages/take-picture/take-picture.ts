@@ -34,12 +34,12 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad TakePicturePage');
+		this.log('ionViewDidLoad TakePicturePage');
 		this.saveAttendantLocalCurrentJob();
 	}
 
 	ionViewWillEnter() {
-		console.log('ionViewWillEnter TakePicturePage');
+		this.log('ionViewWillEnter TakePicturePage');
 		this.dataShare.disableBackButtonAction();
 	}
 
@@ -177,7 +177,8 @@ export class TakePicturePage extends BaseComponent {
 			}
 		}).catch((error) => {
 			this.spinnerDialog.hide();
-			console.log('Error getting location', error);
+			this.log('Error getting location');
+			this.log(error);
 			this.showLocationServiceProblemConfirmation();
 		});
 	}

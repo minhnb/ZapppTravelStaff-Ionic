@@ -1,6 +1,7 @@
 import { Component, Injector, ElementRef } from '@angular/core';
 import { Platform, AlertController, NavController, Events } from 'ionic-angular';
 import { AppConstant } from './app.constant';
+import { AppConfig } from './app.config';
 import { DataShare } from './helper/data.share';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -10,6 +11,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 import { Keyboard } from '@ionic-native/keyboard';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { CallNumber } from '@ionic-native/call-number';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import * as moment from 'moment';
 
@@ -28,6 +30,7 @@ export class BaseComponent {
 	public backgroundMode: BackgroundMode;
 	public dataShare: DataShare;
 	public callNumber: CallNumber;
+	public googleAnalytics: GoogleAnalytics;
 
 	defaultAvatar: string = AppConstant.DEFAULT_AVATAR;
 	hasGoogleMapNative: boolean = false;
@@ -45,9 +48,11 @@ export class BaseComponent {
 		this.backgroundMode = injector.get(BackgroundMode);
 		this.dataShare = injector.get(DataShare);
 		this.callNumber = injector.get(CallNumber);
+		this.googleAnalytics = injector.get(GoogleAnalytics);
 
 		this.subcribeEventAppIsResuming();
 		this.dataShare.removeBackButtonAction();
+		this.googleAnalyticsTrackCurrentView();
 	}
 
 	ionViewWillUnload() {
@@ -427,7 +432,6 @@ export class BaseComponent {
 
 	subcribeEventAppIsResuming() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
-			// console.log('subcribeEventAppIsResuming');
 			this.handleEventAppIsResuming();
 		});
 	}
@@ -482,6 +486,21 @@ export class BaseComponent {
 			.then(() => {
 
 			})
-			.catch(() => console.log('Error launching dialer'));
+			.catch(() => this.log('Error launching dialer'));
+	}
+
+	googleAnalyticsTrackCurrentView() {
+		let currentView = this.constructor.name;
+		if (this.dataShare.isStartedGoogleAnalytics) {
+			this.googleAnalytics.trackView(currentView);
+		} else {
+			this.dataShare.firstViewTrackByGoogleAnalytics = currentView;
+		}
+	}
+
+	log(content: string) {
+		if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
+            console.log(JSON.stringify(content));
+        }
 	}
 }

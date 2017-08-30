@@ -7,6 +7,8 @@ export class DataShare {
     userInfo: any;
     backButtonAction: () => void;
     isUpdatedCurrentLocation: Boolean = false;
+    isStartedGoogleAnalytics: Boolean = false;
+    firstViewTrackByGoogleAnalytics: string;
 
     public setFCMToken(fcmToken: string) {
 		this.fcmToken = fcmToken;

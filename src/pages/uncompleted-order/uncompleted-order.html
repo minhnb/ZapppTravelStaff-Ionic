@@ -11,8 +11,12 @@
   <ion-slides pager>
     <ion-slide *ngFor="let item of listOrder">
       <div class="info-row">
-        <div class="label">{{ 'SENDER' | translate }}</div>
-        <div class="content">{{ item.name }}</div>
+        <div class="label">{{ 'ORDER_ID' | translate }}</div>
+        <div class="content">{{ item.orderId }}</div>
+      </div>
+      <div class="info-row">
+        <div class="label">{{ 'RECEIVER' | translate }}</div>
+        <div class="content">{{ item.receiver }}</div>
       </div>
       <div class="info-row">
         <div class="label">{{ 'HOTEL' | translate }}</div>

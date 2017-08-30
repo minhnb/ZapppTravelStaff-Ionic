@@ -30,7 +30,7 @@ export class ListTruckPage extends BaseComponent {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListTruckPage');
+		this.log('ionViewDidLoad ListTruckPage');
 	}
 
 	goToListHotelPage(truck?: any) {
