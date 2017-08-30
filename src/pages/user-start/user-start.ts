@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
@@ -48,7 +48,7 @@ export class UserStartPage extends BaseComponent {
 	isAssignedCollection: boolean = false;
 	isAssignedDelivery: boolean = false;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public zone: NgZone,
 		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
 		this.subscribeZappperNewRequestEvent();
@@ -207,16 +207,18 @@ export class UserStartPage extends BaseComponent {
 		}
 		this.staffService.loadNewRequestsAndUncompletedOrders().subscribe(
 			res => {
-				this.lastLoadListZappperRequest = (new Date()).getTime();
-				this.listRequest = res.new_request_info.map(item => {
-					return this.requestTransform(item);
+				this.zone.run(() => {
+					this.lastLoadListZappperRequest = (new Date()).getTime();
+					this.listRequest = res.new_request_info.map(item => {
+						return this.requestTransform(item);
+					});
+					this.listUncompleteOrder = res.uncomplete_job_info.map(item => {
+						return this.uncompletedOrderTransform(item);
+					});
+					if (callback) {
+						callback();
+					}
 				});
-				this.listUncompleteOrder = res.uncomplete_job_info.map(item => {
-					return this.uncompletedOrderTransform(item);
-				});
-				if (callback) {
-					callback();
-				}
 			},
 			err => {
 				this.showError(err.message);
@@ -334,7 +336,8 @@ export class UserStartPage extends BaseComponent {
 
 	uncompletedOrderTransform(order: any) {
 		let result = {
-			name: order.guest_name,
+			orderId: order.id,
+			receiver: order.guest_name,
 			hotel: order.hotel_info,
 			accepted: this.timeStampToDateTime(order.accepted_at)
 		};
