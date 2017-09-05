@@ -20,6 +20,7 @@ export class DirectionPage extends BaseComponent {
 	destinationLocation: LatLng = null;
 	polyLines: Array<any> = [];
 	mapId: string = 'map';
+	travelMode: string = AppConstant.GOOGLE_TRAVEL_MODE.DRIVING;
 
 	markers: Array<any> = [];
 	currentLocationMarker: Marker;
@@ -257,7 +258,7 @@ export class DirectionPage extends BaseComponent {
 		this.directionsService.route({
 			origin: origin,
 			destination: destination,
-			travelMode: 'DRIVING'
+			travelMode: this.travelMode
 		}, (response, status) => {
 			this.log(response);
 			callback(response, status);

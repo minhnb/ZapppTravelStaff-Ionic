@@ -32,6 +32,7 @@ export class ListTruckWithDirectionPage extends DirectionTruckPage {
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
 		public geolocation: Geolocation, private staffService: StaffService) {
         super(injector, navCtrl, navParams, googleMaps, geolocation);
+		this.travelMode = AppConstant.GOOGLE_TRAVEL_MODE.WALKING;
 		this.autoMoveCamera = false;
 	}
 
