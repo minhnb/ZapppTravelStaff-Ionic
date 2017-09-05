@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="2017083002" id="com.zapppworld.staff" ios-CFBundleVersion="2017.08.30.0.2" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="2017090502" id="com.zapppworld.staff" ios-CFBundleVersion="2017.09.05.0.2" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Zappp Staff</name>
     <description>Staff for Zappp Travel - with Ionic Framework</description>
     <author email="minh.nguyen@cofoundervp.com" href="http://cofoundervp.com/">CoFounder Venture Partners</author>
