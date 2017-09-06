@@ -29,7 +29,6 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 		this.mapId = 'aboveMap';
 		this.travelMode = AppConstant.GOOGLE_TRAVEL_MODE.WALKING;
 		this.autoMoveCamera = false;
-		this.subscribeZappperNewRequestEvent();
 	}
 
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {

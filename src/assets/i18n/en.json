@@ -138,6 +138,6 @@
   "USER_NOT_STAFF": "You are not staff, so you can not access this app.",
   "VIEW_ASSIGNMENT": "View assignments",
   "WAIT_FOR_USER_TO_COMPLETE_PAYMENT": "Wait for customer to complete payment",
-  "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request. Press OK to view.",
+  "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request (#{{ orderId }}).",
   "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"
 }

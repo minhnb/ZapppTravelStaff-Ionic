@@ -1,5 +1,5 @@
 import { Component, Injector, ElementRef } from '@angular/core';
-import { Platform, AlertController, NavController, Events } from 'ionic-angular';
+import { Platform, AlertController, ToastController, NavController, Events } from 'ionic-angular';
 import { AppConstant } from './app.constant';
 import { AppConfig } from './app.config';
 import { DataShare } from './helper/data.share';
@@ -21,6 +21,7 @@ import * as moment from 'moment';
 export class BaseComponent {
 
 	public alertController: AlertController;
+	public toastController: ToastController;
 	public barcodeScanner: BarcodeScanner;
 	public diagnostic: Diagnostic;
 	public translate: TranslateService;
@@ -39,6 +40,7 @@ export class BaseComponent {
 
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
+		this.toastController = injector.get(ToastController);
 		this.barcodeScanner = injector.get(BarcodeScanner);
 		this.diagnostic = injector.get(Diagnostic);
 		this.translate = injector.get(TranslateService);
@@ -204,6 +206,33 @@ export class BaseComponent {
 
         this.presentAlert(title || this.translate.instant('CONFIRM'), message, buttons);
     }
+
+	private presentCustomToast(message: string, duration: number, position: string, showCloseButton: boolean, closeButtonText: string, dismissOnPageChange: boolean, buttonCallback?: () => void) {
+		let toast = this.toastController.create({
+			message: message,
+			position: position,
+			showCloseButton: showCloseButton,
+			closeButtonText: closeButtonText,
+			dismissOnPageChange: dismissOnPageChange
+		});
+
+		let closedByTimeout = false;
+		let timeoutHandle = setTimeout(() => {
+			closedByTimeout = true;
+			toast.dismiss();
+		}, 5000);
+		toast.onDidDismiss(() => {
+			if (closedByTimeout) return;
+			clearTimeout(timeoutHandle);
+			if (buttonCallback) buttonCallback();
+		});
+
+		toast.present();
+    }
+
+	showBottomCustomToast(message: string, buttonCallback?: () => void) {
+		this.presentCustomToast(message, 0, 'bottom', true, this.translate.instant('BUTTON_OK'), false, buttonCallback);
+	}
 
 	confirmBeforeLeaveView(message?: string, title?: string): Promise<{}> {
 		return new Promise((resolve, reject) => {
