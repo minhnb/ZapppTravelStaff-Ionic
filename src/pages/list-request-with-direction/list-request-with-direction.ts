@@ -27,8 +27,8 @@ export class ListRequestWithDirectionPage extends DirectionPage {
         super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.listRequest = navParams.data.listRequest;
 		this.mapId = 'aboveMap';
+		this.travelMode = AppConstant.GOOGLE_TRAVEL_MODE.WALKING;
 		this.autoMoveCamera = false;
-		this.subscribeZappperNewRequestEvent();
 	}
 
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {

@@ -69,6 +69,7 @@
   "ERROR": "Error",
   "ERROR_ATTENDANT_PICKUP_ZAPPPER_REQUEST": "You cannot pickup for an order which requested a Zappper.",
   "ERROR_BIN_CODE_NOT_IN_LIST": "Wrong storage location code. Please scan another one.",
+  "ERROR_DIRECTION_NOT_FOUND": "Directions not found. Please check your start and end point and try again later.",
   "ERROR_EMPTY_QR_CODE": "Code is empty",
   "ERROR_INVALID_BIN_CODE": "That did not work. Scan a valid storage location.",
   "ERROR_INVALID_CODE": "Invalid code",
@@ -138,6 +139,6 @@
   "USER_NOT_STAFF": "You are not staff, so you can not access this app.",
   "VIEW_ASSIGNMENT": "View assignments",
   "WAIT_FOR_USER_TO_COMPLETE_PAYMENT": "Wait for customer to complete payment",
-  "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request. Press OK to view.",
+  "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request (#{{ orderId }}).",
   "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"
 }
