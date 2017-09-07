@@ -115,7 +115,7 @@ export class DirectionPage extends BaseComponent {
 					}
 				}).catch((error) => {
 					this.log('Error getting location');
-					this.log(error);
+					this.log(error.message);
 					this.showLocationServiceProblemConfirmation();
 				});
 			}

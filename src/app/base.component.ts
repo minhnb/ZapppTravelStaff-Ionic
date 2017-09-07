@@ -152,6 +152,9 @@ export class BaseComponent {
 	}
 
     private presentAlert(title: string, subTitle: string, buttons: Array<any>) {
+		if (this.isDestroyed) {
+			return;
+		}
 		if (this.hasGoogleMapNative) this.handleMapClickable(buttons);
         let alert = this.alertController.create({
 			title: title,
@@ -397,7 +400,8 @@ export class BaseComponent {
 
 	initGeolocationOption(): GeolocationOptions {
 		let geolocationOptions: GeolocationOptions = {
-			enableHighAccuracy: true,
+			// enableHighAccuracy: true,
+			maximumAge: AppConstant.GET_LOCATION_TIMEOUT,
 			timeout: AppConstant.GET_LOCATION_TIMEOUT
 		};
 		return geolocationOptions;
