@@ -269,7 +269,7 @@ export class DirectionPage extends BaseComponent {
 		this.currentDirectionDistance = null;
 		this.currentDirectionDuration = null;
 		this.getGoogleDirection(origin, destination, (response, status) => {
-			if (status === 'OK') {
+			if (status === AppConstant.GOOGLE_DIRECTION_STATUS.OK) {
 				let routes = response.routes;
 				if (response && routes && routes.length > 0 && routes[0].overview_polyline) {
 					let route = routes[0];
@@ -287,6 +287,10 @@ export class DirectionPage extends BaseComponent {
 					}
 				}
 			} else {
+				if (status == AppConstant.GOOGLE_DIRECTION_STATUS.ZERO_RESULTS) {
+					this.showError(this.translate.instant('ERROR_DIRECTION_NOT_FOUND'));
+					return;
+				}
 				this.showError('Directions request failed due to ' + status);
 			}
 		});

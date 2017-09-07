@@ -40,13 +40,17 @@ export const AppConstant = {
         DEFAULT_AVATAR: 'www/assets/images/no-photo.png',
     },
     DEFAULT_AVATAR: 'assets/images/no-photo.png',
-    GET_LOCATION_TIMEOUT: 5000,
+    GET_LOCATION_TIMEOUT: 15000,
     WATCH_POSITION_INTERVAL: 30000,
     GOOGLE_TRAVEL_MODE: {
         DRIVING: "DRIVING",
         WALKING: "WALKING",
         BICYCLING: "BICYCLING",
         TRANSIT: "TRANSIT"
+    },
+    GOOGLE_DIRECTION_STATUS: {
+        OK: 'OK',
+        ZERO_RESULTS: 'ZERO_RESULTS'
     },
     NOTIFICATION_TYPE: {
         PREFIX: 'notification:',
