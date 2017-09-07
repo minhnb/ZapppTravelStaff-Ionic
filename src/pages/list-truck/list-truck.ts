@@ -35,8 +35,8 @@ export class ListTruckPage extends BaseComponent {
 
 	goToListHotelPage(truck?: any) {
 		let params: any = {
-			isTransferMode: this.isTransferMode,
-			isAcceptLuggageMode: this.isAcceptLuggageMode,
+			isTransferMode: truck ? this.isTransferMode : false,
+			isAcceptLuggageMode: truck ? this.isAcceptLuggageMode : false,
 			truck: truck
 		}
 		this.navCtrl.push(ListHotelPage, params);

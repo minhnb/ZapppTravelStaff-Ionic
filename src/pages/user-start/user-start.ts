@@ -195,7 +195,7 @@ export class UserStartPage extends BaseComponent {
 
 	isNeedToLoadZappperRequest(): boolean {
 		let nowTimeStamp = (new Date()).getTime();
-		return (nowTimeStamp - this.lastLoadListZappperRequest) / 1000 > 3;
+		return (nowTimeStamp - this.lastLoadListZappperRequest) / 1000 > 2;
 	}
 
 	loadNewRequestsAndUncompletedOrders(callback?: () => void) {
@@ -435,18 +435,28 @@ export class UserStartPage extends BaseComponent {
 		});
 	}
 
+	getDisplayOrderId(data: any) {
+		let displayOrderId = data.order_id;
+		let displayOrderLength = 6;
+		if (displayOrderId && displayOrderId.length > displayOrderLength) {
+			return data.order_id.substring(0, displayOrderLength);
+		}
+		return displayOrderId;
+	}
+
 	handleZappperNewRequest(data: any) {
 		if (!this.isZappper()) {
 			return;
 		}
-		if (!this.isActiveCurrentPage(this.navCtrl)) {
-			return;
-		}
+		let displayOrderId = this.getDisplayOrderId(data);
 		this.loadNewRequestsAndUncompletedOrders(() => {
-			this.showConfirm(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST'), this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST_TITLE'),
-				() => {
+			this.showBottomCustomToast(this.translate.instant('ZAPPPER_ALERT_NEW_REQUEST', { orderId: displayOrderId }), () => {
+				if (!this.isActiveCurrentPage(this.navCtrl)) {
+					this.navCtrl.popToRoot();
+				} else {
 					this.goToListRequest();
-				});
+				}
+			});
 		});
 	}
 

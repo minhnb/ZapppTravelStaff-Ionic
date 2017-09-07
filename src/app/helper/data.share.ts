@@ -9,6 +9,7 @@ export class DataShare {
     isUpdatedCurrentLocation: Boolean = false;
     isStartedGoogleAnalytics: Boolean = false;
     firstViewTrackByGoogleAnalytics: string;
+    countShowingAlert: number = 0;
 
     public setFCMToken(fcmToken: string) {
 		this.fcmToken = fcmToken;
