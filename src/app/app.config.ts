@@ -1,6 +1,7 @@
 export const AppConfig = {
-    API_URL: 'https://api.zappp.com/api/',
-    GOOGLE_API_KEY: 'AIzaSyCyThSMQW1kGzznD-Wa1IU8m8biWwCojZA',
+    // API_URL: 'https://dev.api.zappp.com/api/',
+    API_URL: 'https://stage.api.zappp.com/api/',
+    GOOGLE_API_KEY: 'AIzaSyCdHJWVxOf18WOxZmsttuF3MI_Emy9EQH4',
     GOOGLE_ANALYTICS_TRACKING_ID: 'UA-105191661-1',
     ENV: 'dev'
 };
