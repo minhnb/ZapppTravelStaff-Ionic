@@ -132,19 +132,29 @@ export class BaseComponent {
 
 	}
 
+	handleMapClickableByCountingShowingAlert() {
+		if (this.dataShare.countShowingAlert > 0) {
+			this.dataShare.countShowingAlert--;
+		}
+		if (this.dataShare.countShowingAlert == 0) {
+			this.enableMapClickable();
+		}
+	}
+
 	handleMapClickable(buttons: Array<any>) {
 		this.disableMapClickable();
+		this.dataShare.countShowingAlert++;
 		buttons = buttons.map(button => {
 			if (button.handler) {
 				let handlerFunction = button.handler;
 				button.handler = () => {
 					handlerFunction();
-					this.enableMapClickable();
+					this.handleMapClickableByCountingShowingAlert();
 				};
 
 			} else {
 				button.handler = () => {
-					this.enableMapClickable();
+					this.handleMapClickableByCountingShowingAlert();
 				};
 			}
 			return button;
