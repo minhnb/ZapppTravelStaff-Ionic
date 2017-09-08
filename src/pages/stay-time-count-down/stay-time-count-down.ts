@@ -6,6 +6,7 @@ import { AppConstant } from '../../app/app.constant';
 import { ListStationPage } from '../list-station';
 
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { UserService } from '../../app/services/user';
 
 import * as moment from 'moment';
 
@@ -15,7 +16,7 @@ var MINUTE_TO_SECOND = 60;
 @Component({
 	selector: 'page-stay-time-count-down',
 	templateUrl: 'stay-time-count-down.html',
-	providers: [CollectionModeService]
+	providers: [CollectionModeService, UserService]
 })
 export class StayTimeCountDownPage extends BaseComponent {
 
@@ -30,7 +31,8 @@ export class StayTimeCountDownPage extends BaseComponent {
 
 	@ViewChild(Navbar) navBar: Navbar;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private collectionModeService: CollectionModeService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, private collectionModeService: CollectionModeService,
+		private userService: UserService) {
         super(injector);
         this.station = this.navParams.data.station;
         this.duration = Number(this.navParams.data.station.stop_time);
@@ -135,6 +137,7 @@ export class StayTimeCountDownPage extends BaseComponent {
 		this.collectionModeService.updateStation(currentStationId, nextStationId, stayTime).subscribe(
 			res => {
 				if (!this.isStarted && !this.isShowingNextStationInfo) {
+					this.warnToDriverWhenTruckIsNotAssignedToCollectionMode();
 					this.startCountDown();
 				}
 				if (callback) {
@@ -207,6 +210,24 @@ export class StayTimeCountDownPage extends BaseComponent {
 	goToNextStation() {
 		this.events.publish(AppConstant.EVENT_TOPIC.DIRECTION_STATION, { station: this.nextStation });
 		this.navCtrl.pop();
+	}
+
+	warnToDriverWhenTruckIsNotAssignedToCollectionMode(callback?: () => void) {
+		this.userService.getUserInfo().subscribe(
+			res => {
+				let truckInfo = res.truck_info;
+				if (!truckInfo || truckInfo.assignment_type == null) {
+					return;
+				}
+				let type = Number(truckInfo.assignment_type);
+				if (type != AppConstant.ASSIGNMENT_MODE.COLLECTION) {
+					this.showBottomCustomToast(this.translate.instant('WARNING_TRUCK_NOT_ASSIGNED_FOR_COLLECTION'));
+				}
+			},
+			err => {
+
+			}
+		);
 	}
 
 }

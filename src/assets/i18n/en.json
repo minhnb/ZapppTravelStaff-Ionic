@@ -139,6 +139,7 @@
   "USER_NOT_STAFF": "You are not staff, so you can not access this app.",
   "VIEW_ASSIGNMENT": "View assignments",
   "WAIT_FOR_USER_TO_COMPLETE_PAYMENT": "Wait for customer to complete payment",
+  "WARNING_TRUCK_NOT_ASSIGNED_FOR_COLLECTION": "You're not assigned for Collection. Customers cannot see your truck on their map. Please contact Admin for more details.",
   "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request (#{{ orderId }}).",
   "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"
 }

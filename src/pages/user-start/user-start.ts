@@ -573,8 +573,6 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	detectCurrentAssigmentMode() {
-		this.isAssignedCollection = false;
-		this.isAssignedDelivery = false;
 		if (this.listAssignment.length == 0) {
 			return;
 		}
@@ -649,6 +647,7 @@ export class UserStartPage extends BaseComponent {
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
 					this.dataShare.setUserInfo(this.userInfoTransform(res));
 					this.saveLocalStaffState(res);
+					this.detectCurrentAssigmentModeByTruckInfo(res.truck_info);
 					this.isLoadedState = true;
 					this.userId = res.id;
 					if (callback) {
@@ -682,5 +681,14 @@ export class UserStartPage extends BaseComponent {
 	handleInvalidStaff(info: any) {
 		this.userService.handleLogout(info);
 		this.events.publish(AppConstant.EVENT_TOPIC.USER_INVALID);
+	}
+
+	detectCurrentAssigmentModeByTruckInfo(truckInfo: any) {
+		if (!truckInfo || truckInfo.assignment_type == null) {
+			return;
+		}
+		let type = Number(truckInfo.assignment_type);
+		this.isAssignedCollection = type == AppConstant.ASSIGNMENT_MODE.COLLECTION;
+		this.isAssignedDelivery = type == AppConstant.ASSIGNMENT_MODE.DELIVERY;
 	}
 }
