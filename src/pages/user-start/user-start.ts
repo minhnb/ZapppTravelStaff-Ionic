@@ -382,14 +382,22 @@ export class UserStartPage extends BaseComponent {
 		return true;
 	}
 
+	staffAlreadyHasJob(): boolean {
+		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
+		if (!currentJob) {
+			return false;
+		}
+		return true;
+	}
+
 	loadCurrentJobForActiveStaff() {
 		if (!this.isActive) {
 			return;
 		}
-		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
-		if (!currentJob) {
+		if (!this.staffAlreadyHasJob()) {
 			return;
 		}
+		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
 		let customer = JSON.parse(currentJob);
 		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
 			res => {
@@ -445,7 +453,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	handleZappperNewRequest(data: any) {
-		if (!this.isZappper()) {
+		if (!this.isZappper() || this.staffAlreadyHasJob()) {
 			return;
 		}
 		let displayOrderId = this.getDisplayOrderId(data);
