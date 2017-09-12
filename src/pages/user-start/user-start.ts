@@ -313,12 +313,8 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	requestTransform(request: any) {
-		let fullName = '';
-		if (request.user_info) {
-			fullName = this.getFullName(request.user_info.first, request.user_info.last)
-		}
 		let result = {
-			name: fullName,
+			name: request.user_info ? this.getFullName(request.user_info.first, request.user_info.last) : '',
 			avatar: request.user_info ? request.user_info.pic_url : '',
 			suitcase: request.order_info ? request.order_info.suit_case : 0,
 			bag: request.order_info ? request.order_info.bag : 0,
@@ -338,6 +334,7 @@ export class UserStartPage extends BaseComponent {
 		let result = {
 			orderId: order.id,
 			receiver: order.guest_name,
+			name: order.user_info ? this.getFullName(order.user_info.first, order.user_info.last) : '',
 			hotel: order.hotel_info,
 			accepted: this.timeStampToDateTime(order.accepted_at)
 		};
