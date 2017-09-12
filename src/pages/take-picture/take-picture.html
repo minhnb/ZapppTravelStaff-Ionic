@@ -1,6 +1,6 @@
 <ion-content padding>
   <button class="transparent-button dismiss-view-button" (click)="dismissView(event)" *ngIf="isDeliveryMode">
-      <ion-icon name="close"></ion-icon>
+      <ion-icon name="ios-arrow-back"></ion-icon>
     </button>
   <div class="middle-center middle-camera" *ngIf="!listImage.length">
     <button class="transparent-button" (click)="takePicture()" [disabled]="!userAlreadyPaid && !isDeliveryMode">
