@@ -84,7 +84,7 @@ export class ZapppHttp {
             let requestSub = this.http.request(url, options)
 				.map(this.extractData.bind(this))
 				.catch((err: any) => {
-                    return self.handleError(err, url, options, needAccessToken);
+                    return self.handleError(err, url, options, needAccessToken, showSpinner);
                 });
             requestSub.subscribe(
                 (res: any) => {
@@ -114,7 +114,7 @@ export class ZapppHttp {
 		return response;
     }
 
-    handleError(error: Response | any, url: string, options: RequestOptions, needAccessToken: Boolean): any {
+    handleError(error: Response | any, url: string, options: RequestOptions, needAccessToken: Boolean, showSpinner: Boolean): any {
         this._spinner.hide();
         if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
             console.log(JSON.stringify(error));
@@ -124,7 +124,7 @@ export class ZapppHttp {
             return Observable.throw(error);
         }
         if (error.status == 401 && needAccessToken) {
-            return this.refreshToken(url, options);
+            return this.refreshToken(url, options, showSpinner);
         }
         let errMsg;
         try {
@@ -161,14 +161,16 @@ export class ZapppHttp {
         return errMsg;
     }
 
-    refreshToken(url: string, options: RequestOptions) {
+    refreshToken(url: string, options: RequestOptions, showSpinner: Boolean) {
         let refreshToken = localStorage.getItem(AppConstant.REFRESH_TOKEN);
         let method = RequestMethod.Post;
         let refreshTokenOptions = this.getRequestOptionsByToken(method, refreshToken);
         refreshTokenOptions.method = method;
         let refreshTokenUrl = this.refreshTokenUrl;
         refreshTokenOptions.body = JSON.stringify({});
-        this._spinner.show();
+        if (showSpinner) {
+            this._spinner.show();
+        }
         return this.http.request(refreshTokenUrl, refreshTokenOptions)
             .toPromise()
             .then((res: Response) => {
