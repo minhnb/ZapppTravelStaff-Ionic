@@ -1,4 +1,16 @@
 page-take-picture {
+  .slider-content {
+    height: calc(100% - 60px);
+
+    ion-slide {
+      .slide-zoom {
+        .image-item {
+          height: 100%;
+        }
+      }
+    }
+  }
+
   .middle-center {
     position: absolute;
     left: 50%;

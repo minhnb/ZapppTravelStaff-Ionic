@@ -299,7 +299,7 @@ export class BaseComponent {
 				return codeSplitedArray[1];
 			}
         }
-        return null;
+        return code;
     }
 
     getOrderIdFromOrderCode(code: string): string {
@@ -541,7 +541,7 @@ export class BaseComponent {
 		}
 	}
 
-	log(content: string) {
+	log(content: any) {
 		if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
             console.log(JSON.stringify(content));
         }
