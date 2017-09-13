@@ -1,19 +1,30 @@
 <ion-content padding>
   <button class="transparent-button dismiss-view-button" (click)="dismissView(event)" *ngIf="isDeliveryMode">
-      <ion-icon name="close"></ion-icon>
+      <ion-icon name="ios-arrow-back"></ion-icon>
     </button>
-  <div class="middle-center middle-camera" *ngIf="!imageUrl">
+  <div class="middle-center middle-camera" *ngIf="!listImage.length">
     <button class="transparent-button" (click)="takePicture()" [disabled]="!userAlreadyPaid && !isDeliveryMode">
             <ion-icon name="camera"></ion-icon>
           </button>
     <div *ngIf="userAlreadyPaid || isDeliveryMode">{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
     <div *ngIf="!userAlreadyPaid && !isDeliveryMode">{{ 'WAIT_FOR_USER_TO_COMPLETE_PAYMENT' | translate }}</div>
   </div>
-  <img class="middle-center" *ngIf="imageUrl" [src]="imageUrl" />
-  <button ion-button class="above-button bottom-left" *ngIf="imageUrl" (click)="takePicture()">{{ 'BUTTON_RETAKE' | translate }}</button>
-  <button ion-button class="above-button bottom-right" *ngIf="imageUrl && isDeliveryMode" (click)="savePictureForDeliveryMode()">{{ 'BUTTON_SAVE' | translate }}</button>
-  <button ion-button class="above-button bottom-right" *ngIf="imageUrl && !isDeliveryMode" (click)="savePictureForCollectionMode()">{{ 'BUTTON_FINISH' | translate }}</button>
-  <div class="button-bottom-full" *ngIf="!imageUrl && !userAlreadyPaid && !isDeliveryMode">
+  <div class="slider-content">
+    <ion-slides pager *ngIf="listImage.length">
+      <ion-slide *ngFor="let item of listImage; let i = index;">
+        <div class="image-item">
+          <img [src]="item" />
+          <button class="transparent-button dismiss-view-button" (click)="deletePicture(i)">
+                        <ion-icon name="close"></ion-icon>
+                      </button>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <button class="button-ios above-button bottom-left" *ngIf="listImage.length" (click)="takePicture()">{{ 'BUTTON_TAKE_MORE_PHOTO' | translate }}</button>
+  <button class="button-ios above-button bottom-right" *ngIf="listImage.length && isDeliveryMode" (click)="savePictureForDeliveryMode()">{{ 'BUTTON_SAVE' | translate }}</button>
+  <button class="button-ios above-button bottom-right" *ngIf="listImage.length && !isDeliveryMode" (click)="savePictureForCollectionMode()">{{ 'BUTTON_FINISH' | translate }}</button>
+  <div class="button-bottom-full" *ngIf="!listImage.length && !userAlreadyPaid && !isDeliveryMode">
     <button ion-button full (click)="recheckOrderPaymentStatus()">{{ 'BUTTON_RECHECK_ORDER_PAYMENT_STATUS' | translate }}</button>
   </div>
 </ion-content>

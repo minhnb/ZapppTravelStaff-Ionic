@@ -1,4 +1,25 @@
 page-take-picture {
+  button.dismiss-view-button {
+    left: 0;
+    right: auto;
+  }
+  .slider-content {
+    height: calc(100% - 60px);
+
+    ion-slide {
+      .slide-zoom {
+        .image-item {
+          height: 100%;
+          button.dismiss-view-button {
+            right: -10px;
+            left: auto;
+            top: -10px;
+          }
+        }
+      }
+    }
+  }
+
   .middle-center {
     position: absolute;
     left: 50%;

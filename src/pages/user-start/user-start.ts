@@ -313,12 +313,8 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	requestTransform(request: any) {
-		let fullName = '';
-		if (request.user_info) {
-			fullName = this.getFullName(request.user_info.first, request.user_info.last)
-		}
 		let result = {
-			name: fullName,
+			name: request.user_info ? this.getFullName(request.user_info.first, request.user_info.last) : '',
 			avatar: request.user_info ? request.user_info.pic_url : '',
 			suitcase: request.order_info ? request.order_info.suit_case : 0,
 			bag: request.order_info ? request.order_info.bag : 0,
@@ -338,6 +334,7 @@ export class UserStartPage extends BaseComponent {
 		let result = {
 			orderId: order.id,
 			receiver: order.guest_name,
+			name: order.user_info ? this.getFullName(order.user_info.first, order.user_info.last) : '',
 			hotel: order.hotel_info,
 			accepted: this.timeStampToDateTime(order.accepted_at)
 		};
@@ -382,14 +379,22 @@ export class UserStartPage extends BaseComponent {
 		return true;
 	}
 
+	staffAlreadyHasJob(): boolean {
+		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
+		if (!currentJob) {
+			return false;
+		}
+		return true;
+	}
+
 	loadCurrentJobForActiveStaff() {
 		if (!this.isActive) {
 			return;
 		}
-		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
-		if (!currentJob) {
+		if (!this.staffAlreadyHasJob()) {
 			return;
 		}
+		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
 		let customer = JSON.parse(currentJob);
 		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
 			res => {
@@ -445,7 +450,7 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	handleZappperNewRequest(data: any) {
-		if (!this.isZappper()) {
+		if (!this.isZappper() || this.staffAlreadyHasJob()) {
 			return;
 		}
 		let displayOrderId = this.getDisplayOrderId(data);
@@ -565,8 +570,6 @@ export class UserStartPage extends BaseComponent {
 	}
 
 	detectCurrentAssigmentMode() {
-		this.isAssignedCollection = false;
-		this.isAssignedDelivery = false;
 		if (this.listAssignment.length == 0) {
 			return;
 		}
@@ -641,6 +644,7 @@ export class UserStartPage extends BaseComponent {
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
 					this.dataShare.setUserInfo(this.userInfoTransform(res));
 					this.saveLocalStaffState(res);
+					this.detectCurrentAssigmentModeByTruckInfo(res.truck_info);
 					this.isLoadedState = true;
 					this.userId = res.id;
 					if (callback) {
@@ -674,5 +678,14 @@ export class UserStartPage extends BaseComponent {
 	handleInvalidStaff(info: any) {
 		this.userService.handleLogout(info);
 		this.events.publish(AppConstant.EVENT_TOPIC.USER_INVALID);
+	}
+
+	detectCurrentAssigmentModeByTruckInfo(truckInfo: any) {
+		if (!truckInfo || truckInfo.assignment_type == null) {
+			return;
+		}
+		let type = Number(truckInfo.assignment_type);
+		this.isAssignedCollection = type == AppConstant.ASSIGNMENT_MODE.COLLECTION;
+		this.isAssignedDelivery = type == AppConstant.ASSIGNMENT_MODE.DELIVERY;
 	}
 }

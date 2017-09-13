@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector } from '@angular/core';
+import { Component, ViewChild, Injector, NgZone } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -32,7 +32,7 @@ export class MyApp extends BaseComponent {
 	serverName: string;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-		private fcm: FCM, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation) {
+		private fcm: FCM, public zone: NgZone, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation) {
 		super(injector);
 
 		this.pages = [
@@ -139,7 +139,10 @@ export class MyApp extends BaseComponent {
 	}
 
 	getServerName() {
-		this.serverName = 'production';
+		let urlWithoutHttp = AppConfig.API_URL.split('://')[1];
+		if (urlWithoutHttp) {
+			this.serverName = urlWithoutHttp.split('.')[0];
+		}
 	}
 
 	defineLangs() {
@@ -312,7 +315,9 @@ export class MyApp extends BaseComponent {
 	handleNotificationUserLoginFromAnotherDevice(data: any) {
 		this.showInfo(this.translate.instant('ERROR_LOGGED_IN_FROM_ANOTHER_DEVICE'));
 		this.userService.handleLogout(data);
-		this.goBackToLoginPage();
+		this.zone.run(() => {
+			this.goBackToLoginPage();
+		});
 	}
 
 	handleZapppBackgroundNotification(data: any) {
