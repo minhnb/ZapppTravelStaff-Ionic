@@ -30,13 +30,13 @@ export class DeliveryModeService {
 		return this.zapppHttp.post(this.truckUrl + '/update_delivery_status', params);
 	}
 
-	deliveryLuggage(orderId: string, listLuggage: Array<any>, latitude: number, longitude: number, proofImageUrl: string) {
+	deliveryLuggage(orderId: string, listLuggage: Array<any>, latitude: number, longitude: number, listProofImageUrl: Array<string>) {
 		let params = {
 			order_id: orderId,
 			luggage_info: listLuggage,
 			lat: latitude,
 			lng: longitude,
-			pic_url: proofImageUrl
+			pic_url: listProofImageUrl
 		};
 		return this.zapppHttp.post(this.orderUrl + '/delivery_completed', params);
 	}
