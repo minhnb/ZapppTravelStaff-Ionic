@@ -55,6 +55,7 @@ export const AppConstant = {
     NOTIFICATION_TYPE: {
         PREFIX: 'notification:',
         REQUEST_ORDER: 'request_order',
+        REQUEST_CANCEL: 'request_cancel',
         ASSIGN_TRUCK_DELIVERY: 'assign_truck_delivery',
         ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',

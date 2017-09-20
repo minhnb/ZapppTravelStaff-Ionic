@@ -105,6 +105,7 @@
   "NOTIFICATION_ASSIGN_TITLE": "Assignment",
   "NOTIFICATION_ASSIGN_TRANSFER": "{{ number }} of your orders were assigned to other trucks for delivery.",
   "NOTIFICATION_ASSIGN_UNASSIGNED": "You were unassigned.",
+  "NOTIFICATION_REQUEST_CANCELED_BY_ADMIN": "This request was cancelled by admin.",
   "NO_RESULT_FOUND": "No result found",
   "NO_TRUCK": "No trucks",
   "ORDERS": "Orders",
@@ -140,6 +141,7 @@
   "USER_NOT_STAFF": "You are not staff, so you can not access this app.",
   "VIEW_ASSIGNMENT": "View assignments",
   "WAIT_FOR_USER_TO_COMPLETE_PAYMENT": "Wait for customer to complete payment",
+  "WARNING": "Warning",
   "WARNING_TRUCK_NOT_ASSIGNED_FOR_COLLECTION": "You're not assigned for Collection. Customers cannot see your truck on their map. Please contact Admin for more details.",
   "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request (#{{ orderId }}).",
   "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"

@@ -52,6 +52,7 @@ export class UserStartPage extends BaseComponent {
 		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
 		this.subscribeZappperNewRequestEvent();
+		this.subscribeZappperRequestCanceledEvent();
 		this.subscribeAssignTruckEvent();
 		this.subscribeEventFirstUpdateCurrentLocation();
 		this.loadPreviousState();
@@ -399,9 +400,11 @@ export class UserStartPage extends BaseComponent {
 		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
 			res => {
 				if (this.isAttedant() && !this.isValidOrderForAttendantToContinueCurrentJob(res)) {
+					this.clearLocalCurrentJob();
 					return;
 				}
 				if (this.isZappper() && !this.isValidOrderForZappperToContinueCurrentJob(res)) {
+					this.clearLocalCurrentJob();
 					return;
 				}
 				let userRequest = this.customerInfoTransform(res);
@@ -475,6 +478,24 @@ export class UserStartPage extends BaseComponent {
 		this.goToListRequest();
 	}
 
+	subscribeZappperRequestCanceledEvent() {
+		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_CANCEL, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleZappperRequestCanceled(data);
+		});
+	}
+
+	handleZappperRequestCanceled(data: any) {
+		if (!this.isZappper() || !this.staffAlreadyHasJob()) {
+			return;
+		}
+		this.clearLocalCurrentJob();
+		this.showInfoWithOkAction(this.translate.instant('NOTIFICATION_REQUEST_CANCELED_BY_ADMIN'), this.translate.instant('WARNING'), () => {
+			this.navCtrl.popToRoot();
+		});
+	}
 
 	subscribeAssignTruckEvent() {
 		let listTruckAssignEvent = [

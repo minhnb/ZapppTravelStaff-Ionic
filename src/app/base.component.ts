@@ -54,6 +54,7 @@ export class BaseComponent {
 
 		this.subcribeEventAppIsResuming();
 		this.dataShare.removeBackButtonAction();
+		this.dataShare.hasGoogleMapNative = this.hasGoogleMapNative;
 		this.googleAnalyticsTrackCurrentView();
 	}
 
@@ -125,11 +126,15 @@ export class BaseComponent {
 	}
 
 	disableMapClickable() {
-
+		if (this.dataShare.googleMapNative) {
+			this.dataShare.googleMapNative.setClickable(false);
+		}
 	}
 
 	enableMapClickable() {
-
+		if (this.dataShare.googleMapNative) {
+			this.dataShare.googleMapNative.setClickable(true);
+		}
 	}
 
 	handleMapClickableByCountingShowingAlert() {
@@ -165,11 +170,14 @@ export class BaseComponent {
 		if (this.isDestroyed) {
 			return;
 		}
-		if (this.hasGoogleMapNative) this.handleMapClickable(buttons);
+		if (this.dataShare.hasGoogleMapNative) {
+			this.handleMapClickable(buttons);
+		}
         let alert = this.alertController.create({
 			title: title,
 			subTitle: subTitle,
-			buttons: buttons
+			buttons: buttons,
+			enableBackdropDismiss: false
 		});
 		alert.present();
     }
@@ -299,7 +307,7 @@ export class BaseComponent {
 				return codeSplitedArray[1];
 			}
         }
-        return code;
+        return '';
     }
 
     getOrderIdFromOrderCode(code: string): string {
