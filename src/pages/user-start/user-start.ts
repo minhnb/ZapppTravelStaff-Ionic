@@ -692,7 +692,8 @@ export class UserStartPage extends BaseComponent {
 			name: this.getFullName(userInfo.first, userInfo.last),
 			email: userInfo.email,
 			avatar: userInfo.pic_url,
-			role: userInfo.roles
+			role: userInfo.roles,
+			id: userInfo.id
 		}
 	}
 

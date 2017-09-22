@@ -76,7 +76,10 @@ export const AppConstant = {
         INPUT_MANUAL: 'input:manual',
         REFRESH_TOKEN_INVALID: 'reftreshToken:invalid',
         USER_INVALID: 'user:invalid',
-        CURRENT_LOCATION_FIRST_UPDATE: 'currentLocation:firstUpdate'
+        CURRENT_LOCATION_FIRST_UPDATE: 'currentLocation:firstUpdate',
+        CHAT_INCOMING_MESSAGE: 'chat:incomingMessage',
+        CHAT_CONNECT: 'chat:connect',
+        CHAT_DISCONNECT: 'chat:disconnect'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',
@@ -103,5 +106,13 @@ export const AppConstant = {
 		FAILED: "payment_failed",
         SUCCESS: "payment_success"
     },
-    PRODUCTION_ENVIRONMENT: "production"
+    PRODUCTION_ENVIRONMENT: "production",
+    SOCKET_EVENT: {
+        SUBSCRIBE: 'subscribe',
+        SEND_MESSAGE: 'send_message',
+        SUBSCRIBE_CALLBACK: 'subscribe_callback',
+        DISCONNECT: 'disconnect',
+        CONNECT_TIMEOUT: 'connect_timeout',
+        CONNECT: 'connect'
+    }
 };

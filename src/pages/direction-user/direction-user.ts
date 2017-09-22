@@ -2,18 +2,21 @@ import { Component, Injector } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GoogleMaps, LatLng } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
+import { AppConstant } from '../../app/app.constant';
 
 import { DirectionPage } from '../direction-stop';
 import { CustomerLuggagePage } from '../customer-luggage';
 import { CustomerInfoPage } from '../customer-info';
+import { ChatViewPage } from '../chat-view';
 
 import { CollectionModeService } from '../../app/services/collection-mode';
+import { ChatService } from '../../app/services/chat';
 
 @IonicPage()
 @Component({
 	selector: 'page-direction-user',
 	templateUrl: 'direction-user.html',
-	providers: [CollectionModeService]
+	providers: [CollectionModeService, ChatService]
 })
 export class DirectionUserPage extends DirectionPage {
 
@@ -22,9 +25,15 @@ export class DirectionUserPage extends DirectionPage {
 	cancellationReason: string;
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps,
-		public geolocation: Geolocation, private collectionModeService: CollectionModeService) {
+		public geolocation: Geolocation, private collectionModeService: CollectionModeService, private chatService: ChatService) {
 		super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.customer = this.navParams.data.customer;
+		this.subcribeChatEvent();
+	}
+
+	ionViewDidLoad() {
+		super.ionViewDidLoad();
+		this.initChat();
 	}
 
 	ionViewWillEnter() {
@@ -102,5 +111,52 @@ export class DirectionUserPage extends DirectionPage {
 				this.showError(err.message);
 			}
 		);
+	}
+
+	goToChatViewPage() {
+		let params = {
+			room: this.customer.orderId,
+			partnerName: this.customer.name
+		}
+		this.navCtrl.push(ChatViewPage, params);
+	}
+
+	initChat() {
+		this.chatService.socketConnect();
+	}
+
+	subcribeChatEvent() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.CHAT_INCOMING_MESSAGE, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleIncomingMessageEvent(data);
+		});
+		this.events.subscribe(AppConstant.EVENT_TOPIC.CHAT_CONNECT, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleChatConnectEvent(data);
+		});
+		this.events.subscribe(AppConstant.EVENT_TOPIC.CHAT_DISCONNECT, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleChatDisconnectEvent(data);
+		});
+	}
+
+	handleIncomingMessageEvent(data: any) {
+		if (this.isActiveCurrentPage(this.navCtrl)) {
+			this.goToChatViewPage();
+		}
+	}
+
+	handleChatConnectEvent(data: any) {
+		this.chatService.joinRoom(this.customer.orderId);
+	}
+
+	handleChatDisconnectEvent(data: any) {
+		this.chatService.joinRoom(this.customer.orderId);
 	}
 }

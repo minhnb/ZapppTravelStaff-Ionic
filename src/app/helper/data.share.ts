@@ -12,6 +12,10 @@ export class DataShare {
     countShowingAlert: number = 0;
     hasGoogleMapNative: Boolean = false;
     googleMapNative: any;
+    socket: any;
+    currentChatRoom: string;
+    chatContent: Array<any> = [];
+    lastEmit: any;
 
     public setFCMToken(fcmToken: string) {
 		this.fcmToken = fcmToken;
