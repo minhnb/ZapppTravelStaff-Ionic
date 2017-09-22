@@ -485,14 +485,21 @@ export class UserStartPage extends BaseComponent {
 			}
 			this.handleZappperRequestCanceled(data);
 		});
+		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_CANCEL_BY_USER, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleZappperRequestCanceled(data, true);
+		});
 	}
 
-	handleZappperRequestCanceled(data: any) {
+	handleZappperRequestCanceled(data: any, isByUser: boolean = false) {
 		if (!this.isZappper() || !this.staffAlreadyHasJob()) {
 			return;
 		}
 		this.clearLocalCurrentJob();
-		this.showInfoWithOkAction(this.translate.instant('NOTIFICATION_REQUEST_CANCELED_BY_ADMIN'), this.translate.instant('WARNING'), () => {
+		let warningContent = this.translate.instant(isByUser ? 'NOTIFICATION_REQUEST_CANCELED_BY_USER' : 'NOTIFICATION_REQUEST_CANCELED_BY_ADMIN');
+		this.showInfoWithOkAction(warningContent, this.translate.instant('WARNING'), () => {
 			this.navCtrl.popToRoot();
 		});
 	}
