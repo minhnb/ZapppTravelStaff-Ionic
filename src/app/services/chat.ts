@@ -19,6 +19,16 @@ export class ChatService {
 			this.log("connecting " + AppConfig.SOCKET_IO_URL);
 			this.dataShare.socket = io(AppConfig.SOCKET_IO_URL);
 			this.initSocketHandler();
+			this.dataShare.needReconnectSocket = true;
+		}
+	}
+
+	socketDisconnect() {
+		if (this.dataShare.socket) {
+			this.log("connecting " + AppConfig.SOCKET_IO_URL);
+			this.dataShare.needReconnectSocket = false;
+			this.dataShare.socket.disconnect();
+			this.dataShare.socket = null;
 		}
 	}
 
@@ -134,6 +144,9 @@ export class ChatService {
 	}
 
 	socketHandleEventDisconnect() {
+		if (!this.dataShare.needReconnectSocket) {
+			return;
+		}
 		this.announceChatDisconect();
 	}
 

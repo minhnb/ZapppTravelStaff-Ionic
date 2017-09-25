@@ -41,6 +41,12 @@ export class DirectionUserPage extends DirectionPage {
 		this.dataShare.disableBackButtonAction();
 	}
 
+	ionViewWillUnload() {
+		super.ionViewWillUnload();
+		this.chatService.socketDisconnect();
+	}
+
+
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {
 		let customerName = this.customer && this.customer.name ? this.customer.name : '';
 		this.drawDirectionFromCurrentLocationToDestination(currentLocation, customerName);
