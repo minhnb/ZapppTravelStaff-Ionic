@@ -48,6 +48,11 @@ ion-navbar {
     }
   }
 }
+ion-content.no-pull {
+    .scroll-content {
+        overflow-y: hidden;
+    }
+}
 
 .ion-page,
 .scroll-content {

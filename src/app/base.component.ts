@@ -37,6 +37,9 @@ export class BaseComponent {
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
 	isDestroyed: boolean = false;
+	needSubcribeKeyboardEvent: boolean = false;
+	keyboardOnShowEvent: any;
+	keyboardOnHideEvent: any;
 
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
@@ -453,6 +456,36 @@ export class BaseComponent {
 
 	hideKeyboard() {
 		this.keyboard.close();
+	}
+
+	handleEventKeyboardShow(data: any) {
+
+	}
+
+	handleEventKeyboardHide(data: any) {
+
+	}
+
+	subcribeKeyboardEvent() {
+		if (!this.needSubcribeKeyboardEvent) {
+			return;
+		}
+		this.keyboardOnShowEvent = this.keyboard.onKeyboardShow();
+		this.keyboardOnHideEvent = this.keyboard.onKeyboardHide();
+		this.keyboardOnShowEvent.subscribe((data: any) => {
+			this.handleEventKeyboardShow(data);
+		});
+		this.keyboardOnHideEvent.subscribe((data: any) => {
+			this.handleEventKeyboardHide(data);
+		});
+	}
+
+	unsubscribeKeyboardEvent() {
+		if (!this.needSubcribeKeyboardEvent) {
+			return;
+		}
+		this.keyboardOnShowEvent.unsubscribe();
+		this.keyboardOnShowEvent.unsubscribe();
 	}
 
 	listLocalEvent() {

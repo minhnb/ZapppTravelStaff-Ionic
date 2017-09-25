@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content class="no-pull">
   <div #map id="map" data-tap-disabled="true" style="height:100%;">
     <button ion-button class="above-button top-left" color="danger" (click)="showCancelOrderView()">{{ 'BUTTON_CANCEL' | translate }}</button>
     <button class="transparent-button left-bottom call" (click)="callCustomer()" [disabled]="!customer || !customer.phoneNumber">

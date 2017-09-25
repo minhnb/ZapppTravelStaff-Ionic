@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injector, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { BaseComponent } from '../../app/base.component';
 import { AppConstant } from '../../app/app.constant';
@@ -15,19 +15,27 @@ export class ChatViewPage extends BaseComponent {
     room: string;
     chatInput: string;
     partnerName: string;
+	keyboardHeight: number = 0;
+
     @ViewChild('chatView') private chatView: ElementRef;
     @ViewChild('chatTextArea') private chatTextArea: ElementRef;
 
-	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, private chatService: ChatService) {
+	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public zone: NgZone, private chatService: ChatService) {
 		super(injector);
         this.room = this.navParams.data.room;
         this.partnerName = this.navParams.data.partnerName;
+		this.needSubcribeKeyboardEvent = true;
         this.subcribeChatEvent();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ChatViewPage');
         this.autoScrollChatView();
+		this.subcribeKeyboardEvent();
+	}
+
+	ionViewWillLeave() {
+		this.unsubscribeKeyboardEvent();
 	}
 
     textAreaOnKeyDown(event) {
@@ -87,4 +95,20 @@ export class ChatViewPage extends BaseComponent {
             this.chatView.nativeElement.height = height - 100;
         });
     }
+
+	handleEventKeyboardShow(data: any) {
+		if (this.isPlatformiOS(this.platform)) {
+			this.zone.run(() => {
+				this.keyboardHeight = data.keyboardHeight;
+			});
+		}
+	}
+
+	handleEventKeyboardHide(data: any) {
+		if (this.isPlatformiOS(this.platform)) {
+			this.zone.run(() => {
+				this.keyboardHeight = 0;
+			});
+		}
+	}
 }

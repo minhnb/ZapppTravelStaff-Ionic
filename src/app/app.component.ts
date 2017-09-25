@@ -61,6 +61,7 @@ export class MyApp extends BaseComponent {
 			}
 
 			this.enableBackgroundMode();
+			this.keyboard.disableScroll(true);
 			this.registerBackButtonAction();
 			this.startGoogleAnalytic();
 		});
