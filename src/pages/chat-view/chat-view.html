@@ -8,7 +8,7 @@
   </ion-navbar>
 
 </ion-header>
-<ion-content  class="no-pull">
+<ion-content class="no-pull">
   <div class="chat-view" #chatView [style.height]="isPlatformiOS(platform) ? 'calc(100vh - 124px - ' + keyboardHeight + 'px)' : 'calc(100vh - 104px)'">
     <div class="message" *ngFor="let item of dataShare.chatContent" [ngClass]="item.isReceived ? '' : 'me'">
       <div class="message-container">
