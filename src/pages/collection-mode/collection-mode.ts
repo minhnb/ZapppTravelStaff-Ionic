@@ -44,10 +44,6 @@ export class CollectionModePage extends BaseComponent {
 		if (order.zappper_info) {
 			return true;
 		}
-		let totalLuggage = Number(order.suit_case) + Number(order.bag) + Number(order.baby_carriage) + Number(order.others);
-		if (totalLuggage > 0) {
-			return true;
-		}
 		return false;
 	}
 
