@@ -254,8 +254,8 @@ export class BaseComponent {
 		toast.present();
     }
 
-	showBottomCustomToast(message: string, buttonCallback?: () => void) {
-		this.presentCustomToast(message, 0, 'bottom', true, this.translate.instant('BUTTON_OK'), false, buttonCallback);
+	showBottomCustomToast(message: string, buttonCallback?: () => void, buttonTitle?: string) {
+		this.presentCustomToast(message, 0, 'bottom', true, buttonTitle || this.translate.instant('BUTTON_OK'), false, buttonCallback);
 	}
 
 	confirmBeforeLeaveView(message?: string, title?: string): Promise<{}> {

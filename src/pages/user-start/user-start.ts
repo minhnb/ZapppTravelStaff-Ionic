@@ -464,7 +464,7 @@ export class UserStartPage extends BaseComponent {
 				} else {
 					this.goToListRequest();
 				}
-			});
+			}, this.translate.instant('BUTTON_VIEW'));
 		});
 	}
 
