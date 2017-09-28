@@ -70,6 +70,7 @@ export const AppConstant = {
     },
     EVENT_TOPIC: {
         APP_RESUMING: 'app:resuming',
+        APP_PAUSING: 'app:pausing',
         USER_ACTIVE: 'user:active',
         DIRECTION_STATION: 'direction:station',
         DELIVERY_COMPLETED: 'delivery:completed',

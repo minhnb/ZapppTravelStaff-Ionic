@@ -470,12 +470,10 @@ export class BaseComponent {
 		if (!this.needSubcribeKeyboardEvent) {
 			return;
 		}
-		this.keyboardOnShowEvent = this.keyboard.onKeyboardShow();
-		this.keyboardOnHideEvent = this.keyboard.onKeyboardHide();
-		this.keyboardOnShowEvent.subscribe((data: any) => {
+		this.keyboardOnShowEvent = this.keyboard.onKeyboardShow().subscribe((data: any) => {
 			this.handleEventKeyboardShow(data);
 		});
-		this.keyboardOnHideEvent.subscribe((data: any) => {
+		this.keyboardOnHideEvent = this.keyboard.onKeyboardHide().subscribe((data: any) => {
 			this.handleEventKeyboardHide(data);
 		});
 	}
@@ -485,7 +483,7 @@ export class BaseComponent {
 			return;
 		}
 		this.keyboardOnShowEvent.unsubscribe();
-		this.keyboardOnShowEvent.unsubscribe();
+		this.keyboardOnHideEvent.unsubscribe();
 	}
 
 	listLocalEvent() {
@@ -516,11 +514,11 @@ export class BaseComponent {
 
 	subcribeEventAppIsResuming() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
-			this.handleEventAppIsResuming();
+			this.handleEventAppIsResuming(data);
 		});
 	}
 
-	handleEventAppIsResuming() {
+	handleEventAppIsResuming(data?: any) {
 
 	}
 

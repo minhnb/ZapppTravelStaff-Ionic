@@ -25,7 +25,7 @@ export class ChatService {
 
 	socketDisconnect() {
 		if (this.dataShare.socket) {
-			this.log("connecting " + AppConfig.SOCKET_IO_URL);
+			this.log("disconnected " + AppConfig.SOCKET_IO_URL);
 			this.dataShare.needReconnectSocket = false;
 			this.dataShare.socket.disconnect();
 			this.dataShare.socket = null;

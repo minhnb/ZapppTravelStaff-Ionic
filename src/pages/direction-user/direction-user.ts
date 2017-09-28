@@ -29,6 +29,7 @@ export class DirectionUserPage extends DirectionPage {
 		super(injector, navCtrl, navParams, googleMaps, geolocation);
 		this.customer = this.navParams.data.customer;
 		this.subcribeChatEvent();
+		this.subcribeEventAppIsPausing();
 	}
 
 	ionViewDidLoad() {
@@ -43,7 +44,7 @@ export class DirectionUserPage extends DirectionPage {
 
 	ionViewWillUnload() {
 		super.ionViewWillUnload();
-		this.chatService.socketDisconnect();
+		this.stopChatting();
 	}
 
 
@@ -152,6 +153,15 @@ export class DirectionUserPage extends DirectionPage {
 		});
 	}
 
+	subcribeEventAppIsPausing() {
+		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_PAUSING, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleEventAppIsPausing(data);
+		});
+	}
+
 	handleIncomingMessageEvent(data: any) {
 		if (this.isActiveCurrentPage(this.navCtrl)) {
 			this.goToChatViewPage();
@@ -164,5 +174,17 @@ export class DirectionUserPage extends DirectionPage {
 
 	handleChatDisconnectEvent(data: any) {
 		this.chatService.joinRoom(this.customer.orderId);
+	}
+
+	handleEventAppIsResuming(data: any) {
+		this.initChat();
+	}
+
+	handleEventAppIsPausing(data: any) {
+		this.stopChatting();
+	}
+
+	stopChatting() {
+		this.chatService.socketDisconnect();
 	}
 }

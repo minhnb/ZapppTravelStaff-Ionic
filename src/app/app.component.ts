@@ -65,6 +65,9 @@ export class MyApp extends BaseComponent {
 			this.registerBackButtonAction();
 			this.startGoogleAnalytic();
 		});
+		this.platform.pause.subscribe(() => {
+			this.announceAppIsPause();
+		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();
 		});
@@ -137,6 +140,11 @@ export class MyApp extends BaseComponent {
 	announceAppIsResuming() {
 		this.log('announceAppIsResuming');
 		this.events.publish(AppConstant.EVENT_TOPIC.APP_RESUMING);
+	}
+
+	announceAppIsPause() {
+		this.log('announceAppIsPausing');
+		this.events.publish(AppConstant.EVENT_TOPIC.APP_PAUSING);
 	}
 
 	getServerName() {
