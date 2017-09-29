@@ -107,7 +107,7 @@ export class ListRequestWithDirectionPage extends DirectionPage {
 		if (this.currentLocation) {
 			this.afterLoadMapAndCurrentLocation(this.currentLocation);
 		} else {
-			this.loadMap();
+			this.afterLoadMap();
 		}
 	}
 }

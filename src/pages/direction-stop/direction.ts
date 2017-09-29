@@ -100,30 +100,34 @@ export class DirectionPage extends BaseComponent {
 
 		this.map = this.googleMaps.create(element);
 
-		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
-		let watchOption = geolocationOptions;
-		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				this.log('Map is ready!');
 				this.dataShare.googleMapNative = this.map;
 				this.enableMapClickable();
-				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
-					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-					if (this.autoMoveCamera) {
-						this.moveCamera(currentLocation);
-					}
-					this.afterLoadMapAndCurrentLocation(currentLocation);
-					if (!this.watchPositionObserverble) {
-						this.initWatchPosition(watchTimeout, watchOption);
-					}
-				}).catch((error) => {
-					this.log('Error getting location');
-					this.log(error.message);
-					this.showLocationServiceProblemConfirmation();
-				});
+				this.afterLoadMap();
 			}
 		);
+	}
+
+	afterLoadMap() {
+		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
+		let watchOption = geolocationOptions;
+		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
+		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
+			let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+			if (this.autoMoveCamera) {
+				this.moveCamera(currentLocation);
+			}
+			this.afterLoadMapAndCurrentLocation(currentLocation);
+			if (!this.watchPositionObserverble) {
+				this.initWatchPosition(watchTimeout, watchOption);
+			}
+		}).catch((error) => {
+			this.log('Error getting location');
+			this.log(error.message);
+			this.showLocationServiceProblemConfirmation();
+		});
 	}
 
 	moveCamera(location: LatLng) {

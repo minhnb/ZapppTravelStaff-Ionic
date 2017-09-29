@@ -81,6 +81,6 @@ export class DirectionStopPage extends DirectionPage {
 		this.station = data.station;
 		this.destinationLocation = new LatLng(Number(this.station.lat), Number(this.station.lng));
 		this.removeAllMarkersAndPolyline();
-		this.loadMap();
+		this.afterLoadMap();
 	}
 }
