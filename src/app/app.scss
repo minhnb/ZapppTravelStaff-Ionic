@@ -48,10 +48,11 @@ ion-navbar {
     }
   }
 }
+
 ion-content.no-pull {
-    .scroll-content {
-        overflow-y: hidden;
-    }
+  .scroll-content {
+    overflow-y: hidden;
+  }
 }
 
 .ion-page,
@@ -69,6 +70,18 @@ ion-content.no-pull {
 
       &.no-margin-bottom {
         margin-bottom: 0;
+      }
+
+      &.button-full-ios {
+        width: 100%;
+      }
+
+      &.button.multi-row {
+        height: auto;
+        line-height: 25px;
+        min-height: 2.8em;
+        padding-top: 8px;
+        padding-bottom: 8px;
       }
     }
   }

@@ -642,7 +642,9 @@ export class UserStartPage extends BaseComponent {
 				}
 			},
 			err => {
-				this.showError(err.message);
+				if (callback) {
+					callback([]);
+				}
 			}
 		);
 	}
@@ -663,6 +665,18 @@ export class UserStartPage extends BaseComponent {
 				}
 			}
 		);
+	}
+
+	acceptLugguageFromOtherTruck() {
+		this.listOtherTruckNeedToGetOrder((listTruck) => {
+			this.goToLisTruckPage(listTruck, true);
+		});
+	}
+
+	transferToOtherTruck() {
+		this.listOtherTruckNeedToTransfer((listTruck) => {
+			this.goToLisTruckPage(listTruck);
+		});
 	}
 
 	getUserInfo(callback?: () => void) {

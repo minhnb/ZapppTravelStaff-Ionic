@@ -18,15 +18,11 @@ import { CollectionModeService } from '../../app/services/collection-mode';
 export class CollectionModePage extends BaseComponent {
 
 	currentTruckId: string;
-	countTransferItem: number = 0;
-	countAcceptItem: number = 0;
 
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams,
 		private collectionModeService: CollectionModeService) {
 		super(injector);
 		this.currentTruckId = this.navParams.data.currentTruckId;
-		this.countTransferItem = this.navParams.data.countTransferItem;
-		this.countAcceptItem = this.navParams.data.countAcceptItem;
 	}
 
 	ionViewDidLoad() {
@@ -101,17 +97,6 @@ export class CollectionModePage extends BaseComponent {
 			this.getLuggageCodeDetail(text, true);
         }, this.translate.instant('PROMPT_BARCODE_SCANNER_LUGGAGE'));
 	}
-	acceptLugguageFromOtherTruck() {
-		this.listOtherTruckNeedToGetOrder((listTruck) => {
-			this.goToLisTruckPage(listTruck, true);
-		});
-	}
-
-	transferToOtherTruck() {
-		this.listOtherTruckNeedToTransfer((listTruck) => {
-			this.goToLisTruckPage(listTruck);
-		});
-	}
 
 	viewOrder() {
 		this.getListOrderOnCurrentTruck((listOrder) => {
@@ -120,32 +105,6 @@ export class CollectionModePage extends BaseComponent {
 			}
 			this.navCtrl.push(OrderSliderPage, params);
 		});
-	}
-
-	listOtherTruckNeedToTransfer(callback?: (listTruck: Array<any>) => void) {
-		this.collectionModeService.listOtherTruckNeedToTransfer(this.currentTruckId).subscribe(
-			res => {
-				if (callback) {
-					callback(res);
-				}
-			},
-			err => {
-				this.showError(err.message);
-			}
-		);
-	}
-
-	listOtherTruckNeedToGetOrder(callback?: (listTruck: Array<any>) => void) {
-		this.collectionModeService.listOtherTruckNeedToGetOrder(this.currentTruckId).subscribe(
-			res => {
-				if (callback) {
-					callback(res);
-				}
-			},
-			err => {
-				this.showError(err.message);
-			}
-		);
 	}
 
 	goToLisTruckPage(listTruck: Array<any>, isAcceptLuggageMode: boolean = false) {

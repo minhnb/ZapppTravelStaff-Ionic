@@ -14,8 +14,6 @@
   <div class="button-bottom-full">
     <button ion-button full (click)="scanOrderQRCode()">{{ 'BUTTON_SCAN_ORDER_QR' | translate }}</button>
     <button class="button-ios button-full-ios multi-row" (click)="acceptLugguageFromZappper()">{{ 'BUTTON_ACCEPT_LUGGAGE_FROM_ZAPPPER' | translate }}</button>
-    <button class="button-ios button-full-ios multi-row" [ngClass]="countAcceptItem ? 'button-ios-secondary' : ''" (click)="acceptLugguageFromOtherTruck()">{{ 'BUTTON_ACCEPT_LUGGAGE_FROM_OTHER_TRUCKS' | translate }} ({{ countAcceptItem }})</button>
-    <button class="button-ios button-full-ios multi-row" [ngClass]="countTransferItem ? 'button-ios-secondary' : ''" (click)="transferToOtherTruck()">{{ 'BUTTON_TRANSFER_LUGGAGE_TO_OTHER_TRUCKS' | translate }} ({{ countTransferItem }})</button>
     <button ion-button full (click)="viewOrder()">{{ 'BUTTON_VIEW_ORDER' | translate }}</button>
   </div>
 </ion-content>
