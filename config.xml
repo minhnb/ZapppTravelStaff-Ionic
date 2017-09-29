@@ -1,14 +1,19 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="2017091202" id="com.zapppworld.staff" ios-CFBundleVersion="2017.09.12.0.2" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="2017092902" id="com.zapppworld.staff" ios-CFBundleVersion="2017.09.29.0.2" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Zappp Staff</name>
     <description>Staff for Zappp Travel - with Ionic Framework</description>
     <author email="minh.nguyen@cofoundervp.com" href="http://cofoundervp.com/">CoFounder Venture Partners</author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-navigation href="http://zappp.com/*" />
+    <allow-navigation href="https://api.zappp.com/*" />
     <allow-navigation href="https://dev.api.zappp.com/*" />
     <allow-navigation href="https://stage.api.zappp.com/*" />
-    <allow-navigation href="http://10.198.6.94:8101" />
+    <allow-navigation href="https://zappp.com/*" />
+    <allow-navigation href="https://dev.zappp.com/*" />
+    <allow-navigation href="https://stage.zappp.com/*" />
+    <allow-navigation href="http://chat.api.zappp.com/*" />
+    <allow-navigation href="http://dev.chat.api.zappp.com/*" />
+    <allow-navigation href="http://stage.chat.api.zappp.com/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -27,6 +32,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="orientation" value="portrait" />
     <preference name="AndroidLaunchMode" value="singleTop" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -81,6 +87,8 @@
         <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
+        <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
+        <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
@@ -92,16 +100,16 @@
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
-    <plugin name="cordova-plugin-googlemaps" spec="^1.4.0">
+    <plugin name="cordova-plugin-googlemaps" spec="git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDkf4O5N67eYGUdT7Cip9uTc8LWohQ_2Lk" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyAhDw5MOfNVEpcLWULEFQO6sNMIF7t9ztQ" />
-        <variable name="NSLOCATIONWHENINUSEUSAGEDESCRIPTION" value="Show your location on the map" />
-        <variable name="NSLOCATIONALWAYSUSAGEDESCRIPTION" value="Trace your location on the map" />
+        <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Show your location on the map" />
+        <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
     <plugin name="cordova-plugin-http" spec="^1.2.0" />
     <plugin name="cordova-plugin-spinner-dialog" spec="^1.3.1" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
-    <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
+    <plugin name="cordova-plugin-statusbar" spec="git+https://github.com/apache/cordova-plugin-statusbar.git" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="cordova.plugins.diagnostic" spec="^3.6.5" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />

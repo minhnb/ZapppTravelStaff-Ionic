@@ -31,7 +31,7 @@ export class LoginPage extends BaseComponent {
 			res => {
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
 					this.saveLocalStaffState(res.user);
-					this.navCtrl.setRoot(UserStartPage);
+					this.navCtrl.setRoot(UserStartPage, { isFromLoginPage: true });
 				} else {
 					this.showError(this.translate.instant('USER_NOT_STAFF'));
 					this.userService.handleLogout(res);

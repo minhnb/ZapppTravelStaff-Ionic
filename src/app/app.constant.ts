@@ -55,6 +55,8 @@ export const AppConstant = {
     NOTIFICATION_TYPE: {
         PREFIX: 'notification:',
         REQUEST_ORDER: 'request_order',
+        REQUEST_CANCEL: 'request_cancel',
+        REQUEST_CANCEL_BY_USER: 'request_cancel_by_user',
         ASSIGN_TRUCK_DELIVERY: 'assign_truck_delivery',
         ASSIGN_TRUCK_COLLECTION: 'assign_truck_collection',
         ASSIGN_TRUCK_UNASSIGNED: 'assign_truck_unassigned',
@@ -68,6 +70,7 @@ export const AppConstant = {
     },
     EVENT_TOPIC: {
         APP_RESUMING: 'app:resuming',
+        APP_PAUSING: 'app:pausing',
         USER_ACTIVE: 'user:active',
         DIRECTION_STATION: 'direction:station',
         DELIVERY_COMPLETED: 'delivery:completed',
@@ -75,7 +78,10 @@ export const AppConstant = {
         INPUT_MANUAL: 'input:manual',
         REFRESH_TOKEN_INVALID: 'reftreshToken:invalid',
         USER_INVALID: 'user:invalid',
-        CURRENT_LOCATION_FIRST_UPDATE: 'currentLocation:firstUpdate'
+        CURRENT_LOCATION_FIRST_UPDATE: 'currentLocation:firstUpdate',
+        CHAT_INCOMING_MESSAGE: 'chat:incomingMessage',
+        CHAT_CONNECT: 'chat:connect',
+        CHAT_DISCONNECT: 'chat:disconnect'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',
@@ -102,5 +108,13 @@ export const AppConstant = {
 		FAILED: "payment_failed",
         SUCCESS: "payment_success"
     },
-    PRODUCTION_ENVIRONMENT: "production"
+    PRODUCTION_ENVIRONMENT: "production",
+    SOCKET_EVENT: {
+        SUBSCRIBE: 'subscribe',
+        SEND_MESSAGE: 'send_message',
+        SUBSCRIBE_CALLBACK: 'subscribe_callback',
+        DISCONNECT: 'disconnect',
+        CONNECT_TIMEOUT: 'connect_timeout',
+        CONNECT: 'connect'
+    }
 };

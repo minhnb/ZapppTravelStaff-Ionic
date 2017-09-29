@@ -34,6 +34,7 @@ export class UserStartPage extends BaseComponent {
     listTruck: Array<any> = [];
 	isLoadedState: boolean = false;
 	userId: string;
+	isFromLoginPage: boolean = false;
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
@@ -51,7 +52,9 @@ export class UserStartPage extends BaseComponent {
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public zone: NgZone,
 		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
+		this.isFromLoginPage = this.navParams.data.isFromLoginPage;
 		this.subscribeZappperNewRequestEvent();
+		this.subscribeZappperRequestCanceledEvent();
 		this.subscribeAssignTruckEvent();
 		this.subscribeEventFirstUpdateCurrentLocation();
 		this.loadPreviousState();
@@ -399,9 +402,11 @@ export class UserStartPage extends BaseComponent {
 		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
 			res => {
 				if (this.isAttedant() && !this.isValidOrderForAttendantToContinueCurrentJob(res)) {
+					this.clearLocalCurrentJob();
 					return;
 				}
 				if (this.isZappper() && !this.isValidOrderForZappperToContinueCurrentJob(res)) {
+					this.clearLocalCurrentJob();
 					return;
 				}
 				let userRequest = this.customerInfoTransform(res);
@@ -461,7 +466,7 @@ export class UserStartPage extends BaseComponent {
 				} else {
 					this.goToListRequest();
 				}
-			});
+			}, this.translate.instant('BUTTON_VIEW'));
 		});
 	}
 
@@ -475,6 +480,31 @@ export class UserStartPage extends BaseComponent {
 		this.goToListRequest();
 	}
 
+	subscribeZappperRequestCanceledEvent() {
+		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_CANCEL, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleZappperRequestCanceled(data);
+		});
+		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.REQUEST_CANCEL_BY_USER, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.handleZappperRequestCanceled(data, true);
+		});
+	}
+
+	handleZappperRequestCanceled(data: any, isByUser: boolean = false) {
+		if (!this.isZappper() || !this.staffAlreadyHasJob()) {
+			return;
+		}
+		this.clearLocalCurrentJob();
+		let warningContent = this.translate.instant(isByUser ? 'NOTIFICATION_REQUEST_CANCELED_BY_USER' : 'NOTIFICATION_REQUEST_CANCELED_BY_ADMIN');
+		this.showInfoWithOkAction(warningContent, this.translate.instant('WARNING'), () => {
+			this.navCtrl.popToRoot();
+		});
+	}
 
 	subscribeAssignTruckEvent() {
 		let listTruckAssignEvent = [
@@ -614,7 +644,9 @@ export class UserStartPage extends BaseComponent {
 				}
 			},
 			err => {
-				this.showError(err.message);
+				if (callback) {
+					callback([]);
+				}
 			}
 		);
 	}
@@ -637,12 +669,25 @@ export class UserStartPage extends BaseComponent {
 		);
 	}
 
+	acceptLugguageFromOtherTruck() {
+		this.listOtherTruckNeedToGetOrder((listTruck) => {
+			this.goToLisTruckPage(listTruck, true);
+		});
+	}
+
+	transferToOtherTruck() {
+		this.listOtherTruckNeedToTransfer((listTruck) => {
+			this.goToLisTruckPage(listTruck);
+		});
+	}
+
 	getUserInfo(callback?: () => void) {
 		this.userService.getUserInfo().subscribe(
 			res => {
 				this.userService.saveUserRole(res.roles);
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
 					this.dataShare.setUserInfo(this.userInfoTransform(res));
+					if (!this.isFromLoginPage) this.updateDeviceToken();
 					this.saveLocalStaffState(res);
 					this.detectCurrentAssigmentModeByTruckInfo(res.truck_info);
 					this.isLoadedState = true;
@@ -671,7 +716,8 @@ export class UserStartPage extends BaseComponent {
 			name: this.getFullName(userInfo.first, userInfo.last),
 			email: userInfo.email,
 			avatar: userInfo.pic_url,
-			role: userInfo.roles
+			role: userInfo.roles,
+			id: userInfo.id
 		}
 	}
 
@@ -687,5 +733,20 @@ export class UserStartPage extends BaseComponent {
 		let type = Number(truckInfo.assignment_type);
 		this.isAssignedCollection = type == AppConstant.ASSIGNMENT_MODE.COLLECTION;
 		this.isAssignedDelivery = type == AppConstant.ASSIGNMENT_MODE.DELIVERY;
+	}
+
+	updateDeviceToken() {
+		let deviceToken = this.dataShare.fcmToken;
+		if (!deviceToken) {
+			return;
+		}
+		this.userService.updateDeviceToken(deviceToken).subscribe(
+			res => {
+
+			},
+			err => {
+				// this.showError(err.message);
+			}
+		);
 	}
 }

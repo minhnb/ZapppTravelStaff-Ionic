@@ -29,6 +29,7 @@ import { ListAssignmentPageModule } from '../pages/list-assignment';
 import { ListTruckWithDirectionPageModule } from '../pages/list-truck-with-direction';
 import { ManualInputPageModule } from '../pages/manual-input';
 import { OrderSliderPageModule } from '../pages/order-slider';
+import { ChatViewPageModule } from '../pages/chat-view';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -94,7 +95,8 @@ import { DataShare } from './helper/data.share';
 		ListAssignmentPageModule,
 		ListTruckWithDirectionPageModule,
 		ManualInputPageModule,
-		OrderSliderPageModule
+		OrderSliderPageModule,
+		ChatViewPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

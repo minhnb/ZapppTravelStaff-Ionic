@@ -124,7 +124,7 @@ export class ZapppHttp {
             return Observable.throw(error);
         }
         if (error.status == 401 && needAccessToken) {
-            return this.refreshToken(url, options, showSpinner);
+            return this.autoRefreshToken(url, options, showSpinner);
         }
         let errMsg;
         try {
@@ -161,16 +161,22 @@ export class ZapppHttp {
         return errMsg;
     }
 
-    refreshToken(url: string, options: RequestOptions, showSpinner: Boolean) {
-        let refreshToken = localStorage.getItem(AppConstant.REFRESH_TOKEN);
-        let method = RequestMethod.Post;
-        let refreshTokenOptions = this.getRequestOptionsByToken(method, refreshToken);
-        refreshTokenOptions.method = method;
-        let refreshTokenUrl = this.refreshTokenUrl;
-        refreshTokenOptions.body = JSON.stringify({});
+    autoRefreshToken(url: string, options: RequestOptions, showSpinner: Boolean) {
         if (showSpinner) {
             this._spinner.show();
         }
+        return this.refreshToken(() => {
+            return this.resendRequest(url, options);
+        });
+    }
+
+    refreshToken(callback?: () => any) {
+        let refreshToken = localStorage.getItem(AppConstant.REFRESH_TOKEN);
+        let method = RequestMethod.Post;
+        let refreshTokenOptions = this.getRequestOptionsByToken(method, refreshToken);
+        refreshTokenOptions.method = RequestMethod.Post;
+        let refreshTokenUrl = this.refreshTokenUrl;
+        refreshTokenOptions.body = JSON.stringify({});
         return this.http.request(refreshTokenUrl, refreshTokenOptions)
             .toPromise()
             .then((res: Response) => {
@@ -180,7 +186,9 @@ export class ZapppHttp {
                 } else {
                     return this.handleErrorRefreshToken(res);
                 }
-                return this.resendRequest(url, options);
+                if (callback) {
+                    return callback();
+                }
             })
             .catch(this.handleErrorRefreshToken.bind(this));
     }
