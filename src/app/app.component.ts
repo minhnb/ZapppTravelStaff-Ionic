@@ -183,7 +183,7 @@ export class MyApp extends BaseComponent {
 			return;
 		}
 		this.dataShare.setFCMToken(deviceToken);
-		if (!this.isLoggedIn()) {
+		if (!this.isLoggedIn() || !this.dataShare.userInfo) {
 			return;
 		}
 		this.userService.updateDeviceToken(deviceToken).subscribe(

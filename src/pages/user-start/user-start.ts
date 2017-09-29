@@ -34,6 +34,7 @@ export class UserStartPage extends BaseComponent {
     listTruck: Array<any> = [];
 	isLoadedState: boolean = false;
 	userId: string;
+	isFromLoginPage: boolean = false;
 
 	listRequest: Array<any> = [];
 	listUncompleteOrder: Array<any> = [];
@@ -51,6 +52,7 @@ export class UserStartPage extends BaseComponent {
 	constructor(private injector: Injector, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public zone: NgZone,
 		private staffService: StaffService, private collectionModeService: CollectionModeService, private userService: UserService) {
 		super(injector);
+		this.isFromLoginPage = this.navParams.data.isFromLoginPage;
 		this.subscribeZappperNewRequestEvent();
 		this.subscribeZappperRequestCanceledEvent();
 		this.subscribeAssignTruckEvent();
@@ -685,6 +687,7 @@ export class UserStartPage extends BaseComponent {
 				this.userService.saveUserRole(res.roles);
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
 					this.dataShare.setUserInfo(this.userInfoTransform(res));
+					if (!this.isFromLoginPage) this.updateDeviceToken();
 					this.saveLocalStaffState(res);
 					this.detectCurrentAssigmentModeByTruckInfo(res.truck_info);
 					this.isLoadedState = true;
@@ -730,5 +733,20 @@ export class UserStartPage extends BaseComponent {
 		let type = Number(truckInfo.assignment_type);
 		this.isAssignedCollection = type == AppConstant.ASSIGNMENT_MODE.COLLECTION;
 		this.isAssignedDelivery = type == AppConstant.ASSIGNMENT_MODE.DELIVERY;
+	}
+
+	updateDeviceToken() {
+		let deviceToken = this.dataShare.fcmToken;
+		if (!deviceToken) {
+			return;
+		}
+		this.userService.updateDeviceToken(deviceToken).subscribe(
+			res => {
+
+			},
+			err => {
+				// this.showError(err.message);
+			}
+		);
 	}
 }
