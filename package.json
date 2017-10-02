@@ -1,9 +1,8 @@
 {
     "name": "ZapppTravel-Staff-Ionic",
-    "version": "1.0",
-    "author": "Minh Nguyen - CVP",
-    "homepage": "http://cofoundervp.com/",
-    "private": true,
+    "version": "1.0.0",
+    "description": "This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.",
+    "main": "index.js",
     "scripts": {
         "clean": "ionic-app-scripts clean",
         "build": "ionic-app-scripts build",
@@ -11,6 +10,16 @@
         "ionic:build": "ionic-app-scripts build",
         "ionic:serve": "ionic-app-scripts serve"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ZapppWorld/ZapppTravelStaff-Ionic.git"
+    },
+    "author": "Minh Nguyen - CVP",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ZapppWorld/ZapppTravelStaff-Ionic/issues"
+    },
+    "homepage": "https://github.com/ZapppWorld/ZapppTravelStaff-Ionic#readme",
     "dependencies": {
         "@angular/common": "4.1.2",
         "@angular/compiler": "4.1.2",
@@ -52,34 +61,34 @@
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-geolocation": "^2.4.3",
         "cordova-plugin-google-analytics": "^1.8.3",
-        "cordova-plugin-googlemaps": "^1.4.0",
+        "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps",
         "cordova-plugin-googlemaps-sdk": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps-sdk.git",
         "cordova-plugin-http": "^1.2.0",
         "cordova-plugin-spinner-dialog": "^1.3.1",
         "cordova-plugin-splashscreen": "^4.0.3",
-        "cordova-plugin-statusbar": "^2.2.3",
+        "cordova-plugin-statusbar": "git+https://github.com/apache/cordova-plugin-statusbar.git",
         "cordova-plugin-whitelist": "^1.3.2",
         "cordova.plugins.diagnostic": "^3.6.5",
         "decode-google-map-polyline": "^1.0.1",
         "google-maps": "^3.2.1",
-        "ionic-angular": "3.3.0",
+        "i": "^0.3.5",
+        "ionic-angular": "^3.6.1-201709221952",
         "ionic-plugin-keyboard": "^2.2.1",
         "ionicons": "3.0.0",
         "moment": "^2.18.1",
-        "mx.ferreyra.callnumber": "~0.0.2",
+        "npm": "^5.4.2",
         "phonegap-plugin-barcodescanner": "^6.0.6",
         "rxjs": "5.1.1",
+        "socket.io-client": "^2.0.3",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.10"
+        "zone.js": "0.8.10",
+        "mx.ferreyra.callnumber": "~0.0.2"
     },
     "devDependencies": {
         "@ionic/app-scripts": "1.3.12",
-        "@ionic/cli-plugin-cordova": "1.6.2",
-        "@ionic/cli-plugin-ionic-angular": "1.4.1",
-        "ionic": "3.7.0",
+        "ionic": "3.12.0",
         "typescript": "2.3.3"
     },
-    "description": "Truck app (Driver app) for Zappp Travel - with Ionic Framework",
     "cordova": {
         "plugins": {
             "cordova-plugin-console": {},
@@ -88,12 +97,6 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-googlemaps": {
-                "API_KEY_FOR_ANDROID": "AIzaSyCD51ltCycXFAHOeypskYjb90aHv4ZkY_U",
-                "API_KEY_FOR_IOS": "AIzaSyCd7pPrjd1RTdB8REqo-aN5aOMzWPPHby0",
-                "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
-                "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map"
-            },
             "cordova-plugin-geolocation": {},
             "cordova-plugin-http": {},
             "cordova-plugin-spinner-dialog": {},
@@ -105,6 +108,12 @@
             "cordova-plugin-google-analytics": {},
             "phonegap-plugin-barcodescanner": {
                 "CAMERA_USAGE_DESCRIPTION": " "
+            },
+            "cordova-plugin-googlemaps": {
+                "API_KEY_FOR_ANDROID": "AIzaSyDkf4O5N67eYGUdT7Cip9uTc8LWohQ_2Lk",
+                "API_KEY_FOR_IOS": "AIzaSyAhDw5MOfNVEpcLWULEFQO6sNMIF7t9ztQ",
+                "LOCATION_WHEN_IN_USE_DESCRIPTION": "Show your location on the map",
+                "LOCATION_ALWAYS_USAGE_DESCRIPTION": "Trace your location on the map"
             }
         },
         "platforms": [

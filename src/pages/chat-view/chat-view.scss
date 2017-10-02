@@ -1,0 +1,63 @@
+page-chat-view {
+  .chat-view {
+    padding: 10px;
+    overflow-y: auto;
+
+    .message {
+      width: calc(100% - 50px);
+      margin-top: 10px;
+      color: white;
+      text-align: left;
+
+      .message-container {
+        display: inline-block;
+        max-width: 100%;
+        padding: 10px;
+        background: #ababab;
+        border-radius: 10px;
+        text-align: left;
+
+        .partner-name {
+          font-size: 10px;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+      }
+
+      &.me {
+        margin-left: 50px;
+        text-align: right;
+
+        .message-container {
+          background: #488aff;
+        }
+      }
+    }
+  }
+
+  .bottom-input {
+    padding: 10px 60px 10px 10px;
+    position: relative;
+
+    ion-textarea {
+      border: solid 1px #ccc;
+      height: 40px;
+      padding: 5px;
+
+      textarea.text-input-ios {
+        margin: 0;
+      }
+    }
+
+    button.send {
+      position: absolute;
+      font-size: 13px;
+      margin: 0;
+      padding-left: 7px;
+      padding-right: 7px;
+      right: 10px;
+      bottom: 10px;
+      height: 40px;
+    }
+  }
+}

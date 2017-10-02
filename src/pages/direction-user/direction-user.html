@@ -1,18 +1,21 @@
-<ion-content>
+<ion-content class="no-pull">
   <div #map id="map" data-tap-disabled="true" style="height:100%;">
     <button ion-button class="above-button top-left" color="danger" (click)="showCancelOrderView()">{{ 'BUTTON_CANCEL' | translate }}</button>
-    <button ion-button class="above-button bottom-left" (click)="callCustomer()" [disabled]="!customer || !customer.phoneNumber">{{ 'BUTTON_CALL' | translate }}</button>
+    <button class="transparent-button left-bottom call" (click)="callCustomer()" [disabled]="!customer || !customer.phoneNumber">
+          <ion-icon name="ios-call"></ion-icon>
+        </button>
+    <button class="transparent-button left-bottom chat" (click)="goToChatViewPage()">
+              <ion-icon name="ios-chatboxes"></ion-icon>
+            </button>
     <button ion-button class="above-button bottom-right" (click)="scanOrderQRCode()">{{ 'BUTTON_PICKUP' | translate }}</button>
     <div id="cancel-order-view" padding [hidden]="!isShowingCancelOrderView">
-      <button class="transparent-button dismiss-view-button" (click)="hideCancelOrderView()" *ngIf="!isStartedDelivering">
+      <button class="transparent-button dismiss-view-button" (click)="hideCancelOrderView()">
             <ion-icon name="close"></ion-icon>
           </button>
 
-      <form>
-        <ion-item class="middle-input">
-          <ion-textarea placeholder="{{ 'CANCELLATION_REASON' | translate }}" [(ngModel)]="cancellationReason" [ngModelOptions]="{standalone: true}"></ion-textarea>
-        </ion-item>
-      </form>
+      <ion-item class="middle-input">
+        <ion-textarea placeholder="{{ 'CANCELLATION_REASON' | translate }}" [(ngModel)]="cancellationReason"></ion-textarea>
+      </ion-item>
       <div class="button-bottom-full">
         <button ion-button full type="submit" [disabled]="!trimText(cancellationReason)" (click)="cancelOrder()">{{ 'BUTTON_SAVE' | translate }}</button>
       </div>

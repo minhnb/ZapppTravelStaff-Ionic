@@ -37,6 +37,9 @@ export class BaseComponent {
 	hasGoogleMapNative: boolean = false;
 	lastWatchPosition: number = 0;
 	isDestroyed: boolean = false;
+	needSubcribeKeyboardEvent: boolean = false;
+	keyboardOnShowEvent: any;
+	keyboardOnHideEvent: any;
 
 	constructor(injector: Injector) {
 		this.alertController = injector.get(AlertController);
@@ -54,6 +57,7 @@ export class BaseComponent {
 
 		this.subcribeEventAppIsResuming();
 		this.dataShare.removeBackButtonAction();
+		this.dataShare.hasGoogleMapNative = this.hasGoogleMapNative;
 		this.googleAnalyticsTrackCurrentView();
 	}
 
@@ -125,11 +129,15 @@ export class BaseComponent {
 	}
 
 	disableMapClickable() {
-
+		if (this.dataShare.googleMapNative) {
+			this.dataShare.googleMapNative.setClickable(false);
+		}
 	}
 
 	enableMapClickable() {
-
+		if (this.dataShare.googleMapNative) {
+			this.dataShare.googleMapNative.setClickable(true);
+		}
 	}
 
 	handleMapClickableByCountingShowingAlert() {
@@ -165,11 +173,14 @@ export class BaseComponent {
 		if (this.isDestroyed) {
 			return;
 		}
-		if (this.hasGoogleMapNative) this.handleMapClickable(buttons);
+		if (this.dataShare.hasGoogleMapNative) {
+			this.handleMapClickable(buttons);
+		}
         let alert = this.alertController.create({
 			title: title,
 			subTitle: subTitle,
-			buttons: buttons
+			buttons: buttons,
+			enableBackdropDismiss: false
 		});
 		alert.present();
     }
@@ -243,8 +254,8 @@ export class BaseComponent {
 		toast.present();
     }
 
-	showBottomCustomToast(message: string, buttonCallback?: () => void) {
-		this.presentCustomToast(message, 0, 'bottom', true, this.translate.instant('BUTTON_OK'), false, buttonCallback);
+	showBottomCustomToast(message: string, buttonCallback?: () => void, buttonTitle?: string) {
+		this.presentCustomToast(message, 0, 'bottom', true, buttonTitle || this.translate.instant('BUTTON_OK'), false, buttonCallback);
 	}
 
 	confirmBeforeLeaveView(message?: string, title?: string): Promise<{}> {
@@ -299,7 +310,7 @@ export class BaseComponent {
 				return codeSplitedArray[1];
 			}
         }
-        return code;
+        return '';
     }
 
     getOrderIdFromOrderCode(code: string): string {
@@ -447,6 +458,34 @@ export class BaseComponent {
 		this.keyboard.close();
 	}
 
+	handleEventKeyboardShow(data: any) {
+
+	}
+
+	handleEventKeyboardHide(data: any) {
+
+	}
+
+	subcribeKeyboardEvent() {
+		if (!this.needSubcribeKeyboardEvent) {
+			return;
+		}
+		this.keyboardOnShowEvent = this.keyboard.onKeyboardShow().subscribe((data: any) => {
+			this.handleEventKeyboardShow(data);
+		});
+		this.keyboardOnHideEvent = this.keyboard.onKeyboardHide().subscribe((data: any) => {
+			this.handleEventKeyboardHide(data);
+		});
+	}
+
+	unsubscribeKeyboardEvent() {
+		if (!this.needSubcribeKeyboardEvent) {
+			return;
+		}
+		this.keyboardOnShowEvent.unsubscribe();
+		this.keyboardOnHideEvent.unsubscribe();
+	}
+
 	listLocalEvent() {
 		return Object.keys(AppConstant.EVENT_TOPIC).map((item) => {
 			let topic = AppConstant.EVENT_TOPIC[item];
@@ -475,11 +514,11 @@ export class BaseComponent {
 
 	subcribeEventAppIsResuming() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
-			this.handleEventAppIsResuming();
+			this.handleEventAppIsResuming(data);
 		});
 	}
 
-	handleEventAppIsResuming() {
+	handleEventAppIsResuming(data?: any) {
 
 	}
 

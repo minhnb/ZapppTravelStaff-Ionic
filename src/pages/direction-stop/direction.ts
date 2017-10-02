@@ -17,6 +17,7 @@ export class DirectionPage extends BaseComponent {
 
 	directionsService: any;
 	map: GoogleMap;
+	hasGoogleMapNative: boolean = true;
 	destinationLocation: LatLng = null;
 	polyLines: Array<any> = [];
 	mapId: string = 'map';
@@ -34,7 +35,6 @@ export class DirectionPage extends BaseComponent {
 
 	constructor(public injector: Injector, public navCtrl: NavController, public navParams: NavParams, public googleMaps: GoogleMaps, public geolocation: Geolocation) {
 		super(injector);
-		this.hasGoogleMapNative = true;
 		if (this.navParams.data.long && this.navParams.data.lat) {
 			this.destinationLocation = new LatLng(Number(this.navParams.data.lat), Number(this.navParams.data.long));
 		}
@@ -53,6 +53,7 @@ export class DirectionPage extends BaseComponent {
 	}
 
 	ionViewWillEnter() {
+		this.dataShare.hasGoogleMapNative = this.hasGoogleMapNative;
 		this.subcribeWatchPosition();
 	}
 
@@ -64,6 +65,8 @@ export class DirectionPage extends BaseComponent {
 		super.ionViewWillUnload();
 		this.destinationLocation = null;
 		this.removeAllMarkersAndPolyline();
+		this.dataShare.hasGoogleMapNative = false;
+		this.dataShare.googleMapNative = null;
 	}
 
 	afterLoadMapAndCurrentLocation(currentLocation: LatLng) {
@@ -97,29 +100,34 @@ export class DirectionPage extends BaseComponent {
 
 		this.map = this.googleMaps.create(element);
 
-		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
-		let watchOption = geolocationOptions;
-		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
 		this.map.one(GoogleMapsEvent.MAP_READY).then(
 			() => {
 				this.log('Map is ready!');
+				this.dataShare.googleMapNative = this.map;
 				this.enableMapClickable();
-				this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
-					let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-					if (this.autoMoveCamera) {
-						this.moveCamera(currentLocation);
-					}
-					this.afterLoadMapAndCurrentLocation(currentLocation);
-					if (!this.watchPositionObserverble) {
-						this.initWatchPosition(watchTimeout, watchOption);
-					}
-				}).catch((error) => {
-					this.log('Error getting location');
-					this.log(error.message);
-					this.showLocationServiceProblemConfirmation();
-				});
+				this.afterLoadMap();
 			}
 		);
+	}
+
+	afterLoadMap() {
+		let geolocationOptions: GeolocationOptions = this.initGeolocationOption();
+		let watchOption = geolocationOptions;
+		let watchTimeout = AppConstant.WATCH_POSITION_INTERVAL;
+		this.geolocation.getCurrentPosition(geolocationOptions).then((resp) => {
+			let currentLocation: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
+			if (this.autoMoveCamera) {
+				this.moveCamera(currentLocation);
+			}
+			this.afterLoadMapAndCurrentLocation(currentLocation);
+			if (!this.watchPositionObserverble) {
+				this.initWatchPosition(watchTimeout, watchOption);
+			}
+		}).catch((error) => {
+			this.log('Error getting location');
+			this.log(error.message);
+			this.showLocationServiceProblemConfirmation();
+		});
 	}
 
 	moveCamera(location: LatLng) {

@@ -61,8 +61,12 @@ export class MyApp extends BaseComponent {
 			}
 
 			this.enableBackgroundMode();
+			this.keyboard.disableScroll(true);
 			this.registerBackButtonAction();
 			this.startGoogleAnalytic();
+		});
+		this.platform.pause.subscribe(() => {
+			this.announceAppIsPause();
 		});
 		this.platform.resume.subscribe(() => {
 			this.announceAppIsResuming();
@@ -138,8 +142,16 @@ export class MyApp extends BaseComponent {
 		this.events.publish(AppConstant.EVENT_TOPIC.APP_RESUMING);
 	}
 
+	announceAppIsPause() {
+		this.log('announceAppIsPausing');
+		this.events.publish(AppConstant.EVENT_TOPIC.APP_PAUSING);
+	}
+
 	getServerName() {
-		this.serverName = 'production';
+		let urlWithoutHttp = AppConfig.API_URL.split('://')[1];
+		if (urlWithoutHttp) {
+			this.serverName = urlWithoutHttp.split('.')[0];
+		}
 	}
 
 	defineLangs() {
@@ -171,7 +183,7 @@ export class MyApp extends BaseComponent {
 			return;
 		}
 		this.dataShare.setFCMToken(deviceToken);
-		if (!this.isLoggedIn()) {
+		if (!this.isLoggedIn() || !this.dataShare.userInfo) {
 			return;
 		}
 		this.userService.updateDeviceToken(deviceToken).subscribe(
