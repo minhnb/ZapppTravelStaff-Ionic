@@ -148,10 +148,7 @@ export class MyApp extends BaseComponent {
 	}
 
 	getServerName() {
-		let urlWithoutHttp = AppConfig.API_URL.split('://')[1];
-		if (urlWithoutHttp) {
-			this.serverName = urlWithoutHttp.split('.')[0];
-		}
+		this.serverName = 'production';
 	}
 
 	defineLangs() {
