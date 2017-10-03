@@ -6,8 +6,14 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="https://api.zappp.com/*" />
+    <allow-navigation href="https://dev.api.zappp.com/*" />
+    <allow-navigation href="https://stage.api.zappp.com/*" />
     <allow-navigation href="https://zappp.com/*" />
+    <allow-navigation href="https://dev.zappp.com/*" />
+    <allow-navigation href="https://stage.zappp.com/*" />
     <allow-navigation href="http://chat.api.zappp.com/*" />
+    <allow-navigation href="http://dev.chat.api.zappp.com/*" />
+    <allow-navigation href="http://stage.chat.api.zappp.com/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -95,8 +101,8 @@
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
     <plugin name="cordova-plugin-googlemaps" spec="git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps">
-        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyCD51ltCycXFAHOeypskYjb90aHv4ZkY_U" />
-        <variable name="API_KEY_FOR_IOS" value="AIzaSyCd7pPrjd1RTdB8REqo-aN5aOMzWPPHby0" />
+        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDkf4O5N67eYGUdT7Cip9uTc8LWohQ_2Lk" />
+        <variable name="API_KEY_FOR_IOS" value="AIzaSyAhDw5MOfNVEpcLWULEFQO6sNMIF7t9ztQ" />
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Show your location on the map" />
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
