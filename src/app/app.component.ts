@@ -317,7 +317,7 @@ export class MyApp extends BaseComponent {
 		let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + data.type;
 		this.events.publish(topic, data);
 		if (!this.notificationTypeIsInList(topic)) {
-			this.showInfo(data.body, data.title);
+			// this.showInfo(data.body, data.title);
 		}
 	}
 
