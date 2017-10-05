@@ -3,6 +3,7 @@ page-take-picture {
     left: 0;
     right: auto;
   }
+
   .slider-content {
     height: calc(100% - 60px);
 
@@ -10,6 +11,7 @@ page-take-picture {
       .slide-zoom {
         .image-item {
           height: 100%;
+
           button.dismiss-view-button {
             right: -10px;
             left: auto;
@@ -25,8 +27,16 @@ page-take-picture {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    max-width: calc(100vw - 30px);
+    width: calc(100vw - 30px);
     max-height: calc(100vh - 160px);
+
+    .qr-code {
+      width: 100%;
+    }
+
+    .text {
+      margin-top: 20px;
+    }
   }
 
   .middle-camera {
