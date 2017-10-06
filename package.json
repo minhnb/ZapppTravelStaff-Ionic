@@ -47,6 +47,7 @@
         "@ionic/storage": "2.0.1",
         "@ngx-translate/core": "^7.0.0",
         "@ngx-translate/http-loader": "^0.1.0",
+        "angular2-qrcode": "^2.0.1",
         "angular2-text-mask": "^8.0.2",
         "call-number": "^1.0.1",
         "cordova-android": "^6.2.3",

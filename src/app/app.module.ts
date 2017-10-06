@@ -49,6 +49,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TextMaskModule } from 'angular2-text-mask';
+import { QRCodeModule } from 'angular2-qrcode';
 
 import { Http, HttpModule } from '@angular/http';
 
@@ -73,6 +74,7 @@ import { DataShare } from './helper/data.share';
 			}
 		}),
 		TextMaskModule,
+		QRCodeModule,
 		SchedulePageModule,
 		DirectionStopPageModule,
 		UserStartPageModule,

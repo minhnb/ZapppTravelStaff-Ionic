@@ -3,11 +3,15 @@
       <ion-icon name="ios-arrow-back"></ion-icon>
     </button>
   <div class="middle-center middle-camera" *ngIf="!listImage.length">
-    <button class="transparent-button" (click)="takePicture()" [disabled]="!userAlreadyPaid && !isDeliveryMode">
+    <button class="transparent-button" (click)="takePicture()" [hidden]="isWeChatPay" [disabled]="!userAlreadyPaid && !isDeliveryMode">
             <ion-icon name="camera"></ion-icon>
           </button>
-    <div *ngIf="userAlreadyPaid || isDeliveryMode">{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
-    <div *ngIf="!userAlreadyPaid && !isDeliveryMode">{{ 'WAIT_FOR_USER_TO_COMPLETE_PAYMENT' | translate }}</div>
+    <div class="qr-code" [hidden]="userAlreadyPaid || isDeliveryMode || !isWeChatPay">
+      <qr-code [value]="weChatQRData" [size]="260"></qr-code>
+      <div class="text">{{ 'SHOW_WE_CHAT_QR_TO_CUSTOMER' | translate }}</div>
+    </div>
+    <div class="text" *ngIf="userAlreadyPaid || isDeliveryMode">{{ 'TAKE_PICTURE_AS_PROOF' | translate }}</div>
+    <div class="text" *ngIf="!userAlreadyPaid && !isDeliveryMode && !isWeChatPay">{{ 'WAIT_FOR_USER_TO_COMPLETE_PAYMENT' | translate }}</div>
   </div>
   <div class="slider-content">
     <ion-slides pager *ngIf="listImage.length">

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { QRCodeModule } from 'angular2-qrcode';
 import { TakePicturePage } from './take-picture';
 
 @NgModule({
@@ -9,7 +10,8 @@ import { TakePicturePage } from './take-picture';
 	],
 	imports: [
 		IonicPageModule.forChild(TakePicturePage),
-		TranslateModule
+		TranslateModule,
+		QRCodeModule
 	],
 	exports: [
 		TakePicturePage

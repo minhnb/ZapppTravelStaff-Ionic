@@ -22,6 +22,8 @@ export class TakePicturePage extends BaseComponent {
 	isDeliveryMode: boolean = false;
 	isFromCustomerInfoPage: boolean = false;
 	userAlreadyPaid: boolean = false;
+	isWeChatPay: boolean = false;
+	weChatQRData: string;
 
 	@ViewChild(Slides) slides: Slides;
 
@@ -33,6 +35,7 @@ export class TakePicturePage extends BaseComponent {
 		this.isDeliveryMode = this.navParams.data.isDeliveryMode;
 		this.isFromCustomerInfoPage = this.navParams.data.isFromCustomerInfoPage;
 		this.subscribeEventUserCompletedPickupCharge();
+		this.subscribeEventUserChargeByWeChat();
 	}
 
 	ionViewDidLoad() {
@@ -169,6 +172,26 @@ export class TakePicturePage extends BaseComponent {
 			});
 	}
 
+	subscribeEventUserChargeByWeChat() {
+		if (this.isDeliveryMode) {
+			return;
+		}
+		this.events.subscribe(AppConstant.NOTIFICATION_TYPE.PREFIX + AppConstant.NOTIFICATION_TYPE.USER_CHARGE_BY_WE_CHAT, (data: any) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			if (!this.isActiveCurrentPage(this.navCtrl)) {
+				return;
+			}
+			this.handleEventUserChargeByWeChat(data);
+		});
+	}
+
+	handleEventUserChargeByWeChat(data: any) {
+		this.isWeChatPay = true;
+		this.weChatQRData = data.wechat_code;
+	}
+
 	uploadPhoto(imageUrl: string, callback?: (uploadUrl: string) => void) {
 		this.imageToBase64(imageUrl, base64Data => {
 			this.staffService.uploadPhoto(base64Data).subscribe(
@@ -289,7 +312,11 @@ export class TakePicturePage extends BaseComponent {
 		this.collectionModeService.getOrderPaymentStatus(orderId).subscribe(
 			res => {
 				if (!res || res.payment_status != AppConstant.PAYMENT_STATUS.SUCCESS) {
-					this.showInfo(this.translate.instant('ERROR_ORDER_ORDER_PAYMENT_STATUS_NOT_PAID'));
+					this.getOrderPaymentWeChatCode(orderId, () => {
+						if (this.isWeChatPay) {
+							this.showInfo(this.translate.instant('ERROR_ORDER_ORDER_PAYMENT_STATUS_NOT_PAID'));
+						}
+					});
 					return;
 				}
 				if (callback) {
@@ -298,6 +325,23 @@ export class TakePicturePage extends BaseComponent {
 			},
 			err => {
 				this.showError(err.message);
+			}
+		);
+	}
+
+	getOrderPaymentWeChatCode(orderId: string, callback?: () => void) {
+		this.collectionModeService.getOrderPaymentWeChatCode(orderId).subscribe(
+			res => {
+				if (callback) {
+					callback();
+				}
+				if (res.wechat_payment) {
+					this.isWeChatPay = true;
+					this.weChatQRData = res.code;
+				}
+			},
+			err => {
+
 			}
 		);
 	}
