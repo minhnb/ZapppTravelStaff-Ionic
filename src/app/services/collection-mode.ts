@@ -127,6 +127,10 @@ export class CollectionModeService {
 		return this.zapppHttp.get(this.orderUrl + '/status/order_id/' + orderId);
 	}
 
+	getOrderPaymentWeChatCode(orderId: string) {
+		return this.zapppHttp.get(this.orderUrl + '/wechat_code/?order_id=' + orderId);
+	}
+
 	cancelOrder(orderId: string, reason: string) {
 		let params = {
 			id: orderId,
