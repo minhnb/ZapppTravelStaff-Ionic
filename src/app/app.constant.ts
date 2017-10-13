@@ -63,7 +63,9 @@ export const AppConstant = {
         ASSIGN_TRUCK_TRANSFER: 'assign_truck_transfer',
         USER_COMPLETED_PICKUP_CHARGE: 'user_completed_pickup_charge',
         USER_CHARGE_BY_WE_CHAT: 'user_will_charge_by_wechat',
-        LOGGED_IN_FROM_ANOTHER_DEVICE: 'your_account_logged_in_from_another_device'
+        LOGGED_IN_FROM_ANOTHER_DEVICE: 'your_account_logged_in_from_another_device',
+        SHOW_FREEZING_MESSAGE: 'send_broadcast',
+        HIDE_FREEZING_MESSAGE: 'stop_broadcast'
     },
     BACKGROUND_NOTIFICATION_TYPE: {
         PREFIX: 'background-notification:',
