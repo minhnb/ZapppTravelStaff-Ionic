@@ -24,6 +24,28 @@ span.version-info {
   }
 }
 
+.message-bar {
+  position: absolute;
+  z-index: 3000;
+  border: solid 2px #d49500;
+  background: #ffe6cc;
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+
+  .left-image {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 40px;
+    transform: translate(0, -50%);
+  }
+
+  .content {
+    padding: 10px 10px 10px 60px;
+  }
+}
+
 ion-navbar,
 ion-toolbar {
   .toolbar-background {

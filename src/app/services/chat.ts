@@ -7,6 +7,8 @@ import { AppConfig } from '../app.config';
 import { AppConstant } from '../app.constant';
 import { DataShare } from '../helper/data.share';
 
+import { Base64 } from 'js-base64';
+
 import * as io from 'socket.io-client';
 
 @Injectable()
@@ -86,7 +88,7 @@ export class ChatService {
 		}
 		let params: any = this.createParams();
 		params.room = room;
-		params.msg = message;
+		params.msg = this.encodeMessage(message);
 		this.socketEmit(AppConstant.SOCKET_EVENT.SEND_MESSAGE, params);
 	}
 
@@ -130,9 +132,9 @@ export class ChatService {
 		if (this.dataShare.currentChatRoom != room) {
 			return;
 		}
-		let message = data.msg;
+		let message = this.decodeMessage(data.msg);
 		let chatMessage = {
-			content: data.msg,
+			content: message,
 			isReceived: this.dataShare.userInfo.id != data.id
 		}
 		this.dataShare.chatContent.push(chatMessage);
@@ -166,5 +168,13 @@ export class ChatService {
 		if (AppConfig.ENV != AppConstant.PRODUCTION_ENVIRONMENT) {
             console.log(JSON.stringify(content));
         }
+	}
+
+	encodeMessage(message: string): string {
+		return Base64.encode(message);
+	}
+
+	decodeMessage(message: string): string {
+		return Base64.decode(message);
 	}
 }

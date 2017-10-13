@@ -55,12 +55,14 @@ import { Http, HttpModule } from '@angular/http';
 
 import { ZapppHttp } from './services/zapppHttp';
 import { DataShare } from './helper/data.share';
+import { Draggable } from './helper/draggable.directive';
 
 @NgModule({
 	declarations: [
 		MyApp,
 		ListPage,
-		LoginPage
+		LoginPage,
+		Draggable
 	],
 	imports: [
 		BrowserModule,
