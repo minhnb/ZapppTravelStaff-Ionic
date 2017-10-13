@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, NgZone } from '@angular/core';
+import { Component, ViewChild, Injector, NgZone, ElementRef } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,7 +22,9 @@ import { BackgroundModeConfiguration } from '@ionic-native/background-mode';
 	providers: [UserService, StaffService]
 })
 export class MyApp extends BaseComponent {
+
 	@ViewChild(Nav) nav: Nav;
+	@ViewChild('messageBar') messageBar: ElementRef;
 
 	deviceHeight: number = 0;
 	rootPage: any = LoginPage;
@@ -30,6 +32,8 @@ export class MyApp extends BaseComponent {
 	watchPositionSubscription: any;
 	watchPositionObserverble: any;
 	serverName: string;
+	showMessageBar: boolean = false;
+	messageBarContent: string;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
 		private fcm: FCM, public zone: NgZone, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation) {
@@ -310,14 +314,19 @@ export class MyApp extends BaseComponent {
 	}
 
 	handleZapppNotification(data: any) {
-		if (data.type == AppConstant.NOTIFICATION_TYPE.LOGGED_IN_FROM_ANOTHER_DEVICE) {
-			this.handleNotificationUserLoginFromAnotherDevice(data);
-			return;
-		}
-		let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + data.type;
-		this.events.publish(topic, data);
-		if (!this.notificationTypeIsInList(topic)) {
-			// this.showInfo(data.body, data.title);
+		switch (data.type) {
+			case AppConstant.NOTIFICATION_TYPE.LOGGED_IN_FROM_ANOTHER_DEVICE:
+				this.handleNotificationUserLoginFromAnotherDevice(data);
+				return;
+			case AppConstant.NOTIFICATION_TYPE.SHOW_FREEZING_MESSAGE:
+				this.handleNotificationShowFreezingMessage(data);
+				return;
+			case AppConstant.NOTIFICATION_TYPE.HIDE_FREEZING_MESSAGE:
+				this.handleNotificationHideFreezingMessage(data);
+				return;
+			default:
+				let topic = AppConstant.NOTIFICATION_TYPE.PREFIX + data.type;
+				this.events.publish(topic, data);
 		}
 	}
 
@@ -326,6 +335,20 @@ export class MyApp extends BaseComponent {
 		this.userService.handleLogout(data);
 		this.zone.run(() => {
 			this.goBackToLoginPage();
+		});
+	}
+
+	handleNotificationShowFreezingMessage(data: any) {
+		this.zone.run(() => {
+			this.messageBarContent = data.content;
+			this.messageBar.nativeElement.style.top = 0;
+			this.showMessageBar = true;
+		});
+	}
+
+	handleNotificationHideFreezingMessage(data: any) {
+		this.zone.run(() => {
+			this.showMessageBar = false;
 		});
 	}
 
