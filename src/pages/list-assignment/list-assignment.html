@@ -7,7 +7,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding class="has-header">
   <ion-list>
     <ion-item class="assignment-item no-padding-left" no-lines *ngFor="let item of listAssignment" [ngClass]="item.modeClass">
       <div class="task" *ngIf="!item.in">

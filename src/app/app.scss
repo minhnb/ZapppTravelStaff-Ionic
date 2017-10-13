@@ -71,9 +71,17 @@ ion-navbar {
   }
 }
 
-ion-content.no-pull {
-  .scroll-content {
-    overflow-y: hidden;
+ion-content {
+  &.has-header {
+    .scroll-content {
+      margin-top: 44px !important;
+    }
+  }
+
+  &.no-pull {
+    .scroll-content {
+      overflow-y: hidden;
+    }
   }
 }
 
