@@ -56,10 +56,18 @@ export class ChatService {
 		this.dataShare.socket.emit(key, params);
 	}
 
-	handleTokenExpired(res: any) {
-		if (res.status && res.status.code > 0) {
+	handleJoinRoomEvent(res: any) {
+		if (!res.status || res.status.code < 0) {
+			this.handleTokenExpired(res);
 			return;
 		}
+		if (!this.dataShare.socketOnConnection) {
+			this.addWarningMessage(this.translate.instant('WARNING_CHAT_CONNECTED'), true);
+		}
+		this.dataShare.socketOnConnection = true;
+	}
+
+	handleTokenExpired(res: any) {
 		this.zapppHttp.refreshToken(() => {
 			let accessToken = localStorage.getItem(AppConstant.ACCESS_TOKEN);
 			this.dataShare.lastEmit.params.authorization = accessToken;
@@ -91,6 +99,9 @@ export class ChatService {
 		let params: any = this.createParams();
 		params.room = room;
 		params.msg = this.encodeMessage(message);
+		if (!this.dataShare.socketOnConnection) {
+			this.joinRoom(room);
+		}
 		this.socketEmit(AppConstant.SOCKET_EVENT.SEND_MESSAGE, params);
 	}
 
@@ -121,7 +132,7 @@ export class ChatService {
 		this.dataShare.socket.on(AppConstant.SOCKET_EVENT.SUBSCRIBE_CALLBACK, res => {
 			this.log(AppConstant.SOCKET_EVENT.SUBSCRIBE_CALLBACK);
 			this.log(res);
-			this.handleTokenExpired(res);
+			this.handleJoinRoomEvent(res);
 		});
 		this.dataShare.socket.on(AppConstant.SOCKET_EVENT.SEND_MESSAGE, res => {
 			this.log(AppConstant.SOCKET_EVENT.SEND_MESSAGE);
@@ -145,10 +156,6 @@ export class ChatService {
 	}
 
 	socketHandleEventConnect() {
-		if (!this.dataShare.socketOnConnection) {
-			this.addWarningMessage(this.translate.instant('WARNING_CHAT_CONNECTED'), true);
-		}
-		this.dataShare.socketOnConnection = true;
 		this.announceChatConnect();
 	}
 
