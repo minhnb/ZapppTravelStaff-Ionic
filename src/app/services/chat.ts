@@ -103,6 +103,11 @@ export class ChatService {
 			this.log(res);
 			this.socketHandleEventConnect();
 		});
+		this.dataShare.socket.on(AppConstant.SOCKET_EVENT.RECONNECT, res => {
+			this.log(AppConstant.SOCKET_EVENT.RECONNECT);
+			this.log(res);
+			this.socketHandleEventConnect();
+		});
 		this.dataShare.socket.on(AppConstant.SOCKET_EVENT.DISCONNECT, res => {
 			this.log(AppConstant.SOCKET_EVENT.DISCONNECT);
 			this.log(res);

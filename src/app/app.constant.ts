@@ -118,6 +118,7 @@ export const AppConstant = {
         SUBSCRIBE_CALLBACK: 'subscribe_callback',
         DISCONNECT: 'disconnect',
         CONNECT_TIMEOUT: 'connect_timeout',
-        CONNECT: 'connect'
+        CONNECT: 'connect',
+        RECONNECT: 'reconnect'
     }
 };
