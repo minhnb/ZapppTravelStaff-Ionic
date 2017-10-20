@@ -77,6 +77,13 @@ export class ChatViewPage extends BaseComponent {
         this.chatView.nativeElement.scrollTop = this.chatView.nativeElement.scrollHeight;
     }
 
+	getMessageClass(item: any): string {
+		if (item.isWarning) {
+			return item.isOnline ? 'online' : 'offline';
+		}
+		return item.isReceived ? '' : 'me';
+	}
+
     subcribeChatEvent() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.CHAT_INCOMING_MESSAGE, (data) => {
 			if (this.isDestroyed) {

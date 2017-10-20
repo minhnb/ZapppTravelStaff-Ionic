@@ -7,6 +7,7 @@ import { AppConfig } from '../app.config';
 import { AppConstant } from '../app.constant';
 import { DataShare } from '../helper/data.share';
 
+import { TranslateService } from '@ngx-translate/core';
 import { Base64 } from 'js-base64';
 
 import * as io from 'socket.io-client';
@@ -14,7 +15,7 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class ChatService {
 
-	constructor(private zapppHttp: ZapppHttp, private dataShare: DataShare, private events: Events) { }
+	constructor(private zapppHttp: ZapppHttp, private dataShare: DataShare, private events: Events, private translate: TranslateService) { }
 
 	socketConnect() {
 		if (!this.dataShare.socket) {
@@ -22,6 +23,7 @@ export class ChatService {
 			this.dataShare.socket = io(AppConfig.SOCKET_IO_URL);
 			this.initSocketHandler();
 			this.dataShare.needReconnectSocket = true;
+			this.dataShare.socketOnConnection = true;
 		}
 	}
 
@@ -133,23 +135,44 @@ export class ChatService {
 			return;
 		}
 		let message = this.decodeMessage(data.msg);
-		let chatMessage = {
-			content: message,
-			isReceived: this.dataShare.userInfo.id != data.id
-		}
-		this.dataShare.chatContent.push(chatMessage);
+		this.addChatMessage(message, this.dataShare.userInfo.id != data.id);
 		this.announceIncomingMessage();
 	}
 
 	socketHandleEventConnect() {
+		if (!this.dataShare.socketOnConnection) {
+			this.addWarningMessage(this.translate.instant('WARNING_CHAT_CONNECTED'), true);
+		}
+		this.dataShare.socketOnConnection = true;
 		this.announceChatConnect();
 	}
 
 	socketHandleEventDisconnect() {
+		if (this.dataShare.needReconnectSocket && this.dataShare.socketOnConnection) {
+			this.addWarningMessage(this.translate.instant('WARNING_CHAT_DISCONNECT'), false);
+		}
+		this.dataShare.socketOnConnection = false;
 		if (!this.dataShare.needReconnectSocket) {
 			return;
 		}
 		this.announceChatDisconect();
+	}
+
+	addChatMessage(content: string, isReceived: boolean) {
+		let chatMessage = {
+			content: content,
+			isReceived: isReceived
+		}
+		this.dataShare.chatContent.push(chatMessage);
+	}
+
+	addWarningMessage(content: string, isOnline?: boolean) {
+		let chatMessage = {
+			content: content,
+			isWarning: true,
+			isOnline: isOnline
+		}
+		this.dataShare.chatContent.push(chatMessage);
 	}
 
 	announceIncomingMessage() {
