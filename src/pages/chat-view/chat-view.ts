@@ -91,6 +91,13 @@ export class ChatViewPage extends BaseComponent {
 			}
 			this.autoScrollChatView();
 		});
+
+		this.events.subscribe(AppConstant.EVENT_TOPIC.CHAT_WARNING_MESSAGE, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
+			this.autoScrollChatView();
+		});
 	}
 
     handleMobileKeyboard() {

@@ -84,7 +84,8 @@ export const AppConstant = {
         CURRENT_LOCATION_FIRST_UPDATE: 'currentLocation:firstUpdate',
         CHAT_INCOMING_MESSAGE: 'chat:incomingMessage',
         CHAT_CONNECT: 'chat:connect',
-        CHAT_DISCONNECT: 'chat:disconnect'
+        CHAT_DISCONNECT: 'chat:disconnect',
+        CHAT_WARNING_MESSAGE: 'chat:warningMessage'
     },
     CODE_PREFIX: {
         LUGGAGE: 'B-',

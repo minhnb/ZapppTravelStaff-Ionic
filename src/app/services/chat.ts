@@ -185,6 +185,7 @@ export class ChatService {
 			isOnline: isOnline
 		}
 		this.dataShare.chatContent.push(chatMessage);
+		this.announceChatWarningMessage();
 	}
 
 	announceIncomingMessage() {
@@ -197,6 +198,10 @@ export class ChatService {
 
 	announceChatDisconect() {
 		this.events.publish(AppConstant.EVENT_TOPIC.CHAT_DISCONNECT);
+	}
+
+	announceChatWarningMessage() {
+		this.events.publish(AppConstant.EVENT_TOPIC.CHAT_WARNING_MESSAGE);
 	}
 
 	log(content: any) {
