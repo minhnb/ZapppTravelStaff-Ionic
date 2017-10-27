@@ -28,4 +28,4 @@
 </div>
 
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
-<ion-nav [root]="rootPage" [style.height.px]="deviceHeight" #content swipeBackEnabled="false"></ion-nav>
+<ion-nav [root]="rootPage" [ngClass]="isPlatformiOS(platform) ? '' : 'manual-header'" [style.height.px]="deviceHeight" #content swipeBackEnabled="false"></ion-nav>
