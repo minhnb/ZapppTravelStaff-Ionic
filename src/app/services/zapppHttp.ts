@@ -92,7 +92,7 @@ export class ZapppHttp {
                         observer.next(res.data);
                         observer.complete();
                     } else {
-                        let err = res.status;
+                        let err = res.status || res.error;
                         err.message = err.msg || this.translate.instant('ERROR_ZAPPP_HTTP_SERVER_ERROR');
                         observer.error(err);
                     }

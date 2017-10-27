@@ -34,6 +34,7 @@ export class MyApp extends BaseComponent {
 	serverName: string;
 	showMessageBar: boolean = false;
 	messageBarContent: string;
+	isFirstTimeGetFreezingMessage: boolean = true;
 
 	constructor(private injector: Injector, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
 		private fcm: FCM, public zone: NgZone, private userService: UserService, private staffService: StaffService, private geolocation: Geolocation) {
@@ -73,6 +74,7 @@ export class MyApp extends BaseComponent {
 			this.announceAppIsPause();
 		});
 		this.platform.resume.subscribe(() => {
+			this.getFreezingMessage();
 			this.announceAppIsResuming();
 		});
 	}
@@ -288,6 +290,10 @@ export class MyApp extends BaseComponent {
 			} else {
 				this.unsubcribeWatchPosition();
 			}
+
+			if (this.isFirstTimeGetFreezingMessage && this.dataShare.userInfo) {
+				this.getFreezingMessage();
+			}
 		});
 	}
 
@@ -346,7 +352,7 @@ export class MyApp extends BaseComponent {
 		});
 	}
 
-	handleNotificationHideFreezingMessage(data: any) {
+	handleNotificationHideFreezingMessage(data?: any) {
 		this.zone.run(() => {
 			this.showMessageBar = false;
 		});
@@ -357,5 +363,24 @@ export class MyApp extends BaseComponent {
 		setTimeout(() => {
 			this.events.publish(topic, data);
 		}, 1000);
+	}
+
+	getFreezingMessage() {
+		if (!this.isLoggedIn()) {
+			return;
+		}
+		this.staffService.getFreezingMessage().subscribe(
+			res => {
+				if (res && res.length > 0) {
+					let data = res[0];
+					this.handleNotificationShowFreezingMessage(data);
+				}
+				this.isFirstTimeGetFreezingMessage = false;
+			},
+			err => {
+				this.handleNotificationHideFreezingMessage();
+				this.isFirstTimeGetFreezingMessage = false;
+			}
+		);
 	}
 }

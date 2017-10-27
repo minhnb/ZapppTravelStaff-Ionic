@@ -13,6 +13,7 @@ export class StaffService {
 	private districtUrl = AppConfig.API_URL + 'district';
 	private zappperUrl = AppConfig.API_URL + 'zappper';
 	private uploadUrl = AppConfig.API_URL + 'uploadfile';
+	private broadcastUrl = AppConfig.API_URL + 'broadcast';
 
 	constructor(private zapppHttp: ZapppHttp) { }
 
@@ -100,5 +101,9 @@ export class StaffService {
 			truck_id: truckId
 		};
 		return this.zapppHttp.post(this.truckUrl + '/count_orders_by_mode', params, null, showSpinner);
+	}
+
+	getFreezingMessage(): Observable<any> {
+		return this.zapppHttp.get(this.broadcastUrl + '/check_messages');
 	}
 }
