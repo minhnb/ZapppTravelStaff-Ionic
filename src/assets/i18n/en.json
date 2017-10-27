@@ -147,6 +147,8 @@
   "VIEW_ASSIGNMENT": "View assignments",
   "WAIT_FOR_USER_TO_COMPLETE_PAYMENT": "Wait for customer to complete payment",
   "WARNING": "Warning",
+  "WARNING_CHAT_CONNECTED": "Connected.",
+  "WARNING_CHAT_DISCONNECT": "Something went wrong. We are re-connecting.",
   "WARNING_TRUCK_NOT_ASSIGNED_FOR_COLLECTION": "You're not assigned for Collection. Customers cannot see your truck on their map. Please contact Admin for more details.",
   "ZAPPPER_ALERT_NEW_REQUEST": "You have a new request (#{{ orderId }}).",
   "ZAPPPER_ALERT_NEW_REQUEST_TITLE": "New request"

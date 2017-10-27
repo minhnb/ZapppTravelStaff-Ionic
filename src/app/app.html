@@ -21,11 +21,11 @@
   </ion-content>
 
 </ion-menu>
-<span class="version-info" [ngClass]="isPlatformiOS(platform) ? 'margin-top' : ''">Version 1.0 Build 2017.10.13.0 Server {{ serverName }}</span>
+<span class="version-info" [ngClass]="isPlatformiOS(platform) ? 'margin-top' : ''">Version 1.0 Build 2017.10.27.0 Server {{ serverName }}</span>
 <div #messageBar class="message-bar" [ng2-draggable]="true" [allow-horizontal]="false" [max-height]="deviceHeight" [hidden]="!showMessageBar">
   <img class="left-image" src="assets/images/warning.png" />
   <div class="content">{{ messageBarContent }}</div>
 </div>
 
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
-<ion-nav [root]="rootPage" [style.height.px]="deviceHeight" #content swipeBackEnabled="false"></ion-nav>
+<ion-nav [root]="rootPage" [ngClass]="isPlatformiOS(platform) ? '' : 'manual-header'" [style.height.px]="deviceHeight" #content swipeBackEnabled="false"></ion-nav>
