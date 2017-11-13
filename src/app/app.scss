@@ -72,19 +72,15 @@ ion-navbar {
 }
 
 ion-content {
+  &.has-header {
+    .scroll-content {
+      margin-top: 44px !important;
+    }
+  }
+
   &.no-pull {
     .scroll-content {
       overflow-y: hidden;
-    }
-  }
-}
-
-ion-nav.manual-header {
-  ion-content {
-    &.has-header {
-      .scroll-content {
-        margin-top: 44px !important;
-      }
     }
   }
 }
@@ -349,5 +345,23 @@ ion-app._gmaps_cdv_ .nav-decor {
     &.name {
       font-weight: bold;
     }
+  }
+}
+
+#cancel-order-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+
+  ion-item.middle-input {
+    margin-top: calc(50vh - 64px);
+    border: solid 1px #cccccc;
+  }
+
+  .item-ios.item-block .item-inner {
+    border: none;
   }
 }
