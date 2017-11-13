@@ -32,4 +32,9 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-/package-lock.json
+src/app/app.config.ts
+src/app/app.html
+config.xml
+package-lock.json
+package.json
+.gitignore
