@@ -2,6 +2,7 @@
   <button class="transparent-button dismiss-view-button" (click)="dismissView(event)" *ngIf="isDeliveryMode">
       <ion-icon name="ios-arrow-back"></ion-icon>
     </button>
+  <button ion-button class="above-button top-left" color="danger" [hidden]="isDeliveryMode" (click)="showCancelOrderView()">{{ 'BUTTON_CANCEL_ORDER' | translate }}</button>
   <div class="middle-center middle-camera" *ngIf="!listImage.length">
     <button class="transparent-button" (click)="takePicture()" [hidden]="isWeChatPay" [disabled]="!userAlreadyPaid && !isDeliveryMode">
             <ion-icon name="camera"></ion-icon>
@@ -25,10 +26,22 @@
       </ion-slide>
     </ion-slides>
   </div>
+  <div id="cancel-order-view" padding [hidden]="!isShowingCancelOrderView">
+    <button class="transparent-button dismiss-view-button" (click)="hideCancelOrderView()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+
+    <ion-item class="middle-input">
+      <ion-textarea placeholder="{{ 'CANCELLATION_REASON' | translate }}" [(ngModel)]="cancellationReason"></ion-textarea>
+    </ion-item>
+    <div class="button-bottom-full">
+      <button ion-button full type="submit" [disabled]="!trimText(cancellationReason)" (click)="cancelOrder()">{{ 'BUTTON_SAVE' | translate }}</button>
+    </div>
+  </div>
   <button class="button-ios above-button bottom-left" *ngIf="listImage.length" (click)="takePicture()">{{ 'BUTTON_TAKE_MORE_PHOTO' | translate }}</button>
   <button class="button-ios above-button bottom-right" *ngIf="listImage.length && isDeliveryMode" (click)="savePictureForDeliveryMode()">{{ 'BUTTON_SAVE' | translate }}</button>
   <button class="button-ios above-button bottom-right" *ngIf="listImage.length && !isDeliveryMode" (click)="savePictureForCollectionMode()">{{ 'BUTTON_FINISH' | translate }}</button>
-  <div class="button-bottom-full" *ngIf="!listImage.length && !userAlreadyPaid && !isDeliveryMode">
+  <div class="button-bottom-full" *ngIf="!listImage.length && !userAlreadyPaid && !isDeliveryMode && !isShowingCancelOrderView">
     <button ion-button full (click)="recheckOrderPaymentStatus()">{{ 'BUTTON_RECHECK_ORDER_PAYMENT_STATUS' | translate }}</button>
   </div>
 </ion-content>

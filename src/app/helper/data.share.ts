@@ -17,6 +17,7 @@ export class DataShare {
     chatContent: Array<any> = [];
     lastEmit: any;
     needReconnectSocket: boolean = false;
+    socketOnConnection: boolean = false;
 
     public setFCMToken(fcmToken: string) {
 		this.fcmToken = fcmToken;

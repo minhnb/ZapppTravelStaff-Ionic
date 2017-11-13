@@ -24,6 +24,8 @@ export class TakePicturePage extends BaseComponent {
 	userAlreadyPaid: boolean = false;
 	isWeChatPay: boolean = false;
 	weChatQRData: string;
+	isShowingCancelOrderView: boolean = false;
+	cancellationReason: string;
 
 	@ViewChild(Slides) slides: Slides;
 
@@ -342,6 +344,27 @@ export class TakePicturePage extends BaseComponent {
 			},
 			err => {
 
+			}
+		);
+	}
+
+	showCancelOrderView() {
+		this.isShowingCancelOrderView = true;
+	}
+
+	hideCancelOrderView() {
+		this.isShowingCancelOrderView = false;
+	}
+
+	cancelOrder() {
+		this.hideKeyboard();
+		let reason = this.trimText(this.cancellationReason);
+		this.collectionModeService.cancelOrder(this.customer.orderId, reason).subscribe(
+			res => {
+				this.goBackAfterPickup();
+			},
+			err => {
+				this.showError(err.message);
 			}
 		);
 	}

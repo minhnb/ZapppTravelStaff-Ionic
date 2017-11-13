@@ -32,6 +32,27 @@ page-chat-view {
           background: #488aff;
         }
       }
+
+      &.offline,
+      &.online {
+        font-size: 10px;
+        width: 100%;
+        text-align: center;
+
+        .message-container {
+          background: none;
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+      }
+
+      &.online {
+        color: green;
+      }
+
+      &.offline {
+        color: red;
+      }
     }
   }
 
