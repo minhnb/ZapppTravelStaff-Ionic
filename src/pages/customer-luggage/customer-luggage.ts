@@ -271,7 +271,16 @@ export class CustomerLuggagePage extends BaseComponent {
 	}
 
 	finishScanningForCollectionMode() {
-		this.updateLuggage();
+		if (this.isUpdated) {
+			this.updateLuggage();
+			return;
+		}
+		let numberOfLuagages = this.listLuggage.length;
+		let suffix = numberOfLuagages > 1 ? 's' : '';
+		this.showConfirm(this.translate.instant('CONFIRM_FINISH_SCAN', { number: numberOfLuagages, suffix: suffix }), this.translate.instant('CONFIRMATION'),
+            () => {
+                this.updateLuggage();
+            });
 	}
 
     goBackToCollectionModePage() {
