@@ -514,6 +514,9 @@ export class BaseComponent {
 
 	subcribeEventAppIsResuming() {
 		this.events.subscribe(AppConstant.EVENT_TOPIC.APP_RESUMING, (data) => {
+			if (this.isDestroyed) {
+				return;
+			}
 			this.handleEventAppIsResuming(data);
 		});
 	}

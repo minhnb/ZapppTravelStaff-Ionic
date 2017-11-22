@@ -4,7 +4,7 @@
     </button>
   <button ion-button class="above-button top-left" color="danger" [hidden]="isDeliveryMode" (click)="showCancelOrderView()">{{ 'BUTTON_CANCEL_ORDER' | translate }}</button>
   <div class="middle-center middle-camera" *ngIf="!listImage.length">
-    <button class="transparent-button" (click)="takePicture()" [hidden]="isWeChatPay" [disabled]="!userAlreadyPaid && !isDeliveryMode">
+    <button class="transparent-button" (click)="takePicture()" [hidden]="isWeChatPay && !userAlreadyPaid" [disabled]="!userAlreadyPaid && !isDeliveryMode">
             <ion-icon name="camera"></ion-icon>
           </button>
     <div class="qr-code" [hidden]="userAlreadyPaid || isDeliveryMode || !isWeChatPay">

@@ -26,6 +26,7 @@ export class TakePicturePage extends BaseComponent {
 	weChatQRData: string;
 	isShowingCancelOrderView: boolean = false;
 	cancellationReason: string;
+	isShowingInfoOrderCancel: boolean = false;
 
 	@ViewChild(Slides) slides: Slides;
 
@@ -43,11 +44,18 @@ export class TakePicturePage extends BaseComponent {
 	ionViewDidLoad() {
 		this.log('ionViewDidLoad TakePicturePage');
 		this.saveAttendantLocalCurrentJob();
+		this.recheckOrderPaymentStatus(true);
 	}
 
 	ionViewWillEnter() {
 		this.log('ionViewWillEnter TakePicturePage');
 		this.dataShare.disableBackButtonAction();
+	}
+
+	handleEventAppIsResuming(data?: any) {
+		if (!this.userAlreadyPaid && !this.isShowingInfoOrderCancel) {
+			this.recheckOrderPaymentStatus(true);
+		}
 	}
 
 	dismissView(event) {
@@ -282,10 +290,10 @@ export class TakePicturePage extends BaseComponent {
 		}
 	}
 
-	recheckOrderPaymentStatus() {
+	recheckOrderPaymentStatus(isAuto: boolean = false) {
 		let orderId = this.customer.orderId;
 		this.checkOrderStatus(orderId, () => {
-			this.checkOrderPaymentStatus(orderId, () => {
+			this.checkOrderPaymentStatus(orderId, isAuto, () => {
 				this.handleEventUserCompletedPickupCharge();
 			});
 		});
@@ -295,6 +303,7 @@ export class TakePicturePage extends BaseComponent {
 		this.collectionModeService.getOrderDetail(orderId).subscribe(
 			res => {
 				if (res.status == AppConstant.ORDER_STATUS.CANCELED) {
+					this.isShowingInfoOrderCancel = true;
 					this.showInfoWithOkAction(this.translate.instant('ERROR_ORDER_ORDER_CANCELLED'), this.translate.instant('INFO'), () => {
 						this.goBackAfterPickup();
 					});
@@ -310,12 +319,12 @@ export class TakePicturePage extends BaseComponent {
 		);
 	}
 
-	checkOrderPaymentStatus(orderId: string, callback?: () => void) {
+	checkOrderPaymentStatus(orderId: string, isAuto: boolean = false, callback?: () => void) {
 		this.collectionModeService.getOrderPaymentStatus(orderId).subscribe(
 			res => {
 				if (!res || res.payment_status != AppConstant.PAYMENT_STATUS.SUCCESS) {
 					this.getOrderPaymentWeChatCode(orderId, () => {
-						if (this.isWeChatPay) {
+						if (this.isWeChatPay && !isAuto) {
 							this.showInfo(this.translate.instant('ERROR_ORDER_ORDER_PAYMENT_STATUS_NOT_PAID'));
 						}
 					});
