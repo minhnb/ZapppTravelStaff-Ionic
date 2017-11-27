@@ -17,6 +17,8 @@ import { UserStartPage } from '../pages/user-start';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { BackgroundModeConfiguration } from '@ionic-native/background-mode';
 
+declare var Pushy: any;
+
 @Component({
 	templateUrl: 'app.html',
 	providers: [UserService, StaffService]
@@ -58,6 +60,7 @@ export class MyApp extends BaseComponent {
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
 			this.registerFCM();
+			this.registerPushy();
 			this.defineLangs();
 			this.deviceHeight = this.platform.height();
 
@@ -106,6 +109,19 @@ export class MyApp extends BaseComponent {
 
 			// fcm.unsubscribeFromTopic('marketing');
 		}
+	}
+
+	registerPushy() {
+		Pushy.listen();
+		Pushy.register((err, deviceToken) => {
+			if (err) {
+				return this.log(err);
+			}
+			this.log('Pushy device token: ' + deviceToken);
+		});
+		Pushy.setNotificationListener((data) => {
+			this.log('Received notification: ' + JSON.stringify(data));
+		});
 	}
 
 	registerBackButtonAction() {
