@@ -148,6 +148,9 @@ export class UserStartPage extends BaseComponent {
 		this.truck = null;
 		this.listAssignment = [];
 		this.countNewAssignment();
+		this.isAssignedCollection = false;
+		this.isAssignedDelivery = false;
+		this.resetCountOrder();
 	}
 
     onStatusChange(event) {
@@ -156,7 +159,6 @@ export class UserStartPage extends BaseComponent {
 				this.saveStatusToLocalStorage(this.isActive);
 				if (!this.isActive) {
 					this.resetInfoForDriverAndAttendant();
-					this.resetCountOrder();
 				}
 				this.announceActiveEvent();
 				this.loadListTruckForActiveDirverAndAttendant();
@@ -614,6 +616,7 @@ export class UserStartPage extends BaseComponent {
 	resetCountOrder() {
 		this.countDeliveryItem = 0;
 		this.countTransferItem = 0;
+		this.countAcceptItem = 0;
 	}
 
 	countOrderByMode() {
