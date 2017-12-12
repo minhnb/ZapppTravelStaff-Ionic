@@ -33,3 +33,10 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 /package-lock.json
+my-release-key.jks
+sign/android-release-unsigned.apk
+sign/apksigner
+sign/app.apk
+sign/app2.apk
+sign/my-release-key.jks
+sign/zipalign
