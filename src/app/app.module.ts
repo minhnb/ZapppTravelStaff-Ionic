@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
+import { BaseComponent } from './base.component';
+import { DirectionPage } from '../pages/direction-stop';
+
 import { MyApp } from './app.component';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
@@ -57,8 +60,14 @@ import { ZapppHttp } from './services/zapppHttp';
 import { DataShare } from './helper/data.share';
 import { Draggable } from './helper/draggable.directive';
 
+export function createTranslateLoader(http: Http) {
+    return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
+
 @NgModule({
 	declarations: [
+		BaseComponent,
+		DirectionPage,
 		MyApp,
 		ListPage,
 		LoginPage,
@@ -71,7 +80,7 @@ import { Draggable } from './helper/draggable.directive';
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
-				useFactory: (http: Http) => new TranslateHttpLoader(http, 'assets/i18n/', '.json'),
+				useFactory: (createTranslateLoader),
 				deps: [Http]
 			}
 		}),

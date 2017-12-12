@@ -11,7 +11,7 @@ import * as decodePolyline from 'decode-google-map-polyline';
 import { StayTimeCountDownPage } from '../stay-time-count-down';
 
 @Component({
-
+	templateUrl: 'direction-stop.html',
 })
 export class DirectionPage extends BaseComponent {
 
