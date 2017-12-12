@@ -16,7 +16,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import * as moment from 'moment';
 
 @Component({
-
+	templateUrl: 'app.html'
 })
 export class BaseComponent {
 
