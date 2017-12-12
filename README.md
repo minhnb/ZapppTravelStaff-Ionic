@@ -90,7 +90,11 @@ platforms/android/project.properties
 to make sure versions are 9.8.0
 
 Step 4: Build release android
+
+```bash
 npm run release-android
+```
+
 Refer: https://ionicframework.com/docs/intro/deploying/
 *********************************************************************************************
 [iOS] RESOLVE FCM - INVALID GOOGLE_APP_ID PROBLEM
