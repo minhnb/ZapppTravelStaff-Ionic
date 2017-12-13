@@ -291,6 +291,9 @@ export class TakePicturePage extends BaseComponent {
 	}
 
 	recheckOrderPaymentStatus(isAuto: boolean = false) {
+		if (this.isDeliveryMode) {
+			return;
+		}
 		let orderId = this.customer.orderId;
 		this.checkOrderStatus(orderId, () => {
 			this.checkOrderPaymentStatus(orderId, isAuto, () => {
