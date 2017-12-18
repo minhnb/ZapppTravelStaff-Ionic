@@ -78,6 +78,8 @@ export class UserStartPage extends BaseComponent {
 	handleEventAppIsResuming() {
 		if (this.isActiveCurrentPage(this.navCtrl)) {
 			this.loadStaffStatistic();
+		} else {
+			this.recheckZappperRequestCanceledAfterResume();
 		}
 	}
 
@@ -506,6 +508,26 @@ export class UserStartPage extends BaseComponent {
 		this.showInfoWithOkAction(warningContent, this.translate.instant('WARNING'), () => {
 			this.navCtrl.popToRoot();
 		});
+	}
+
+	recheckZappperRequestCanceledAfterResume() {
+		if (!this.isZappper() || !this.staffAlreadyHasJob()) {
+			return;
+		}
+		let currentJob = localStorage.getItem(AppConstant.CURRENT_JOB);
+		let customer = JSON.parse(currentJob);
+		this.collectionModeService.getOrderDetail(customer.orderId).subscribe(
+			res => {
+				if (res.status == AppConstant.ORDER_STATUS.CANCELED) {
+					this.clearLocalCurrentJob();
+					this.navCtrl.popToRoot();
+					return;
+				}
+			},
+			err => {
+
+			}
+		);
 	}
 
 	subscribeAssignTruckEvent() {
