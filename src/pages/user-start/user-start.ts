@@ -709,7 +709,7 @@ export class UserStartPage extends BaseComponent {
 	getUserInfo(callback?: () => void) {
 		this.userService.getUserInfo().subscribe(
 			res => {
-				this.userService.saveUserRole(res.roles);
+				this.userService.saveStaffRole(res.roles);
 				if (this.isDriver() || this.isAttedant() || this.isZappper()) {
 					this.dataShare.setUserInfo(this.userInfoTransform(res));
 					if (!this.isFromLoginPage) this.updateDeviceToken();

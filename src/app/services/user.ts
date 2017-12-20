@@ -22,11 +22,24 @@ export class UserService {
 		localStorage.setItem(AppConstant.ACCESS_TOKEN, data.access_token);
 		localStorage.setItem(AppConstant.REFRESH_TOKEN, data.refresh_token);
 		localStorage.setItem(AppConstant.EXPIRED_AT, data.expired_at);
-		this.saveUserRole(role);
+		this.saveStaffRole(role);
 	}
 
-	saveUserRole(role) {
-		localStorage.setItem(AppConstant.ROLE, role);
+	getValidStaffRole(roleString) {
+		let roles = roleString.split(',');
+		let validRoles = [AppConstant.USER_ROLE.ATTENDANT, AppConstant.USER_ROLE.DRIVER, AppConstant.USER_ROLE.ZAPPPER];
+		for (let i = 0; i < roles.length; i++) {
+			let role = roles[i];
+			if (validRoles.indexOf(role) > -1) {
+				return role;
+			}
+		}
+		return '';
+	}
+
+	saveStaffRole(role) {
+		let staffRole = this.getValidStaffRole(role);
+		localStorage.setItem(AppConstant.ROLE, staffRole);
 	}
 
 	handleLoginSuccess(data: any): any {
