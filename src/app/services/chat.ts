@@ -15,6 +15,8 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class ChatService {
 
+	private conversationUrl = AppConfig.SOCKET_IO_URL + 'api/chat/orders';
+
 	constructor(private zapppHttp: ZapppHttp, private dataShare: DataShare, private events: Events, private translate: TranslateService) { }
 
 	socketConnect() {
@@ -65,6 +67,7 @@ export class ChatService {
 			this.addWarningMessage(this.translate.instant('WARNING_CHAT_CONNECTED'), true);
 		}
 		this.dataShare.socketOnConnection = true;
+		this.syncChatContent();
 	}
 
 	handleTokenExpired(res: any) {
@@ -151,7 +154,8 @@ export class ChatService {
 			return;
 		}
 		let message = this.decodeMessage(data.msg);
-		this.addChatMessage(message, this.dataShare.userInfo.id != data.id);
+		let createAt = data.created_at;
+		this.addChatMessage(message, createAt, this.dataShare.userInfo.id != data.id);
 		this.announceIncomingMessage();
 	}
 
@@ -170,9 +174,10 @@ export class ChatService {
 		this.announceChatDisconect();
 	}
 
-	addChatMessage(content: string, isReceived: boolean) {
+	addChatMessage(content: string, createdAt: number, isReceived: boolean) {
 		let chatMessage = {
 			content: content,
+			createdAt: createdAt,
 			isReceived: isReceived
 		}
 		this.dataShare.chatContent.push(chatMessage);
@@ -186,6 +191,58 @@ export class ChatService {
 		}
 		this.dataShare.chatContent.push(chatMessage);
 		this.announceChatWarningMessage();
+	}
+
+	findStartIndexToSync(chatHistory: Array<any>) {
+		let currentChatContentLength = this.dataShare.chatContent.length;
+		let startIndex = chatHistory.length;
+		if (currentChatContentLength == 0) {
+			return startIndex;
+		}
+		let lastChatContentItem = this.dataShare.chatContent[currentChatContentLength - 1];
+		for (let i = 0; i < chatHistory.length; i++) {
+			let item = chatHistory[i];
+			if (item.created_at == lastChatContentItem.createdAt) {
+				let isReceived = this.dataShare.userInfo.id != item.id;
+				let message = this.decodeMessage(item.msg);
+				if (lastChatContentItem.isReceived == isReceived && lastChatContentItem.content == message) {
+					startIndex = i;
+					break;
+				}
+			}
+		}
+		return startIndex;
+	}
+
+	syncChatContent() {
+		let room = this.dataShare.currentChatRoom;
+		this.loadChatHistoryByPage(room, 1, (chatHistory) => {
+			let startIndex = this.findStartIndexToSync(chatHistory);
+			for (let i = startIndex - 1; i >= 0; i--) {
+				let data = chatHistory[i];
+				let message = this.decodeMessage(data.msg);
+				let createdAt = data.created_at;
+				let isReceived = this.dataShare.userInfo.id != data.id;
+				this.addChatMessage(message, createdAt, isReceived);
+			}
+
+			if (startIndex > 0) {
+				this.announceIncomingMessage();
+			}
+		});
+	}
+
+	loadChatHistoryByPage(orderId: string, page: number, callback: (res: any) => void) {
+		this.loadConversationHistory(orderId, page).subscribe(
+			res => {
+				if (callback) {
+					callback(res);
+				}
+			},
+			err => {
+
+			}
+		)
 	}
 
 	announceIncomingMessage() {
@@ -216,5 +273,14 @@ export class ChatService {
 
 	decodeMessage(message: string): string {
 		return Base64.decode(message);
+	}
+
+	loadConversationHistory(orderId: string, page: number = 1, itemPerPage: number = 200) {
+		let params = {
+			order_id: orderId,
+			page: page,
+			page_size: itemPerPage
+		};
+		return this.zapppHttp.post(this.conversationUrl, params);
 	}
 }
