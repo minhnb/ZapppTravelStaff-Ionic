@@ -154,7 +154,7 @@ export class ChatService {
 			return;
 		}
 		let message = this.decodeMessage(data.msg);
-		let createAt = data.created_at;
+		let createAt = data.created_at || Math.round((new Date).getTime() / 1000);
 		this.addChatMessage(message, createAt, this.dataShare.userInfo.id != data.id);
 		this.announceIncomingMessage();
 	}
@@ -195,23 +195,24 @@ export class ChatService {
 
 	findStartIndexToSync(chatHistory: Array<any>) {
 		let currentChatContentLength = this.dataShare.chatContent.length;
-		let startIndex = chatHistory.length;
 		if (currentChatContentLength == 0) {
-			return startIndex;
+			return chatHistory.length;
 		}
 		let lastChatContentItem = this.dataShare.chatContent[currentChatContentLength - 1];
 		for (let i = 0; i < chatHistory.length; i++) {
 			let item = chatHistory[i];
+			if (item.created_at < lastChatContentItem.createdAt) {
+				return i;
+			}
 			if (item.created_at == lastChatContentItem.createdAt) {
 				let isReceived = this.dataShare.userInfo.id != item.id;
 				let message = this.decodeMessage(item.msg);
 				if (lastChatContentItem.isReceived == isReceived && lastChatContentItem.content == message) {
-					startIndex = i;
-					break;
+					return i;
 				}
 			}
 		}
-		return startIndex;
+		return chatHistory.length;
 	}
 
 	syncChatContent() {
